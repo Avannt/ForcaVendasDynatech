@@ -1,0 +1,75 @@
+{
+	"Principal": [{
+		"id": "pedido",
+		"icon": "sales-order",
+		"title": "Pedido",
+		"info": "Digitação",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "entregaFutura",
+		"icon": "shipping-status",
+		"title": "Entrega Futura",
+		"info": "Digitação",
+		"visible": false,
+		"number": ""
+	}, {
+		"id": "aprovacoes",
+		"icon": "approvals",
+		"title": "Aprovações",
+		"info": "Pedidos",
+		"visible": false,
+		"number": ""
+	}, {
+		"id": "menuConsultas",
+		"icon": "search",
+		"title": "Consultas",
+		"info": "Gerais",
+		"visible": true,
+		"number": ""
+	}],
+	"Consultas": [{
+		"id": "clienteConsultas",
+		"icon": "customer",
+		"title": "Clientes",
+		"info": "Dados Gerais",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "produtoConsultas",
+		"icon": "product",
+		"title": "Tabela Preços",
+		"info": "Produtos",
+		"visible": true,
+		"number": ""
+	},
+		{
+		"id": "relatorioPedidos",
+		"icon": "expense-report",
+		"title": "Pedidos",
+		"info": "Históricos",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "relatorioEnvSaldo",
+		"icon": "expense-report",
+		"title": "Envio Saldo",
+		"info": "Históricos",
+		"visible": false,
+		"number": ""
+	}, {
+		"id": "verbaConsultas",
+		"icon": "waiver",
+		"title": "Verbas",
+		"info": "Movim. e Saldo",
+		"visible": false,
+		"number": ""
+	}, {
+		"id": "relatorioTitulos",
+		"icon": "activity-individual",
+		"title": "Títulos",
+		"info": "Venc. e a vencer ",
+		"visible": false,
+		"number": ""
+	}]
+}

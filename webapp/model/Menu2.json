@@ -1,0 +1,98 @@
+{
+	"Principal": [{
+		"id": "pedido",
+		"icon": "sales-order",
+		"title": "Pedido",
+		"info": "Digitação Pedidos",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "entregaFutura",
+		"icon": "shipping-status",
+		"title": "Entrega Futura",
+		"info": "Entrega Futura",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "aprovacoes",
+		"icon": "approvals",
+		"title": "Aprovações",
+		"info": "Aprovações de pedidos",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "menuConsultas",
+		"icon": "search",
+		"title": "Consultas",
+		"info": "Consultas",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "relatorios",
+		"icon": "manager-insight",
+		"title": "Relatórios",
+		"info": "Relatórios",
+		"visible": true,
+		"number": ""
+	}],
+	"Consultas": [{
+			"id": "clienteConsultas",
+			"icon": "customer",
+			"title": "Clientes",
+			"info": "Descr. dos Clientes",
+			"visible": true,
+			"number": ""
+	}, {
+			"id": "produtoConsultas",
+			"icon": "product",
+			"title": "Produtos",
+			"info": "Descr. dos Produtos",
+			"visible": true,
+			"number": ""
+	}, {
+			"id": "verbaConsultas",
+			"icon": "waiver",
+			"title": "Verbas",
+			"info": "Movim. e Saldo",
+			"visible": true,
+			"number": ""
+	},
+		{
+			"id": "relatorioPedidos",
+			"icon": "expense-report",
+			"title": "Pedidos",
+			"info": "Levant. dos Pedidos",
+			"visible": true,
+			"number": ""
+	}, {
+			"id": "relatorioTitulos",
+			"icon": "activity-individual",
+			"title": "Títulos",
+			"info": "Levant. de Titulos",
+			"visible": true,
+			"number": ""
+	}],
+
+	"Relatorios": [{
+		"id": "relatorioPedidos",
+		"icon": "expense-report",
+		"title": "Pedidos",
+		"info": "Levant. dos Pedidos",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "relatorioTitulos",
+		"icon": "activity-individual",
+		"title": "Títulos",
+		"info": "Levant. de Titulos",
+		"visible": false,
+		"number": ""
+	}, {
+		"id": "relatorioTabelas",
+		"icon": "sales-quote",
+		"title": "Tab Preços",
+		"info": "Preço dos Prod.",
+		"visible": false,
+		"number": ""
+	}]
+}

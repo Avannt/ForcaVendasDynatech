@@ -1,0 +1,17 @@
+<mvc:View controllerName="testeui5.controller.App" displayBlock="false" xmlns="sap.m" xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc">
+	<u:Shell headerHiding="false" headerVisible="true" id="MyShell" icon="">
+		<!--{modelAux>/iconeEmpresa}-->
+		<u:headItems>
+			<u:ShellHeadItem visible="{modelAux>/homeVisible}" id="label" tooltip="Home" icon="sap-icon://home" press="handlePressHome"/>
+		</u:headItems>
+		<u:user>
+			<u:ShellHeadUserItem id="shellHeadUser" image="sap-icon://customer" username="{modelAux>/userID}" press="showId"/>
+		</u:user>
+		<u:headEndItems>
+			<u:ShellHeadItem id="idLogoff" icon="sap-icon://log" tooltip="Logoff" press="handleLogoffPress"/>
+		</u:headEndItems>
+		<u:content>
+			<App id="app" width="100%" height="100%"></App>
+		</u:content>
+	</u:Shell>
+</mvc:View>

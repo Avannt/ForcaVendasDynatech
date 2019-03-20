@@ -1,0 +1,24 @@
+<mvc:View height="100%" xmlns:core="sap.ui.core" controllerName="testeui5.controller.Menu" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns="sap.m" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+	<Page class="backgroundAzul" title="Força de vendas" showHeader="false">
+		<TileContainer id="container" tileDelete="handleTileDelete" tiles="{menu>/Principal}">
+			<StandardTile class="backgroundAzul1"  icon="sap-icon://{menu>icon}" type="{menu>type}" number="{menu>number}" numberUnit="{menu>numberUnit}" title="{menu>title}"
+				info="{menu>info}" infoState="{menu>infoState}" busy="{menu>busy}" busyIndicatorDelay="0" busyIndicatorSize="Medium" app:opcao="{menu>id}" press="onTile" visible="{menu>visible}"/> 
+		</TileContainer>
+		<!--<footer>-->
+		<!--	<Bar>-->
+		<!--		<contentLeft>-->
+		<!--			<Text id="idAtualizacao" text="Atual: {modelAux>/DataAtualizacao}" />-->
+					<!--{modelAux>/dataUltimoUpdate}-->
+		<!--		</contentLeft>-->
+		<!--		<contentRight>-->
+		<!--			<Label text="Versão: {modelAux>/VersaoApp}" ></Label>-->
+					<!--<Label text="{modelAux>/nomeEmpresa}"/>-->
+		<!--		</contentRight>-->
+				<!--<contentMiddle>-->
+				<!--	<Label text="v2.15" class="sapUiMediumMarginEnd"></Label>-->
+				<!--</contentMiddle>-->
+		<!--	</Bar>-->
+		<!--</footer>-->
+	</Page>
+</mvc:View>

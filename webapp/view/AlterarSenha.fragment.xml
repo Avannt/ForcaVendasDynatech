@@ -1,0 +1,48 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout" id="idPageAlterar">
+	<Dialog id="idDialogAlterarSenha" title="Alterar Senha" icon="sap-icon://user-edit" stretch="true" class="customizedDialog">
+		<content>
+			<f:Form id="idForm" editable="true" ariaLabelledBy="Title1">
+				<f:layout>
+					<f:ResponsiveGridLayout labelSpanXL="2" labelSpanL="2" labelSpanM="2" labelSpanS="3" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0"
+						emptySpanM="0" emptySpanS="0" columnsXL="6" columnsL="6" columnsM="12"/>
+				</f:layout>
+				<f:FormContainer ariaLabelledBy="Title1">
+					<f:formElements>
+						<f:FormElement label="Senha atual">
+							<f:fields>
+								<Input id="idSenha" type="Password" submit="onPularSenha">
+									<layoutData>
+										<l:GridData span="XL8 L8 M8 S12" linebreakXL="false" linebreakS="true"/>
+									</layoutData>
+								</Input>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Nova senha">
+							<f:fields>
+								<Input id="idSenhaNova" type="Password" submit="onPularSenha1">
+									<layoutData>
+										<l:GridData span="XL8 L8 M8 S12" linebreakXL="false" linebreakS="true"/>
+									</layoutData>
+								</Input>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Repita nova senha">
+							<f:fields>
+								<Input id="idSenhaNova2" type="Password" submit="onPularSenha2">
+									<layoutData>
+										<l:GridData span="XL8 L8 M8 S12" linebreakXL="false" linebreakS="true"/>
+									</layoutData>
+								</Input>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:Form>
+		</content>
+		<buttons>
+			<Button text="Confimar" type="Accept" icon="sap-icon://accept" press="onDialogMudarSenha"/>
+			<Button text="Sair" icon="sap-icon://undo" press="onFecharAlteracaoSenha"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

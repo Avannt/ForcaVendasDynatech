@@ -1,0 +1,11 @@
+<mvc:View
+	controllerName="testeui5.controller.NotFound"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<MessagePage
+		title="{Não Encontrada}"
+		text="Desculpe, mas o recurso solicitado não está disponível.."
+		description="Por Favor, verifique a URL e tente novamente."
+		showNavButton="true"
+		navButtonPress="onNavBack"/>
+</mvc:View>

@@ -1,0 +1,154 @@
+<core:FragmentDefinition id="idFragment" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form"
+	xmlns:layout="sap.ui.layout">
+	<Dialog id="idDialog" title="Item do pedido Web" icon="sap-icon://add-product" busyIndicatorDelay="0" contentWidth="93%" busy="false" contentHeight="96%"
+		stretchOnPhone="true">
+		<content>
+			<form:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="1" labelSpanM="1"
+						emptySpanL="1" emptySpanM="1" columnsL="2" columnsM="2" class="editableForm">
+				<form:content>
+					<Label text="Item">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<SearchField class="desabilitado" id="idItemPedido" placeholder="Digite Código ou Nome do Produto" enableSuggestions="true"
+						search="onItemChange" suggest="_handleValueHelpSearch"
+						suggestionItems="{ path: 'materiaisCadastrados>/', sorter: { path: 'matnr' }, parameters: {operationMode: 'Client'} }">
+						<suggestionItems>
+							<SuggestionItem text="{materiaisCadastrados>matnr}" description="{materiaisCadastrados>maktx}" key="{materiaisCadastrados>matnr}"/>
+						</suggestionItems>
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</SearchField>
+					<Label text="Descrição">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idDescricao" enabled="false" class="desabilitado">
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</Input>
+					<!--<Label text="Preço tabela">-->
+					<!--	<layoutData>-->
+					<!--		<layout:GridData span="L2 M2" linebreakXL="true" linebreakL="true"/>-->
+					<!--	</layoutData>-->
+					<!--</Label>-->
+					<!--<Input id="idPrecoTabela" enabled="false" class="desabilitado">-->
+					<!--	<layoutData>-->
+					<!--		<layout:GridData span="L4 M2"/>-->
+					<!--	</layoutData>-->
+					<!--</Input>-->
+					<Label text="Quantidade">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idQuantidade" class="editableForm" editable="true" change="onQuantidadeChange" submit="onFocusQnt" type="Number">
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</Input>
+					<Label text="Quantidade Campanha Brinde" visible="false">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idQuantidadeBrinde" visible="false" class="editableForm" editable="false" change="onQuantidadeBrindeChange" type="Number">
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</Input>
+					<Label text="Preço S/ Desc" visible="false">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idPrecoCheio" enabled="false" class="desabilitado" visible="false">
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</Input>
+					<Label text="Desconto (%)">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idDesconto" class="desabilitado" editable="true" change="onDescontoChange" submit="onFocus" type="Number">
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</Input>
+					<Label text="Preço de Venda">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idPrecoDesconto" class="desabilitado" value="{path: 'modelItemPedido>/valorTotal', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}" editable="false" change="onPrecoDeVendaChange" submit="onFocusVenda" type="Text">
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</Input>
+					<!--<Label text="Preço Unid.">-->
+					<!--	<layoutData>-->
+					<!--		<layout:GridData span="L2 M2"/>-->
+					<!--	</layoutData>-->
+					<!--</Label>-->
+					<!--<Input id="idPrecoUnidade" enabled="false" class="desabilitadoPRECOUNI">-->
+					<!--	<layoutData>-->
+						<!--		<layout:GridData span="L2 M2"/>-->
+					<!--	</layoutData>-->
+					<!--</Input>-->
+					<Label text="Perc. Verba (%)" visible="false">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idVerba" enabled="false" class="desabilitado" visible="false">
+						<layoutData>
+							<layout:GridData span="L4 M2"/>
+						</layoutData>
+					</Input>
+					<Label text="Perc. Comissão (%)" visible="false">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Input id="idComissao" enabled="false" class="desabilitado" visible="false">
+						<layoutData>
+							<layout:GridData span="L4 M2"/> 
+						</layoutData>
+					</Input>
+					<!--<Label text="Preço Mínimo">-->
+					<!--	<layoutData>-->
+					<!--		<layout:GridData span="L2 M2"/>-->
+					<!--	</layoutData>-->
+					<!--</Label>-->
+					<!--<Input id="idPrecoMinimo" enabled="false" class="desabilitado">-->
+					<!--	<layoutData>-->
+					<!--		<layout:GridData span="L2 M2"/>-->
+					<!--	</layoutData>-->
+					<!--</Input>-->
+					<Label text="">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Label>
+					<Image id="idImgProduto" width="100%" height="70%">
+						<layoutData>
+							<layout:GridData span="L2 M2"/>
+						</layoutData>
+					</Image>
+				</form:content>
+			</form:SimpleForm>
+		</content>
+		<beginButton>
+			<Button id="idButtonSalvarDialog" text="Salvar" press="onDialogSubmitButton"/>
+		</beginButton>
+		<endButton>
+			<Button text="Cancelar" press="onDialogCancelButton"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

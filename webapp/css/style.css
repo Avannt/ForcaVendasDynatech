@@ -1,0 +1,164 @@
+.myNamespace-BackgroundTile .sapMStdTileTopRow {
+
+    height: 8rem;
+
+}
+
+.myNamespace-BackgroundTile .sapMStdTileBottomRow {
+
+    background-color: rgba(255,255,255,0.7);
+
+    height: 3rem;
+
+    padding-top: 0.3rem;
+
+}
+
+.myNamespace-BackgroundTile .sapMStdTileBottomRow .sapMStdTileTitle {
+
+    color:#444;
+
+}
+
+.desabilitado .sapMInputBaseInner {
+    background-color: #F8F8FF;
+}
+.desabilitado2 .sapMInputBaseInner {
+    background-color: #F8F8FF;
+    font-weight:bold;
+}
+.marginBottomInpu {
+	padding-botton: 20px !important;
+}
+
+.sapMTextBold div > span {
+    font-size: 10px !important;
+} 
+
+.removePadding {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-botton: 0px !important;
+    margin-top: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-botton: 0px !important;
+
+}
+
+tr[data-mydata="Diluicao"], tr[data-mydata="Diluicao"] + tr.sapMListTblSubRow {	
+  background:  #FF8484 !important;
+}
+
+tr[data-mydataAprov="Diluicao"], tr[data-mydata="Diluicao"] + tr.sapMListTblSubRow {	
+  background:  #FF8484 !important;
+}
+
+tr[data-mydataRP="Inconsistente"], tr[data-mydataRP="Inconsistente"] + tr.sapMListTblSubRow {	
+  background:  rgba(255, 0, 0, 0.34) !important;
+}
+
+tr[data-mydataEF="2"], tr[data-mydataEF="2"] + tr.sapMListTblSubRow, tr[data-mydataPED="9"], tr[data-mydataPED="9"] + tr.sapMListTblSubRow {	
+  background:  rgba(255, 238, 13, 0.34) !important;
+}
+
+tr[data-mydata="Diluido"], tr[data-mydata="Diluido"] + tr.sapMListTblSubRow  {	
+  background:  #C1FFAD !important;
+}
+
+tr[data-mydata="Normal"], tr[data-mydata="Normal"] + tr.sapMListTblSubRow {	
+  background:  #FFFFFF !important;
+}
+
+.cssClasse {
+	background-image: url("img/bg.png");
+}
+
+.camposDialog .sapMInputBaseInner {
+    background-color: #ebf7f5;
+}
+
+.camposDialogPRECOUNI .sapMInputBaseInner {
+    background-color: #86fd48;
+}
+
+.fundoInicio {
+	background-color: #dde6ed;
+}
+
+.sapMStdTileTitle{
+	font-size: 1.05rem !important;
+	font-weight:bold;
+}
+
+.bold{
+	font-weight:bold;
+}
+
+.vermelho{
+	color: #ff092c;
+}
+
+#labelVerificacao {
+	color: #ff092c;
+}
+
+.backgroundAzul {
+    background-image: linear-gradient(rgb(239, 244, 249), white);
+    
+    padding-top: 0px !important;
+    
+}
+
+.backgroundAzul1 {
+	/*background-image: url('../img/img.jpg');*/
+	
+	/*opacity: 0.5;*/
+	
+	/*filter: alpha(opacity=50);*/
+	
+    background-image: linear-gradient(rgb(201, 216, 231), white);
+    
+    padding-top: 0px !important;
+}
+
+.customizedDialog.sapMDialog>.sapMDialogSection {
+	
+	background-image: linear-gradient(white, rgb(47, 60, 72));
+}
+
+.center .sapMInputBaseInner{
+	display: block;
+    margin: 0 auto;
+}
+
+.tamanhopeq {
+    widht: 100px;
+}
+
+#__xmlview5--idTopLevelIconTabBar-content {
+	padding: 0px;
+}
+
+#__xmlview3--idTopLevelIconTabBar-content {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+body {
+    margin: 0px;
+}
+
+.margins{
+	padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-botton: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-botton: 0px;
+}

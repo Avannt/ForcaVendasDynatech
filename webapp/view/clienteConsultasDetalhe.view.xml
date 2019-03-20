@@ -1,0 +1,235 @@
+<mvc:View displayBlock="true" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form"
+	controllerName="testeui5.controller.clienteConsultasDetalhe">
+	<App>
+		<pages>
+			<Page title="Cliente" class="sapUiResponsivePadding" showNavButton="true" navButtonPress="onNavBack">
+				<content>
+					<IconTabBar id="idTopLevelIconTabBar" stretchContentHeight="true" >
+						<items>
+							<IconTabFilter id="tabInfoCliente" text="Dados Cliente" icon="sap-icon://hint" key="tab1">
+								<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">
+									<f:SimpleForm id="simpleFormChange" title="" editable="true" class="editableForm">
+										<f:content>
+											<Label text="Código"/>
+											<Input id="idCodigo" enabled="false" value="{clienteModel>/kunnr}"/>
+											<Label text="Código Repres."/>
+											<Input id="idCodRepres" enabled="false" value="{modelAux>/CodRepres}"/>
+											<Label text="Nome"/>
+											<Input id="idNome" enabled="false" value="{clienteModel>/name1}"/>
+											<Label text="CNPJ"/>
+											<Input id="idCNPJ" enabled="false" value="{clienteModel>/stcd1}"/>
+											<Label text="CEP"/>
+											<Input id="idCEP" enabled="false" value="{clienteModel>/pstlz}"/>
+											<Label text="Inscrição Estadual"/>
+											<Input id="idInscricaoEstadual" enabled="false" value="{clienteModel>/stcd2}"/>
+											<Label text="Telefone"/>
+											<Input id="idTelefone" enabled="false"/>
+											<Label text="Endereço"/>
+											<Input id="idEndereco" enabled="false" value="{clienteModel>/stras}"/>
+											<Label text="Cidade"/>
+											<Input id="idCidade" enabled="false" value="{clienteModel>/ort01}"/>
+											<Label text="Data Cadastro Cliente"/>
+											<Input id="idDataCadastroCliente" enabled="false"/>
+											<Label text="Email"/>
+											<Input id="idEmail" enabled="false"/>
+											<Label text="Email Envio XML"/>
+											<Input id="idEmailXML" enabled="false"/>
+											<Label text="Email Contas a Pagar"/>
+											<Input id="idEmailPagar" enabled="false"/>
+											<Label text="Microrregião"/>
+											<Input id="idMicrorregiao" enabled="false"/>
+											<Label text="Insc. Aux Subst. Trib."/>
+											<Input id="idInscAuxSubstTrib" enabled="false"/>
+											<Label text="Grupo Cliente"/>
+											<Input id="idGrupoCliente" enabled="false"/>
+											<Label text="Canal Venda"/>
+											<Input id="idCanalVenda" enabled="false"/>
+											<Label text="Matriz"/>
+											<Input id="idMatriz" enabled="false"/>
+											<Label text="Cod. Suframa"/>
+											<Input id="idCodSuframa" enabled="false"/>
+											<Label text="Faturar Saldo?"/>
+											<Input id="idFaturarSaldo" enabled="false"/>
+											<Label text="Status Crédito"/>
+											<Input id="idStatusCredito" enabled="false"/>
+										</f:content>
+									</f:SimpleForm>
+								</ScrollContainer>
+							</IconTabFilter>
+							<!--<IconTabFilter id="tabInfoFinanceiro" text="Dados Financ." icon="sap-icon://lead" key="tab2">-->
+							<!--	<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">-->
+							<!--		<f:SimpleForm id="simpleFormChange1" title="" editable="true" class="editableForm">-->
+							<!--			<f:content>-->
+							<!--				<Label text="Limite Crédito"/>-->
+							<!--				<Input id="idLimiteCredito" enabled="false"/>-->
+							<!--				<Label text="Data Lim. Crédito"/>-->
+							<!--				<Input id="idDataLimCredito" enabled="false"/>-->
+							<!--				<Label text="Maior Titulo_NF"/>-->
+							<!--				<Input id="idMaiorTitulo_NF" enabled="false"/>-->
+							<!--				<Label text="Data Maior Titulo/NF"/>-->
+							<!--				<Input id="idDataMaiorTitulo_NF" enabled="false"/>-->
+							<!--				<Label text="Valor Ultimo Titulo/NF"/>-->
+							<!--				<Input id="idUltimoTitulo_NF" enabled="false"/>-->
+							<!--				<Label text="Data Valor Ultimo Titulo/NF"/>-->
+							<!--				<Input id="idDataUltimoTitulo_NF" enabled="false"/>-->
+							<!--				<Label text="Simples Nacional"/>-->
+							<!--				<Input id="idSimplesNacional" enabled="false"/>-->
+							<!--			</f:content>-->
+							<!--		</f:SimpleForm>-->
+							<!--	</ScrollContainer>-->
+							<!--</IconTabFilter>-->
+							<IconTabFilter id="tabTabelaPrecos" text="Tabela Preços" icon="sap-icon://table-view" key="tab3">
+								<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">
+									<Table id="table_TabelaPrecos" items="{ path: 'tabPreco>/' }" width="100%" updateFinished="onListUpdateFinished"
+										itemPress="onItemPress" noDataText="Nenhuma tabela de preços cadastrado para o cliente"
+										busyIndicatorDelay="{detailView>/lineItemTableDelay}" fixedLayout="false">
+										<columns>
+											<Column>
+												<Text text="Cliente"/>
+											</Column>
+											<Column>
+												<Text text="Tabela"/>
+											</Column>
+											<Column minScreenWidth="Tablet" demandPopin="true">
+												<Text text="Descrição"/>
+											</Column>
+										</columns>
+										<items >
+											<ColumnListItem type="Inactive">
+												<cells>
+													<Text text="{tabPreco>kunnr}"/>
+													<Text text="{tabPreco>pltyp}"/>
+													<Text text="{tabPreco>ptext}"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</ScrollContainer>
+							</IconTabFilter>
+							<!--<IconTabFilter id="tabContratos" text="Contratos Ativos" icon="sap-icon://document-text" key="tab4">-->
+							<!--	<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">-->
+							<!--		<Table id="table_ContratosAtivos" width="100%" items="{path: 'contratoCliente>/', sorter : { path : 'CodEstabel', ascending : true }}"-->
+							<!--			updateFinished="onListUpdateFinished" itemPress="onItemPress" noDataText="Nenhum contrato Ativo cadastrado para o cliente"-->
+							<!--			busyIndicatorDelay="{detailView>/lineItemTableDelay}">-->
+							<!--			<columns>-->
+							<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
+							<!--					<Text text="Est"/>-->
+							<!--				</Column>-->
+							<!--				<Column>-->
+							<!--					<Text text="Nome"/>-->
+							<!--				</Column>-->
+							<!--				<Column>-->
+							<!--					<Text text="Contrato"/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
+							<!--					<Text text="Unid. Negócio"/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="Tablet" demandPopin="true">-->
+							<!--					<Text text="Desc.Fin.(%)"/>-->
+							<!--				</Column>-->
+							<!--			</columns>-->
+							<!--			<items >-->
+							<!--				<ColumnListItem type="Active">-->
+							<!--					<cells>-->
+							<!--						<Text text="{contratoCliente>CodEstabel}"/>-->
+							<!--						<Text text="{contratoCliente>NomEstabel}"/>-->
+							<!--						<Text text="{contratoCliente>CodContrato}"/>-->
+							<!--						<Text text="{contratoCliente>UnidadeNegocio}"/>-->
+							<!--						<Text text="{contratoCliente>PctDescContrato}"/>-->
+							<!--					</cells>-->
+							<!--				</ColumnListItem>-->
+							<!--			</items>-->
+							<!--		</Table>-->
+							<!--	</ScrollContainer>-->
+							<!--</IconTabFilter>-->
+							<!--<IconTabFilter id="tabDuplicatas" text="Duplicatas Pendentes" icon="sap-icon://expense-report" key="tab5">-->
+							<!--	<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">-->
+							<!--		<Table id="table_DuplicatasAtivos" fixedLayout="false"-->
+							<!--			items="{ path: 'duplicataCliente>/', sorter: { path : 'CodEstabel', ascending: 'true'}}" updateFinished="onListUpdateFinished"-->
+							<!--			noDataText="Nenhum duplicata em aberto para o cliente" width="100%" busyIndicatorDelay="{detailView>/lineItemTableDelay}">-->
+							<!--			<columns>-->
+							<!--				<Column minScreenWidth="320px">-->
+							<!--					<Text text="Estab"/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="320px">-->
+							<!--					<Text text="Nr Doc."/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="550px" demandPopin="true">-->
+							<!--					<Text text="Ped Venda"/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="460px">-->
+							<!--					<Text text="Emissão"/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="400px">-->
+							<!--					<Text text="Venc."/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="320px">-->
+							<!--					<Text text="Valor Orig."/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="650px" demandPopin="true">-->
+							<!--					<Text text="Saldo"/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="720px" demandPopin="true">-->
+							<!--					<Text text="Dias Atrs."/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="780px" demandPopin="true">-->
+							<!--					<Text text="Historico"/>-->
+							<!--				</Column>-->
+							<!--			</columns>-->
+							<!--			<items >-->
+							<!--				<ColumnListItem type="Active">-->
+							<!--					<cells>-->
+							<!--						<Text text="{duplicataCliente>NomeEstabel}"/>-->
+							<!--						<Text text="{duplicataCliente>CodTitAcr}"/>-->
+							<!--						<Text text="{duplicataCliente>CodPedVda}"/>-->
+							<!--						<Text text="{duplicataCliente>DatEmisDocto}"/>-->
+							<!--						<Text text="{duplicataCliente>DatVenctoTitAcr}"/>-->
+							<!--						<Text text="{duplicataCliente>ValOriginTitAcr}"/>-->
+							<!--						<Text text="{duplicataCliente>ValSdoTitAcr}"/>-->
+							<!--						<Text text="{duplicataCliente>DiasAtraso}"/>-->
+							<!--						<Text text="{duplicataCliente>Historico}"/>-->
+							<!--					</cells>-->
+							<!--				</ColumnListItem>-->
+							<!--			</items>-->
+							<!--		</Table>-->
+							<!--		<Table id="table_DuplicatasAtivosTotal" items="{ path: 'duplicataClienteTotal>/', sorter: { path : 'CodEstabel', ascending: 'true'}}"-->
+							<!--			width="100%" updateFinished="onListUpdateFinished" fixedLayout="false" noDataText="Nenhum duplicata em aberto para o cliente"-->
+							<!--			busyIndicatorDelay="{detailView>/lineItemTableDelay}">-->
+							<!--			<headerToolbar>-->
+							<!--				<ToolbarSpacer/>-->
+							<!--				<ToolbarSpacer/>-->
+							<!--				<ToolbarSpacer/>-->
+							<!--				<Toolbar id="lineItemsToolbar">-->
+							<!--					<Title id="lineItemsHeader" text="Total Duplicatas em Aberto" class="bold"/>-->
+							<!--				</Toolbar>-->
+							<!--			</headerToolbar>-->
+							<!--			<columns>-->
+							<!--				<Column minScreenWidth="320px">-->
+							<!--					<Text text="Estab"/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="320px">-->
+							<!--					<Text text="Valor Orig."/>-->
+							<!--				</Column>-->
+							<!--				<Column minScreenWidth="320px">-->
+							<!--					<Text text="Saldo"/>-->
+							<!--				</Column>-->
+							<!--			</columns>-->
+							<!--			<items >-->
+							<!--				<ColumnListItem type="Active">-->
+							<!--					<cells>-->
+							<!--						<Text text="{duplicataClienteTotal>NomeEstabel}"/>-->
+							<!--						<Text text="R$: {duplicataClienteTotal>ValOriginTitAcr}"/>-->
+							<!--						<Text text="R$: {duplicataClienteTotal>ValSdoTitAcr}"/>-->
+							<!--					</cells>-->
+							<!--				</ColumnListItem>-->
+							<!--			</items>-->
+							<!--		</Table>-->
+							<!--	</ScrollContainer>-->
+							<!--</IconTabFilter>-->
+						</items>
+					</IconTabBar>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
