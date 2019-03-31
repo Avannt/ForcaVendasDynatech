@@ -35,6 +35,14 @@
         "entryPath": "/sap/opu/odata"
       },
       "description": "VB_GWD"
+    },
+    {
+      "path": "/Dynatec_DEV",
+      "target": {
+        "type": "destination",
+        "name": "Dynatec_DEV"
+      },
+      "description": "Dynatec_DEV"
     }
   ]
 }

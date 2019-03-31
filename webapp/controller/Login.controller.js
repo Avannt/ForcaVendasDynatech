@@ -47,7 +47,7 @@ sap.ui.define([
 					this.getOwnerComponent().getModel("modelAux").setProperty("/DBModel", oModel);
 				} else { // QAS
 					this.getOwnerComponent().getModel("modelAux").setProperty("/DBModel", this.getView().getModel());
-					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.0.19");
+					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.00");
 				}
 
 				this.getOwnerComponent().getModel("modelAux").setProperty("/Werks", "1000");
@@ -899,7 +899,7 @@ sap.ui.define([
 											if (result1 !== null && result1 !== undefined) {
 
 												oModel.read("/Login(IvCodRepres='" + result1.codUsr + "',IvWerks='" + Werks + "',IvSenha='" + result1.senha +
-													"',IvImei='" + ImeiCelular + "',IvVersaoapp='" + NumVersao + "')", {
+													"',IvVersaoapp='" + NumVersao + "')", {
 														success: function(retorno) {
 															if (retorno.EvRettyp == "E") {
 
@@ -2031,147 +2031,120 @@ sap.ui.define([
 					// oModel.setProperty("password", "sap123");
 
 					sap.ui.getCore().byId("idDialogLogin").setBusy(true);
+						
+					oModel.read("/Login(IvRepres='" + codUsr + "',IvWerks='" + werks + "',IvSenha='" + senha + "',IvVersaoapp='" + numVersao + "')", {
+						success: function(retorno) {
+							if (retorno.EvRettyp == "E") {
 
-					oModel.read("/Login(IvCodRepres='" + codUsr + "',IvWerks='" + werks + "',IvSenha='" + senha +
-						"',IvImei='" + imeiCelular + "',IvVersaoapp='" + numVersao + "')", {
-							success: function(retorno) {
-								if (retorno.EvRettyp == "E") {
+								sap.m.MessageBox.show(
+									retorno.EvReturn, {
+										icon: sap.m.MessageBox.Icon.WARNING,
+										title: "Falha ao realizar Login!",
+										actions: [sap.m.MessageBox.Action.OK],
+										onClose: function(oAction) {
+											sap.ui.getCore().byId("idDialogLogin").setBusy(false);
 
-									sap.m.MessageBox.show(
-										retorno.EvReturn, {
-											icon: sap.m.MessageBox.Icon.WARNING,
-											title: "Falha ao realizar Login!",
-											actions: [sap.m.MessageBox.Action.OK],
-											onClose: function(oAction) {
-												sap.ui.getCore().byId("idDialogLogin").setBusy(false);
-
-											}
 										}
-									);
+									}
+								);
 
-								} else if (retorno.EvRettyp == "S") {
+							} else if (retorno.EvRettyp == "S") {
 
-									var open = indexedDB.open("VB_DataBase");
+								var open = indexedDB.open("VB_DataBase");
 
-									open.onerror = function(hxr) {
-										console.log("Erro ao abrir tabelas.");
-										console.log(hxr.Message);
-									};
+								open.onerror = function(hxr) {
+									console.log("Erro ao abrir tabelas.");
+									console.log(hxr.Message);
+								};
 
-									//Load tables
-									open.onsuccess = function(e) {
+								//Load tables
+								open.onsuccess = function(e) {
 
-										var db = e.target.result;
+									var db = e.target.result;
 
-										var objUsuarios = db.transaction(["Usuarios"], "readwrite");
-										var objectStoreUsuarios = objUsuarios.objectStore("Usuarios");
+									var objUsuarios = db.transaction(["Usuarios"], "readwrite");
+									var objectStoreUsuarios = objUsuarios.objectStore("Usuarios");
 
-										var request = objectStoreUsuarios.get(werks);
+									var request = objectStoreUsuarios.get(werks);
 
-										request.onsuccess = function(e1) {
-											var result = e1.target.result;
+									request.onsuccess = function(e1) {
+										var result = e1.target.result;
 
-											var codRepres = retorno.CodRepres;
+										var codRepres = retorno.CodRepres;
 
-											var entryUsuario = {
-												// idEmpresa: werks + "." + codRepres,
-												werks: werks,
-												dataAtualizacao: "", // Deixo em branco, essa info somente sera atualizada no clique do botao atualizar, caso ocorra tudo corretamente
-												codUsr: codUsr,
-												senha: senha,
-												imei: imeiCelular,
-												numVersao: numVersao,
-												codRepres: codRepres,
-												tipousuario: retorno.Tipousuario,
-												// Utiliza Campanha Prod Acab
-												utilcampProdAcab: retorno.UtilcampAmo == "S",
-												//Utiliza Campanha Brinde
-												utilcampBri: retorno.UtilcampBri == "S",
-												//Utiliza Campanha Enxoval
-												utilcampEnxoval: retorno.UtilcampDesc == "S",
-												//Utiliza Campanha Prz
-												utilcampPrz: retorno.UtilcampPrz == "S",
-												//Utiliza Campanha Global
-												utilcampGbl: retorno.UtilcampBon == "S",
-												utilcomAmo: retorno.UtilcomAmo == "S",
-												utilcomBon: retorno.UtilcomBon == "S",
-												utilcomBri: retorno.UtilcomBri == "S",
-												utilcomDesc: retorno.UtilcomDesc == "S",
-												utilcomPrz: retorno.UtilcomPrz == "S",
-												utilverbAmo: retorno.UtilverbAmo == "S",
-												utilverbBon: retorno.UtilverbBon == "S",
-												utilverbBri: retorno.UtilverbBri == "S",
-												utilverbDesc: retorno.UtilverbDesc == "S",
-												utilverbPrz: retorno.UtilverbPrz == "S",
-												buGroup: retorno.BuGroup,
-												tabbon: retorno.Tabbon,
-												tabamo: retorno.Tabamo,
-												tabbri: retorno.Tabbri,
-												usrped: retorno.Usrped,
-												usrapr: retorno.Usrapr
+										var entryUsuario = {
+											// idEmpresa: werks + "." + codRepres,
+											werks: werks,
+											dataAtualizacao: "", // Deixo em branco, essa info somente sera atualizada no clique do botao atualizar, caso ocorra tudo corretamente
+											codUsr: codUsr,
+											senha: senha,
+											imei: imeiCelular,
+											numVersao: numVersao,
+											codRepres: codRepres,
+											tipousuario: retorno.Tipousuario
+										};
+
+										if (result == null || result == undefined) {
+
+											var requestUsuariosAdd = objectStoreUsuarios.add(entryUsuario);
+
+											requestUsuariosAdd.onsuccess = function() {
+
+												MessageBox.show(retorno.EvReturn, {
+													icon: MessageBox.Icon.SUCCESS,
+													title: "Confirmação",
+													actions: [MessageBox.Action.OK],
+													onClose: function() {
+
+														that.getOwnerComponent().getModel("modelAux").setProperty("/CodRepres", codRepres);
+														that.getOwnerComponent().getModel("modelAux").setProperty("/CodUsr", codUsr);
+														that.getOwnerComponent().getModel("modelAux").setProperty("/Tipousuario", retorno.Tipousuario);
+														sap.ui.getCore().byId("idUsuario").setProperty("enabled", false);
+														sap.ui.getCore().byId("idSenha").setProperty("enabled", false);
+
+														if (that._ItemDialog) {
+															that._ItemDialog.destroy(true);
+														}
+													}
+												});
+
+											};
+											requestUsuariosAdd.onerror = function() {
+												console.log("Erro ao adicionar dados de login.");
 											};
 
-											if (result == null || result == undefined) {
+										} else {
+											var requestUsuariosUpdate = objectStoreUsuarios.put(entryUsuario);
 
-												var requestUsuariosAdd = objectStoreUsuarios.add(entryUsuario);
+											requestUsuariosUpdate.onsuccess = function() {
 
-												requestUsuariosAdd.onsuccess = function() {
+												MessageBox.show("Login foi Atualizado com Sucesso!", {
+													icon: MessageBox.Icon.SUCCESS,
+													title: "Confirmação",
+													actions: [MessageBox.Action.OK],
+													onClose: function() {
 
-													MessageBox.show(retorno.EvReturn, {
-														icon: MessageBox.Icon.SUCCESS,
-														title: "Confirmação",
-														actions: [MessageBox.Action.OK],
-														onClose: function() {
-
-															that.getOwnerComponent().getModel("modelAux").setProperty("/CodRepres", codRepres);
-															that.getOwnerComponent().getModel("modelAux").setProperty("/CodUsr", codUsr);
-															that.getOwnerComponent().getModel("modelAux").setProperty("/Tipousuario", retorno.Tipousuario);
-															sap.ui.getCore().byId("idUsuario").setProperty("enabled", false);
-															sap.ui.getCore().byId("idSenha").setProperty("enabled", false);
-
-															if (that._ItemDialog) {
-																that._ItemDialog.destroy(true);
-															}
+														if (that._ItemDialog) {
+															that._ItemDialog.destroy(true);
 														}
-													});
-
-												};
-												requestUsuariosAdd.onerror = function() {
-													console.log("Erro ao adicionar dados de login.");
-												};
-
-											} else {
-												var requestUsuariosUpdate = objectStoreUsuarios.put(entryUsuario);
-
-												requestUsuariosUpdate.onsuccess = function() {
-
-													MessageBox.show("Login foi Atualizado com Sucesso!", {
-														icon: MessageBox.Icon.SUCCESS,
-														title: "Confirmação",
-														actions: [MessageBox.Action.OK],
-														onClose: function() {
-
-															if (that._ItemDialog) {
-																that._ItemDialog.destroy(true);
-															}
-														}
-													});
-												};
-												requestUsuariosUpdate.onerror = function() {
-													console.log("Erro ao adicionar dados de login");
-												};
-											}
-										};
+													}
+												});
+											};
+											requestUsuariosUpdate.onerror = function() {
+												console.log("Erro ao adicionar dados de login");
+											};
+										}
 									};
-								}
-							},
-							error: function(error) {
-
-								sap.ui.getCore().byId("idDialogLogin").setBusy(false);
-								that.onMensagemErroODATA(error.statusCode);
-
+								};
 							}
-						});
+						},
+						error: function(error) {
+
+							sap.ui.getCore().byId("idDialogLogin").setBusy(false);
+							that.onMensagemErroODATA(error.statusCode);
+
+						}
+					});
 				}
 			},
 
