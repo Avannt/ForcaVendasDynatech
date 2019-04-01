@@ -7,7 +7,7 @@ sap.ui.define([
 		"testeui5/util/mensagem",
 		"testeui5/js/index"
 	],
-	function(Controller, BaseController, MessageBox, mensagem, index) {
+	function(Controller, BaseController, MessageBox, mensagem, index) { 
 		"use strict";
 		var idbSupported = false;
 		var ImeiResult = [];
