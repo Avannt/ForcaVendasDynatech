@@ -7,18 +7,18 @@ sap.ui.define([
 		"testeui5/util/mensagem",
 		"testeui5/js/index"
 	],
-	function(Controller, BaseController, MessageBox, mensagem, index) {
+	function (Controller, BaseController, MessageBox, mensagem, index) {
 		"use strict";
 		var idbSupported = false;
-		var ImeiResult = []; 
-		
+		var ImeiResult = [];
+
 		return BaseController.extend("testeui5.controller.Login", {
 
-			onInit: function() {
+			onInit: function () {
 				this.getRouter().getRoute("login").attachPatternMatched(this._onLoadFields, this);
 			},
 
-			_onLoadFields: function() {
+			_onLoadFields: function () {
 				var that = this;
 
 				this.onInicializaModels();
@@ -45,9 +45,11 @@ sap.ui.define([
 
 					this.getView().setModel(oModel);
 					this.getOwnerComponent().getModel("modelAux").setProperty("/DBModel", oModel);
-				} else { // QAS
+				} else {
+					// QAS
 					this.getOwnerComponent().getModel("modelAux").setProperty("/DBModel", this.getView().getModel());
-					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.0.19");
+					//Esse parâmetro está cadastrado na tabela tvarv no S4/HANA
+					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.00");
 				}
 
 				this.getOwnerComponent().getModel("modelAux").setProperty("/Werks", "1000");
@@ -63,10 +65,10 @@ sap.ui.define([
 
 				if (idbSupported) {
 
-					var open = indexedDB.open("VB_DataBase", 49);
+					var open = indexedDB.open("VB_DataBase", 5);
 
 					// Create the Tables
-					open.onupgradeneeded = function(e) {
+					open.onupgradeneeded = function (e) {
 						var db = e.target.result;
 						console.log(e);
 
@@ -118,55 +120,6 @@ sap.ui.define([
 							});
 
 							objMateriais.createIndex("mtpos", "mtpos", {
-								unique: false
-							});
-						}
-
-						// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE PV ENTREGA FUTURA  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						if (!db.objectStoreNames.contains("EntregaFutura")) {
-							var objEntregaFutura = db.createObjectStore("EntregaFutura", {
-								keyPath: "idEntregaFutura",
-								unique: true
-							});
-
-							objEntregaFutura.createIndex("Vbeln", "Vbeln", {
-								unique: false
-							});
-
-							objEntregaFutura.createIndex("Kunrg", "Kunrg", {
-								unique: false
-							});
-
-						}
-
-						// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE PV ENTREGA FUTURA (RETORNO) >>>>>>>>>>>>>>>>>>>>>>>>>
-						if (!db.objectStoreNames.contains("EntregaFutura2")) {
-							var objEntregaFutura2 = db.createObjectStore("EntregaFutura2", {
-								keyPath: "idEntregaFutura",
-								unique: true
-							});
-
-							objEntregaFutura2.createIndex("Vbeln", "Vbeln", {
-								unique: false
-							});
-
-							objEntregaFutura2.createIndex("Kunrg", "Kunrg", {
-								unique: false
-							});
-						}
-
-						// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE PV ENTREGA FUTURA (HISTÓRICO) >>>>>>>>>>>>>>>>>>>>>>>>>
-						if (!db.objectStoreNames.contains("EntregaFutura3")) {
-							var objEntregaFutura3 = db.createObjectStore("EntregaFutura3", {
-								keyPath: "idEntregaFutura",
-								unique: true
-							});
-
-							objEntregaFutura3.createIndex("Vbeln", "Vbeln", {
-								unique: false
-							});
-
-							objEntregaFutura3.createIndex("Kunrg", "Kunrg", {
 								unique: false
 							});
 						}
@@ -245,6 +198,7 @@ sap.ui.define([
 								unique: false
 							});
 						}
+
 						// >>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE ACOMP PEDIDO DET >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
 						if (!db.objectStoreNames.contains("AcompPedidoDetalhe")) {
 							var objAcompPedidosDet = db.createObjectStore("AcompPedidoDetalhe", {
@@ -264,274 +218,7 @@ sap.ui.define([
 								unique: false
 							});
 						}
-						// >>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE SALDO VERBA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
-						if (!db.objectStoreNames.contains("SaldoVerba")) {
-							var objSaldoVerba = db.createObjectStore("SaldoVerba", {
-								keyPath: "Reprs",
-								unique: true
-							});
-							objSaldoVerba.createIndex("Kunnr", "Kunnr", {
-								unique: false
-							});
-							objSaldoVerba.createIndex("Werks", "Werks", {
-								unique: false
-							});
-						}
 
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. ITEM TABELA A960 (ZSDMF_A960) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A959 – Esta tabela servirá para vincular o código de cliente com a tabela de preço
-						if (!db.objectStoreNames.contains("A959")) {
-							var objA959 = db.createObjectStore("A959", {
-								keyPath: "idA959",
-								unique: true
-							});
-						}
-
-						if (!db.objectStoreNames.contains("A960")) {
-							var objA960 = db.createObjectStore("A960", {
-								keyPath: "idA960",
-								unique: true
-							});
-							objA960.createIndex("kunnr", "kunnr", {
-								unique: false
-							});
-							objA960.createIndex("pltyp", "pltyp", {
-								unique: false
-							});
-							objA960.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. ITEM TABELA A961 (ZSDMF_A961) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A961 – Esta tabela servirá para vincular o código de cliente com a tabela de preço
-						if (!db.objectStoreNames.contains("A961")) {
-							var objClienteTabPreco = db.createObjectStore("A961", {
-								keyPath: "idA961", // Werks.kunnr.pltyp
-								unique: true
-							});
-							objClienteTabPreco.createIndex("kunnr", "kunnr", {
-								unique: false
-							});
-							objClienteTabPreco.createIndex("pltyp", "pltyp", {
-								unique: false
-							});
-							objClienteTabPreco.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..TABELA A962 (ZSDMF_A962) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A962 – Esta tabela será para cadastrar as famílias referente ao desconto extra
-						if (!db.objectStoreNames.contains("A962")) {
-							var objA962 = db.createObjectStore("A962", {
-								keyPath: "idA962",
-								unique: true
-							});
-							objA962.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE A963 (ZSDMF_A963) >>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A963 – Esta tabela fará o vínculo do representante e a tabela de preços
-						if (!db.objectStoreNames.contains("A963")) {
-							var objA963 = db.createObjectStore("A963", {
-								keyPath: "idA963",
-								unique: true
-							});
-							objA963.createIndex("werks", "werks", {
-								unique: false
-							});
-							objA963.createIndex("lifnr", "lifnr", {
-								unique: false
-							});
-							objA963.createIndex("pltyp", "pltyp", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..TABELA A964 (ZSDMF_A964) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A964 – Esta tabela conterá o percentual de juros
-						if (!db.objectStoreNames.contains("A964")) {
-							var objA964 = db.createObjectStore("A964", {
-								keyPath: "idA964",
-								unique: true
-							});
-							objA964.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..TABELA A965 (ZSDMF_A965) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A965 – Esta tabela será para cadastrar as famílias referente ao desconto normal
-						if (!db.objectStoreNames.contains("A965")) {
-							var objA965 = db.createObjectStore("A965", {
-								keyPath: "idA965",
-								unique: true
-							});
-							objA965.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..TABELA DE A966 (ZSDMF_A966) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A966 – Esta tabela fará o vínculo entre a tabela de preço e a regra da família
-						if (!db.objectStoreNames.contains("A966")) {
-							var objA966 = db.createObjectStore("A966", {
-								keyPath: "idA966",
-								unique: true
-							});
-							objA966.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..TABELA DE A967 (ZSDMF_A967) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A967 – Cadastro de range de quantidades para a regra de desconto normal.
-						if (!db.objectStoreNames.contains("A967")) {
-							var objA967 = db.createObjectStore("A967", {
-								keyPath: "idA967",
-								unique: true
-							});
-							objA967.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE A968 (ZSDMF_A968) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						if (!db.objectStoreNames.contains("A968")) {
-							var objDescPorQuant = db.createObjectStore("A968", {
-								keyPath: "idA968",
-								unique: true
-							});
-							objDescPorQuant.createIndex("matnr", "matnr", {
-								unique: false
-							});
-							objDescPorQuant.createIndex("werks", "werks", {
-								unique: false
-							});
-							objDescPorQuant.createIndex("zzGrpmat", "zzGrpmat", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..TABELA DE A969 (ZSDMF_A969) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						//A969 – Cadastro de range de quantidades para a regra de desconto extra.
-						if (!db.objectStoreNames.contains("A969")) {
-							var objA969 = db.createObjectStore("A969", {
-								keyPath: "idA969",
-								unique: true
-							});
-							objA969.createIndex("werks", "werks", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE KONM (ZSDMF_KONM) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// KONM – Tabela onde estarão os ranges de quantidades 
-						if (!db.objectStoreNames.contains("Konm")) {
-							var objKONM = db.createObjectStore("Konm", {
-								keyPath: "idKonm",
-								unique: true
-							});
-							objKONM.createIndex("knumh", "knumh", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpEnxoval (ZSDMF_CAMPANHA_ENXOVAL) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpEnxoval – Tabela de campanha de enxoval
-						if (!db.objectStoreNames.contains("CmpEnxoval")) {
-							var objCmpEnxoval = db.createObjectStore("CmpEnxoval", {
-								keyPath: "idCmpEnxoval",
-								unique: true,
-								autoIncrement: true
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpGbGrpProdsAcabs (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpGbGrpProdsAcabs – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("CmpGbGrpProdsAcabs")) {
-							var objCmpGbGrpProdsAcabs = db.createObjectStore("CmpGbGrpProdsAcabs", {
-								keyPath: "idCmpGbGrpProdsAcabs",
-								unique: true,
-								autoIncrement: true
-							});
-
-							objCmpGbGrpProdsAcabs.createIndex("material", "material", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpGbItensBrindes (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpGbItensBrindes – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("CmpGbItensBrindes")) {
-							var objCmpGbItensBrindes = db.createObjectStore("CmpGbItensBrindes", {
-								keyPath: "idCmpGbItensBrindes",
-								unique: true,
-								autoIncrement: true
-							});
-
-							objCmpGbItensBrindes.createIndex("material", "material", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpGbProdsAcabs (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpGbProdsAcabs – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("CmpGbProdsAcabs")) {
-							var objCmpGbProdsAcabs = db.createObjectStore("CmpGbProdsAcabs", {
-								keyPath: "idCmpGbProdsAcabs",
-								unique: true,
-								autoIncrement: true
-							});
-
-							objCmpGbProdsAcabs.createIndex("grupo", "grupo", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpGbQtdItens (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpGbQtdItens – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("CmpGbQtdItens")) {
-							var objCmpGbQtdItens = db.createObjectStore("CmpGbQtdItens", {
-								keyPath: "idCmpGbQtdItens",
-								unique: true,
-								autoIncrement: true
-							});
-							
-							objCmpGbQtdItens.createIndex("grupo", "grupo", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpProdsAcabs (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpProdsAcabs – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("CmpProdsAcabs")) {
-							var objCmpProdsAcabs = db.createObjectStore("CmpProdsAcabs", {
-								keyPath: "idCmpProdsAcabs",
-								unique: true,
-								autoIncrement: true
-							});
-
-							objCmpProdsAcabs.createIndex("material", "material", {
-								unique: false
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpSldBrindes (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpSldBrindes – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("CmpSldBrindes")) {
-							var objCmpSldBrindes = db.createObjectStore("CmpSldBrindes", {
-								keyPath: "idCmpSldBrindes",
-								unique: true,
-								autoIncrement: true
-							});
-						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpSldBrindes (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpSldBrindes – Tabela de campanha Global grupo Produto Acabado 
 						if (!db.objectStoreNames.contains("FormasPagamentos")) {
 							var objFormasPagamentos = db.createObjectStore("FormasPagamentos", {
 								keyPath: "idFormasPagamentos",
@@ -539,34 +226,70 @@ sap.ui.define([
 								autoIncrement: true
 							});
 						}
+
+						if (!db.objectStoreNames.contains("A950")) {
+							var objA950 = db.createObjectStore("A950", {
+								keyPath: "idA950",
+								unique: true,
+								autoIncrement: true
+							});
+							
+							objA950.createIndex("matnr", "matnr", {
+								unique: false
+							});
+						}
+
+						if (!db.objectStoreNames.contains("A406")) {
+							var objA406 = db.createObjectStore("A406", {
+								keyPath: "idA406",
+								unique: true,
+								autoIncrement: true
+							});
+							
+							objA406.createIndex("matnr", "matnr", {
+								unique: false
+							});
+						}
+
+						if (!db.objectStoreNames.contains("A900")) {
+							var objA900 = db.createObjectStore("A900", {
+								keyPath: "idA900",
+								unique: true,
+								autoIncrement: true
+							});
+							
+							objA900.createIndex("matnr", "matnr", {
+								unique: false
+							});
+						}
 						
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE CmpSldBrindes (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpSldBrindes – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("CmpPrzMed")) {
-							var objCmpPrzMed = db.createObjectStore("CmpPrzMed", {
-								keyPath: "idCmpPrzMed",
+						if (!db.objectStoreNames.contains("TabPreco")) {
+							var objTabPreco = db.createObjectStore("TabPreco", {
+								keyPath: "idTabPreco",
 								unique: true,
 								autoIncrement: true
 							});
 						}
-
-						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.. TABELA DE ZSDT040 (ZSDMF_CAMPANHA_GRP_PROD_ACAB) >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-						// CmpSldBrindes – Tabela de campanha Global grupo Produto Acabado 
-						if (!db.objectStoreNames.contains("ControleAmostra")) {
-							var objControleAmostra = db.createObjectStore("ControleAmostra", {
-								keyPath: "idControleAmostra",
+						
+						if (!db.objectStoreNames.contains("OrdensTabPreco")) {
+							var objOrdensTabPreco = db.createObjectStore("OrdensTabPreco", {
+								keyPath: "idOrdensTabPreco",
 								unique: true,
 								autoIncrement: true
+							});
+							
+							objOrdensTabPreco.createIndex("kozgf", "kozgf", {
+								unique: false
 							});
 						}
 					};
 
-					open.onerror = function(hxr) {
+					open.onerror = function (hxr) {
 						console.log("Erro ao abrir tabelas.");
 						console.log(hxr.Message);
 					};
 					//Load tables
-					open.onsuccess = function(e) {
+					open.onsuccess = function (e) {
 
 						var db = e.target.result;
 						var Werks = that.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
@@ -576,7 +299,7 @@ sap.ui.define([
 
 						var request = objUsuarios.get(Werks);
 
-						request.onsuccess = function(evt) {
+						request.onsuccess = function (evt) {
 
 							var result = evt.target.result;
 
@@ -594,7 +317,7 @@ sap.ui.define([
 				}
 			},
 
-			onInicializaModels: function() {
+			onInicializaModels: function () {
 
 				var oModel = new sap.ui.model.json.JSONModel({
 					Ntgew: 0,
@@ -677,11 +400,10 @@ sap.ui.define([
 					zzDesext: "", // – Desconto Extra
 					zzValmim: "" // – Valor Mínimo
 				});
-
 				this.getOwnerComponent().setModel(oModelItemPedido, "modelItemPedido");
 			},
 
-			retornaDataAtualizacao: function() {
+			retornaDataAtualizacao: function () {
 				var date = new Date();
 				var dia = String(date.getDate());
 				var mes = String(date.getMonth() + 1);
@@ -716,7 +438,7 @@ sap.ui.define([
 				return data + " - " + horario;
 			},
 
-			getPermissao: function() {
+			getPermissao: function () {
 				var that = this;
 
 				if (device.platform == 'Android') {
@@ -735,7 +457,7 @@ sap.ui.define([
 				}
 			},
 
-			getImei: function() {
+			getImei: function () {
 				var that = this;
 				var isTablet = this.getOwnerComponent().getModel("modelAux").getProperty("/isTablet");
 				var isTablet = "Android";
@@ -784,7 +506,7 @@ sap.ui.define([
 				}
 			},
 
-			onLoadTables: function() {
+			onLoadTables: function () {
 
 				var that = this;
 				var Werks = this.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
@@ -812,7 +534,7 @@ sap.ui.define([
 
 				var open = indexedDB.open("VB_DataBase");
 
-				open.onsuccess = function() {
+				open.onsuccess = function () {
 					var db = open.result;
 
 					var store = db.transaction("PrePedidos").objectStore("PrePedidos");
@@ -821,7 +543,7 @@ sap.ui.define([
 					var request = indiceStatusPed.getAll(2); // 2 -> Status Pendente (envio)
 
 					var oDocsPendentes = [];
-					request.onsuccess = function(event) {
+					request.onsuccess = function (event) {
 						oDocsPendentes = event.target.result;
 
 						// bExisteDocPendente = (oDocsPendentes.length > 0);
@@ -834,845 +556,471 @@ sap.ui.define([
 								icon: MessageBox.Icon.ERROR,
 								title: "Erro ao atualizar bases.",
 								actions: [MessageBox.Action.OK],
-								onClose: function() {
+								onClose: function () {
 									bExisteDocPendente = false;
 									return;
 								}
 							});
 					}
 
-					store = db.transaction("EntregaFutura2").objectStore("EntregaFutura2");
-					request = store.getAll();
+					MessageBox.show("Você deseja atualizar as tabelas?", {
+						icon: MessageBox.Icon.QUESTION,
+						title: "Atualização das tabelas.",
+						actions: [MessageBox.Action.YES, sap.m.MessageBox.Action.CANCEL],
+						onClose: function (oAction) {
+							if (oAction === sap.m.MessageBox.Action.YES) {
 
-					request.onsuccess = function(event) {
-						oDocsPendentes = event.target.result;
+								var vTables = ["Clientes", "Materiais", "PrePedidos", "StatusPedidos", "OrdensTabPreco",
+									"ItensPedido", "TitulosAbertos", "TiposPedidos", "FormasPagamentos", "A900", "A406", "A950", "TabPreco"
+								];
 
-						// bExisteDocPendente = (oDocsPendentes.length > 0);
-						bExisteDocPendente = false;
-						if (bExisteDocPendente) {
-							MessageBox.show(
-								"Existe(m) entrega(s) de vendas a ser(em) enviadas, por favor verifique..", {
-									icon: MessageBox.Icon.ERROR,
-									title: "Erro ao atualizar bases.",
-									actions: [MessageBox.Action.OK],
-									onClose: function() {
-										bExisteDocPendente = false;
-										return;
-									}
-								});
-						} else {
+								that.DropDBTables(vTables);
 
-							MessageBox.show("Você deseja atualizar as tabelas?", {
-								icon: MessageBox.Icon.QUESTION,
-								title: "Atualização das tabelas.",
-								actions: [MessageBox.Action.YES, sap.m.MessageBox.Action.CANCEL],
-								onClose: function(oAction) {
-									if (oAction === sap.m.MessageBox.Action.YES) {
+								if (!that._CreateMaterialFragment) {
 
-										var vTables = ["Clientes", "A969", "A959", "A960", "A961", "A962", "A963", "A964", "A965", "A966", "A967", "A968",
-											"Materiais", "TitulosAbertos", "Konm", "TiposPedidos", "FormasPagamentos", "StatusPedidos", "CmpGbItensBrindes", "EntregaFutura3", "CmpPrzMed",
-											"CmpSldBrindes", "CmpProdsAcabs", "CmpGbQtdItens", "CmpGbProdsAcabs", "CmpGbGrpProdsAcabs", "CmpEnxoval", "EntregaFutura", "ControleAmostra", "SaldoVerba"
-										];
+									that._ItemDialog = sap.ui.xmlfragment(
+										"testeui5.view.busyDialog",
+										that
+									);
+									that.getView().addDependent(that._ItemDialog);
+								}
 
-										that.DropDBTables(vTables);
+								that._ItemDialog.open();
 
-										if (!that._CreateMaterialFragment) {
+								var tx = db.transaction("Usuarios", "readwrite");
+								var objUsuarios = tx.objectStore("Usuarios");
 
-											that._ItemDialog = sap.ui.xmlfragment(
-												"testeui5.view.busyDialog",
-												that
-											);
-											that.getView().addDependent(that._ItemDialog);
-										}
+								request = objUsuarios.get(Werks);
 
-										that._ItemDialog.open();
+								request.onsuccess = function (e1) {
 
-										var tx = db.transaction("Usuarios", "readwrite");
-										var objUsuarios = tx.objectStore("Usuarios");
+									var result1 = e1.target.result;
 
-										request = objUsuarios.get(Werks);
+									if (result1 !== null && result1 !== undefined) {
 
-										request.onsuccess = function(e1) {
+										oModel.read("/Login(IvRepres='" + result1.codUsr + "',IvWerks='" + Werks + "',IvSenha='" +
+											result1.senha + "',IvVersaoapp='" + NumVersao + "')", {
+												success: function (retorno) {
+													if (retorno.EvRettyp == "E") {
 
-											var result1 = e1.target.result;
-
-											if (result1 !== null && result1 !== undefined) {
-
-												oModel.read("/Login(IvCodRepres='" + result1.codUsr + "',IvWerks='" + Werks + "',IvSenha='" + result1.senha +
-													"',IvImei='" + ImeiCelular + "',IvVersaoapp='" + NumVersao + "')", {
-														success: function(retorno) {
-															if (retorno.EvRettyp == "E") {
-
-																sap.m.MessageBox.show(
-																	retorno.EvReturn, {
-																		icon: sap.m.MessageBox.Icon.WARNING,
-																		title: "Falha ao realizar Login!",
-																		actions: [sap.m.MessageBox.Action.OK],
-																		onClose: function(oAction) {
-																			if (that._ItemDialog) {
-																				that._ItemDialog.destroy(true);
-																			}
-																		}
+														sap.m.MessageBox.show(
+															retorno.EvReturn, {
+																icon: sap.m.MessageBox.Icon.WARNING,
+																title: "Falha ao realizar Login!",
+																actions: [sap.m.MessageBox.Action.OK],
+																onClose: function (oAction) {
+																	if (that._ItemDialog) {
+																		that._ItemDialog.destroy(true);
 																	}
-																);
+																}
+															}
+														);
 
-															} else if (retorno.EvRettyp == "S") {
+													} else if (retorno.EvRettyp == "S") {
 
-																oModel.read("/A959", {
-																	success: function(retornoA959) {
-																		var txA959 = db.transaction("A959", "readwrite");
-																		var objA959 = txA959.objectStore("A959");
+														//Clientes
+														oModel.read("/Clientes", {
+															urlParameters: {
+																"$filter": "IvRepres eq '" + CodRepres + "'"
+															},
+															success: function (retornoCliente) {
 
-																		for (var i = 0; i < retornoA959.results.length; i++) {
+																var txCliente = db.transaction("Clientes", "readwrite");
+																var objCliente = txCliente.objectStore("Clientes");
 
-																			var objBancoA959 = {
-																				idA959: retornoA959.results[i].Werks + "." +
-																					retornoA959.results[i].Pltyp,
-																				kappl: retornoA959.results[i].Kappl,
-																				kschl: retornoA959.results[i].Kschl,
-																				werks: retornoA959.results[i].Werks,
-																				pltyp: retornoA959.results[i].Pltyp,
-																				zzPrzminav: retornoA959.results[i].ZzPrzminav,
-																				zzPrzminap: retornoA959.results[i].ZzPrzminap,
-																				zzVlrPedMin: retornoA959.results[i].ZzVlrPedMin,
-																				zzPrzmaxav: retornoA959.results[i].ZzPrzmaxav,
-																				zzPrzmaxap: retornoA959.results[i].ZzPrzmaxap,
-																				kfrst: retornoA959.results[i].Kfrst,
-																				datbi: retornoA959.results[i].Datbi,
-																				datab: retornoA959.results[i].Datab,
-																				kbstat: retornoA959.results[i].Kbstat,
-																				knumh: retornoA959.results[i].Knumh
+																// for (var i = 0; i < retornoCliente.results.length; i++) {
+																for (var i = 0; i < 3; i++) {
+
+																	var objBancoCliente = {
+																		kunnr: "202269" + i,
+																		land1: "BR",
+																		lifnr: "203453",
+																		name1: "PAULO SERGIO MONTEIRO BORGES",
+																		name2: "",
+																		ort01: "CAMPO VERDE",
+																		ort02: "CENTRO",
+																		parvw: "YR",
+																		pstlz: "78840-000",
+																		regio: "MT",
+																		stcd1: "",
+																		stcd2: "53636309153",
+																		stras: "AV CURITIBA, 411 411",
+																		telf1: "6634195164"
+																			// kunnr: retornoCliente.results[i].Kunnr,
+																			// land1: retornoCliente.results[i].Land1,
+																			// name1: retornoCliente.results[i].Name1,
+																			// name2: retornoCliente.results[i].Name2,
+																			// ort01: retornoCliente.results[i].Ort01,
+																			// ort02: retornoCliente.results[i].Ort02,
+																			// regio: retornoCliente.results[i].Regio,
+																			// stras: retornoCliente.results[i].Stras,
+																			// pstlz: retornoCliente.results[i].Pstlz,
+																			// stcd1: retornoCliente.results[i].Stcd1,
+																			// stcd2: retornoCliente.results[i].Stcd2,
+																			// // inco1: retornoCliente.results[i].Inco1,
+																			// parvw: retornoCliente.results[i].Parvw,
+																			// lifnr: retornoCliente.results[i].Lifnr,
+																			// telf1: retornoCliente.results[i].Telf1
+																	};
+
+																	var requestCliente = objCliente.add(objBancoCliente);
+
+																	requestCliente.onsuccess = function (event) {
+																		console.log("Dados Clientes inseridos");
+																	};
+																	requestCliente.onerror = function (event) {
+																		console.log("Dados Clientes não foram inseridos :" + event);
+																	};
+																}
+
+																oModel.read("/TiposPedidos", {
+																	success: function (retornoTiposPedidos) {
+
+																		var txTiposPedidos = db.transaction("TiposPedidos", "readwrite");
+																		var objTiposPedidos = txTiposPedidos.objectStore("TiposPedidos");
+
+																		// for (i = 0; i < retornoTiposPedidos.results.length; i++) {
+																		for (i = 0; i < 1; i++) {
+
+																			// var objBancoTiposPedidos = {
+																			// 	idTipoPedido: "retornoTiposPedidos.results[i].Auart",
+																			// 	descricao: retornoTiposPedidos.results[i].Bezei
+																			// };
+																			var objBancoTiposPedidos = {
+																				idTipoPedido: "YVEN",
+																				descricao: "Pedido de Venda"
 																			};
 
-																			var requestA959 = objA959.add(objBancoA959);
+																			var requestTiposPedidos = objTiposPedidos.add(objBancoTiposPedidos);
 
-																			requestA959.onsuccess = function(event) {
-																				console.log("Dados A959 inseridos. " + event);
+																			requestTiposPedidos.onsuccess = function (event) {
+																				console.log("Dados TiposPedidos inseridos");
 																			};
-
-																			requestA959.onerror = function(event) {
-																				console.log("Dados A959 não foram inseridos :" + event);
+																			requestTiposPedidos.onerror = function (event) {
+																				console.log("Dados TiposPedidos não foram inseridos :" + event);
 																			};
 																		}
 
-																		oModel.read("/TiposPedidos", {
-																			success: function(retornoTiposPedidos) {
+																		oModel.read("/Materiais", {
+																			success: function (retornoMateriais) {
 
-																				var txTiposPedidos = db.transaction("TiposPedidos", "readwrite");
-																				var objTiposPedidos = txTiposPedidos.objectStore("TiposPedidos");
+																				var txMateriais = db.transaction("Materiais", "readwrite");
+																				var objMateriais = txMateriais.objectStore("Materiais");
 
-																				for (i = 0; i < retornoTiposPedidos.results.length; i++) {
+																				for (i = 0; i < retornoMateriais.results.length; i++) {
 
-																					var objBancoTiposPedidos = {
-																						idTipoPedido: retornoTiposPedidos.results[i].IdTipoPedido,
-																						descricao: retornoTiposPedidos.results[i].Descricao
+																					var objBancoMateriais = {
+																						matnr: retornoMateriais.results[i].Matnr,
+																						meins: retornoMateriais.results[i].Meins,
+																						maktx: retornoMateriais.results[i].Maktx,
+																						aumng: retornoMateriais.results[i].Aumng,
+																						scmng: retornoMateriais.results[i].Scmng,
+																						vrkme: retornoMateriais.results[i].Vrkme,
+																						mtpos: retornoMateriais.results[i].Mtpos,
+																						ntgew: retornoMateriais.results[i].Ntgew,
+																						provg: retornoMateriais.results[i].Provg,
+																						extwg: retornoMateriais.results[i].Extwg
 																					};
 
-																					var requestTiposPedidos = objTiposPedidos.add(objBancoTiposPedidos);
+																					var requestMateriais = objMateriais.add(objBancoMateriais);
 
-																					requestTiposPedidos.onsuccess = function(event) {
-																						console.log("Dados TiposPedidos inseridos");
+																					requestMateriais.onsuccess = function (event) {
+																						console.log("Dados Materiais inseridos. " + event);
 																					};
-																					requestTiposPedidos.onerror = function(event) {
-																						console.log("Dados TiposPedidos não foram inseridos :" + event);
+
+																					requestMateriais.onerror = function (event) {
+																						console.log("Dados Materiais não foram inseridos :" + event);
 																					};
 																				}
 
-																				oModel.read("/TitulosAbertos", {
-																					urlParameters: {
-																						"$filter": "IvRepres eq '" + CodRepres + "'"
-																					},
-																					success: function(retornoTitulosAbertos) {
+																				oModel.read("/FormasPagamentos", {
+																					// urlParameters: {
+																					// 	"$filter": "IvCodRepres eq '" + CodRepres + "'"
+																					// },
+																					success: function (retornoFormasPagamentos) {
+																						var txFormasPagamentos = db.transaction("FormasPagamentos", "readwrite");
+																						var objFormasPagamentos = txFormasPagamentos.objectStore("FormasPagamentos");
 
-																						var txTitulosAbertos = db.transaction("TitulosAbertos", "readwrite");
-																						var objTitulosAbertos = txTitulosAbertos.objectStore("TitulosAbertos");
-																						// objTitulosAbertos.autoIncrement();
+																						for (i = 0; i < retornoFormasPagamentos.results.length; i++) {
 
-																						Date.prototype.shiftDays = function(days) {
-																							days = parseInt(days, 10);
-																							this.setDate(this.getDate() + days);
-																							return this;
-																						};
-
-																						for (i = 0; i < retornoTitulosAbertos.results.length; i++) {
-
-																							var dataVenc = retornoTitulosAbertos.results[i].Zfbdt;
-																							dataVenc = dataVenc.shiftDays(1);
-
-																							var auxDmbtr = parseFloat(retornoTitulosAbertos.results[i].Dmbtr);
-																							var date = retornoTitulosAbertos.results[i].Budat;
-																							var dia = String(date.getDate());
-																							var mes = String(date.getMonth() + 1);
-																							var ano = String(date.getFullYear());
-																							ano = ano.substring(2, 4);
-																							var minuto = String(date.getMinutes());
-																							var hora = String(date.getHours());
-																							var seg = String(date.getSeconds());
-
-																							if (dia.length == 1) {
-																								dia = "0" + String(dia);
-																							}
-
-																							if (mes.length == 1) {
-																								mes = "0" + String(mes);
-																							}
-
-																							if (minuto.length == 1) {
-																								minuto = "0" + String(minuto);
-																							}
-																							if (hora.length == 1) {
-																								hora = "0" + String(hora);
-																							}
-																							if (seg.length == 1) {
-																								seg = "0" + String(seg);
-																							}
-																							//HRIMP E DATIMP
-																							//var horario = String(hora) + ":" + String(minuto) + ":" + String(seg);
-																							var data = String(dia + "/" + mes + "/" + ano);
-
-																							var objBancoTitulosAbertos = {
-																								// idTituloAberto: retornoTitulosAbertos.results[i].Belnr + "." + retornoTitulosAbertos.results[
-																								// 		i].Kunnr + "." +
-																								// 	auxDmbtr + "." + data,
-																								idTituloAberto: String(i),
-																								belnr: retornoTitulosAbertos.results[i].Belnr,
-																								name1: retornoTitulosAbertos.results[i].Name1,
-																								budat: retornoTitulosAbertos.results[i].Budat, //Data emissão
-																								zfbdt: dataVenc, //Data vencimento
-																								dmbtr: auxDmbtr,
-																								kunnr: retornoTitulosAbertos.results[i].Kunnr
+																							var objBancoFormasPagamentos = {
+																								idFormasPagamentos: i,
+																								zlsch: retornoFormasPagamentos.results[i].Zlsch,
+																								text1: retornoFormasPagamentos.results[i].Text1
 																							};
 
-																							var requestTitulosAbertos = objTitulosAbertos.add(objBancoTitulosAbertos);
+																							var requestFormasPagamentos = objFormasPagamentos.put(objBancoFormasPagamentos);
 
-																							requestTitulosAbertos.onsuccess = function(event) {
-																								event.stopPropagation();
-																								console.log("Dados TitulosAbertos inseridos");
+																							requestFormasPagamentos.onsuccess = function (event) {
+																								console.log("Dados FormasPagamentos inseridos. " + event);
 																							};
-																							requestTitulosAbertos.onerror = function(event) {
-																								event.stopPropagation();
-																								console.log("Dados TitulosAbertos não foram inseridos :" + event.srcElement.error);
+
+																							requestFormasPagamentos.onerror = function (event) {
+																								console.log("Dados FormasPagamentos não foram inseridos :" + event);
 																							};
 																						}
+																						
+																						/*
+																							KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
+																							KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
+																							WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
+																							MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
+																							KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
+																						*/
+																						oModel.read("/A900", {
+																							success: function (retornoA900) {
+																								var txA900 = db.transaction("A900", "readwrite");
+																								var objA900 = txA900.objectStore("A900");
 
-																						//Clientes
-																						oModel.read("/Clientes", {
-																							urlParameters: {
-																								"$filter": "IvRepres eq '" + CodRepres + "' and IvUsuario eq '" + CodUsuario + "'"
-																							},
-																							success: function(retornoCliente) {
+																								for (i = 0; i < retornoA900.results.length; i++) {
 
-																								var txCliente = db.transaction("Clientes", "readwrite");
-																								var objCliente = txCliente.objectStore("Clientes");
-
-																								for (i = 0; i < retornoCliente.results.length; i++) {
-
-																									var objBancoCliente = {
-																										kunnr: retornoCliente.results[i].Kunnr,
-																										land1: retornoCliente.results[i].Land1,
-																										name1: retornoCliente.results[i].Name1,
-																										name2: retornoCliente.results[i].Name2,
-																										ort01: retornoCliente.results[i].Ort01,
-																										ort02: retornoCliente.results[i].Ort02,
-																										regio: retornoCliente.results[i].Regio,
-																										stras: retornoCliente.results[i].Stras,
-																										pstlz: retornoCliente.results[i].Pstlz,
-																										stcd1: retornoCliente.results[i].Stcd1,
-																										stcd2: retornoCliente.results[i].Stcd2,
-																										// inco1: retornoCliente.results[i].Inco1,
-																										parvw: retornoCliente.results[i].Parvw,
-																										lifnr: retornoCliente.results[i].Lifnr,
-																										efetuoucompra: retornoCliente.results[i].Efetuoucompra,
-																										telf1: retornoCliente.results[i].Telf1
+																									var objBancoA900 = {
+																										idA900: i,
+																										kappl: retornoA900.results[i].Kappl,
+																										kschl: retornoA900.results[i].Kschl,
+																										werks: retornoA900.results[i].Werks,
+																										matnr: retornoA900.results[i].Matnr,
+																										kbetr: retornoA900.results[i].Kbetr
 																									};
 
-																									var requestCliente = objCliente.add(objBancoCliente);
+																									var requestA900 = objA900.put(objBancoA900);
 
-																									objBancoCliente = {
-																										kunnr: "",
-																										land1: "",
-																										name1: "",
-																										name2: "",
-																										ort01: "",
-																										ort02: "",
-																										regio: "",
-																										stras: "",
-																										pstlz: "",
-																										stcd1: "",
-																										stcd2: "",
-																										// inco1: "",
-																										parvw: "",
-																										lifnr: "",
-																										telf1: "",
-																										efetuoucompra: ""
+																									requestA900.onsuccess = function (event) {
+																										console.log("Dados A900 inseridos. " + event);
 																									};
 
-																									requestCliente.onsuccess = function(event) {
-																										console.log("Dados Clientes inseridos");
-																									};
-																									requestCliente.onerror = function(event) {
-																										console.log("Dados Clientes não foram inseridos :" + event);
+																									requestA900.onerror = function (event) {
+																										console.log("Dados A900 não foram inseridos :" + event);
 																									};
 																								}
+																								
+																								/*
+																									KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
+																									KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
+																									WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
+																									PLTYP	1 Tipo	PLTYP	CHAR	2	0	Tipo de lista de preços
+																									MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
+																									KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
+																								*/
+																								
+																								oModel.read("/A950", {
+																									success: function (retornoA950) {
+																										var txA950 = db.transaction("A950", "readwrite");
+																										var objA950 = txA950.objectStore("A950");
 
-																								oModel.read("/Materiais", {
-																									success: function(retornoMateriais) {
+																										for (i = 0; i < retornoA950.results.length; i++) {
 
-																										var txMateriais = db.transaction("Materiais", "readwrite");
-																										var objMateriais = txMateriais.objectStore("Materiais");
-
-																										for (i = 0; i < retornoMateriais.results.length; i++) {
-
-																											var objBancoMateriais = {
-																												matnr: retornoMateriais.results[i].Matnr,
-																												meins: retornoMateriais.results[i].Meins,
-																												maktx: retornoMateriais.results[i].Maktx,
-																												aumng: retornoMateriais.results[i].Aumng,
-																												scmng: retornoMateriais.results[i].Scmng,
-																												vrkme: retornoMateriais.results[i].Vrkme,
-																												mtpos: retornoMateriais.results[i].Mtpos,
-																												ntgew: retornoMateriais.results[i].Ntgew,
-																												provg: retornoMateriais.results[i].Provg,
-																												extwg: retornoMateriais.results[i].Extwg
+																											var objBancoA950 = {
+																												idA950: i,
+																												kappl: retornoA950.results[i].Kappl,
+																												kschl: retornoA950.results[i].Kschl,
+																												werks: retornoA950.results[i].Werks,
+																												matnr: retornoA950.results[i].Matnr,
+																												kbetr: retornoA950.results[i].Kbetr,
+																												pltyp: retornoA950.results[i].Pltyp
 																											};
 
-																											var requestMateriais = objMateriais.add(objBancoMateriais);
+																											var requestA950 = objA950.put(objBancoA950);
 
-																											requestMateriais.onsuccess = function(event) {
-																												console.log("Dados Materiais inseridos. " + event);
+																											requestA950.onsuccess = function (event) {
+																												console.log("Dados A950 inseridos. " + event);
 																											};
 
-																											requestMateriais.onerror = function(event) {
-																												console.log("Dados Materiais não foram inseridos :" + event);
+																											requestA950.onerror = function (event) {
+																												console.log("Dados A950 não foram inseridos :" + event);
 																											};
 																										}
-
-																										oModel.read("/A960", {
-																											success: function(retornoA960) {
-
-																												var txA960 = db.transaction("A960", "readwrite");
-																												var objA960 = txA960.objectStore("A960");
-
-																												for (i = 0; i < retornoA960.results.length; i++) {
-																													var objBancoA960 = {
-																														idA960: retornoA960.results[i].Werks + "." + retornoA960.results[i]
-																															.Pltyp +
-																															"." + retornoA960.results[i].Matnr,
-																														kappl: retornoA960.results[i].Kappl,
-																														kschl: retornoA960.results[i].Kschl,
-																														werks: retornoA960.results[i].Werks,
-																														pltyp: retornoA960.results[i].Pltyp,
-																														// inco1: retornoA960.results[i].Inco1,
-																														matnr: retornoA960.results[i].Matnr,
-																														kfrst: retornoA960.results[i].Kfrst,
-																														datbi: retornoA960.results[i].Datbi,
-																														datab: retornoA960.results[i].Datab,
-																														kbstat: retornoA960.results[i].Kbstat,
-																														zzVprod: retornoA960.results[i].ZzVprod,
-																														zzPercom: retornoA960.results[i].ZzPercom,
-																														zzPervm: retornoA960.results[i].ZzPervm,
-																														knumh: retornoA960.results[i].Knumh
+																										
+																										/*
+																											KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
+																											KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição		
+																											WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
+																											MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
+																											KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala	
+																										*/
+																										
+																										oModel.read("/A406", {
+																											success: function (retornoA406) {
+																												var txA406 = db.transaction("A406", "readwrite");
+																												var objA406 = txA406.objectStore("A406");
+		
+																												for (i = 0; i < retornoA406.results.length; i++) {
+		
+																													var objBancoA406 = {
+																														idA406: i,
+																														kappl: retornoA406.results[i].Kappl,
+																														kschl: retornoA406.results[i].Kschl,
+																														werks: retornoA406.results[i].Werks,
+																														matnr: retornoA406.results[i].Matnr,
+																														kbetr: retornoA406.results[i].Kbetr
 																													};
-
-																													var requestA960 = objA960.add(objBancoA960);
-
-																													requestA960.onsuccess = function(event) {
-																														console.log("Dados A960 inseridos. " + event);
+		
+																													var requestA406 = objA406.put(objBancoA406);
+		
+																													requestA406.onsuccess = function (event) {
+																														console.log("Dados A406 inseridos. " + event);
 																													};
-
-																													requestA960.onerror = function(event) {
-																														console.log("Dados A960 não foram inseridos :" + event);
+		
+																													requestA406.onerror = function (event) {
+																														console.log("Dados A406 não foram inseridos :" + event);
 																													};
 																												}
-
-																												oModel.read("/A961 ", {
-																													success: function(retornoA961) {
-
-																														var txClienteTabPreco = db.transaction("A961", "readwrite");
-																														var objClienteTabPreco = txClienteTabPreco.objectStore("A961");
-
-																														for (i = 0; i < retornoA961.results.length; i++) {
-
-																															var objBancoA961 = {
-																																idA961: retornoA961.results[i].Werks + "." +
-																																	retornoA961.results[i].Kunnr + "." + retornoA961.results[i].Pltyp,
-																																kunnr: retornoA961.results[i].Kunnr,
-																																werks: retornoA961.results[i].Werks,
-																																pltyp: retornoA961.results[i].Pltyp,
-																																ptext: retornoA961.results[i].Ptext
+																												/*
+																													KOZGF	1 Tipo	KOZGF	CHAR	4	0	Seqüência de acesso
+																													KOLNR	1 Tipo	KOLNR	NUMC	3	0	Seqüência de acesso - acesso
+																													KOTABNR	1 Tipo	KOTABNR	CHAR	3	0	Tabela de condições
+																												*/
+																												
+																												oModel.read("/OrdensTabPreco", {
+																													success: function (retornoOrdensTabPreco) {
+																														var txOrdensTabPreco = db.transaction("OrdensTabPreco", "readwrite");
+																														var objOrdensTabPreco = txOrdensTabPreco.objectStore("OrdensTabPreco");
+				
+																														for (i = 0; i < retornoOrdensTabPreco.results.length; i++) {
+				
+																															var objBancoOrdensTabPreco = {
+																																idOrdensTabPreco: i,
+																																kozgf: retornoOrdensTabPreco.results[i].Kozgf,
+																																kolnr: retornoOrdensTabPreco.results[i].Kolnr,
+																																kotabnr: retornoOrdensTabPreco.results[i].Kotabnr
 																															};
-
-																															var requestA961 = objClienteTabPreco.add(objBancoA961);
-																															requestA961.onsuccess = function(event) {
-																																console.log("Dados A961 inseridos. " + event);
+				
+																															var requestOrdensTabPreco = objOrdensTabPreco.put(objBancoOrdensTabPreco);
+				
+																															requestOrdensTabPreco.onsuccess = function (event) {
+																																console.log("Dados OrdensTabPreco inseridos. " + event);
 																															};
-
-																															requestA961.onerror = function(event) {
-																																console.log("Dados A961 não foram inseridos :" + event);
+				
+																															requestOrdensTabPreco.onerror = function (event) {
+																																console.log("Dados OrdensTabPreco não foram inseridos :" + event);
 																															};
 																														}
-
-																														oModel.read("/A962 ", {
-																															success: function(retornoA962) {
-
-																																var txA962 = db.transaction("A962", "readwrite");
-																																var objA962 = txA962.objectStore("A962");
-
-																																for (i = 0; i < retornoA962.results.length; i++) {
-
-																																	var objBancoA962 = {
-																																		idA962: retornoA962.results[i].Werks + "." +
-																																			retornoA962.results[i].ZzGrpmat + "." +
-																																			retornoA962.results[i].Matnr,
-																																		zzGrpmat: retornoA962.results[i].ZzGrpmat,
-																																		werks: retornoA962.results[i].Werks,
-																																		matnr: retornoA962.results[i].Matnr
-																																	};
-
-																																	var requestA962 = objA962.add(objBancoA962);
-
-																																	requestA962.onsuccess = function(event) {
-																																		console.log("Dados A962 inseridos. " + event);
-																																	};
-
-																																	requestA962.onerror = function(event) {
-																																		console.log("Dados A962 não foram inseridos :" + event);
-																																	};
+																														
+																														var txTabPreco = db.transaction("TabPreco", "readwrite");
+																														var objTabPreco = txTabPreco.objectStore("TabPreco");
+																														
+																														//Tab preço
+																														for (i = 0; i < 2; i++) {
+				
+																															var objBancoTabPreco = {
+																																idTabPreco: i,
+																																pltyp: "Z" + (parseInt(i,10)+1),
+																																ptext: "Tabela de preço padrão" + (parseInt(i,10)+1)																															};
+				
+																															var requestTabPreco = objTabPreco.put(objBancoTabPreco);
+				
+																															requestTabPreco.onsuccess = function (event) {
+																																console.log("Dados TabPreco inseridos. " + event);
+																															};
+				
+																															requestTabPreco.onerror = function (event) {
+																																console.log("Dados TabPreco não foram inseridos :" + event);
+																															};
+																														}
+																														
+																													MessageBox.show(
+																														"Tabelas carregadas com sucesso!", {
+																															icon: MessageBox.Icon.SUCCESS,
+																															title: "Carregamento Completo",
+																															actions: [MessageBox.Action.OK],
+																															onClose: function () {
+																																if (that._ItemDialog) {
+																																	that._ItemDialog.destroy(true);
 																																}
-
-																																oModel.read("/A963 ", {
-																																	urlParameters: {
-																																		"$filter": "IRepres eq '" + CodRepres + "'"
-																																	},
-																																	success: function(retornoA963) {
-
-																																		var txA963 = db.transaction("A963", "readwrite");
-																																		var objA963 = txA963.objectStore("A963");
-
-																																		for (i = 0; i < retornoA963.results.length; i++) {
-
-																																			var objBancoA963 = {
-																																				idA963: retornoA963.results[i].Werks + "." +
-																																					retornoA963.results[i].Lifnr + "." + retornoA963.results[i].Pltyp,
-																																				lifnr: retornoA963.results[i].Lifnr,
-																																				werks: retornoA963.results[i].Werks,
-																																				pltyp: retornoA963.results[i].Pltyp,
-																																				ptext: retornoA963.results[i].Ptext
-																																			};
-
-																																			var requestA963 = objA963.add(objBancoA963);
-
-																																			requestA963.onsuccess = function(event) {
-																																				console.log("Dados A963 inseridos. " + event);
-																																			};
-
-																																			requestA963.onerror = function(event) {
-																																				console.log("Dados A963 não foram inseridos :" +
-																																					event);
-																																			};
-																																		}
-
-																																		oModel.read("/A964", {
-																																			success: function(retornoA964) {
-
-																																				var txA964 = db.transaction("A964", "readwrite");
-																																				var objA964 = txA964.objectStore("A964");
-
-																																				for (i = 0; i < retornoA964.results.length; i++) {
-
-																																					var objBancoA964 = {
-																																						idA964: retornoA964.results[i].Werks + "." +
-																																							retornoA964.results[i].ZzPerjur,
-																																						werks: retornoA964.results[i].Werks,
-																																						zzPerjur: retornoA964.results[i].ZzPerjur
-																																					};
-
-																																					var requestA964 = objA964.add(objBancoA964);
-
-																																					requestA964.onsuccess = function(event) {
-																																						console.log("Dados A964 inseridos. " + event);
-																																					};
-
-																																					requestA964.onerror = function(event) {
-																																						console.log("Dados A964 não foram inseridos :" +
-																																							event);
-																																					};
-																																				}
-
-																																				oModel.read("/A965", { // A965
-																																					success: function(retornoA965) {
-
-																																						var txA965 = db.transaction("A965",
-																																							"readwrite");
-																																						var objA965 = txA965.objectStore("A965");
-
-																																						for (i = 0; i < retornoA965.results.length; i++) {
-
-																																							var objBancoA965 = {
-																																								idA965: retornoA965.results[i].Werks + "." +
-																																									retornoA965.results[i].ZzGrpmat + "." +
-																																									retornoA965.results[i].Matnr,
-																																								werks: retornoA965.results[i].Werks,
-																																								zzGrpmat: retornoA965.results[i].ZzGrpmat,
-																																								matnr: retornoA965.results[i].Matnr
-																																							};
-
-																																							var requestA965 = objA965.add(objBancoA965);
-
-																																							requestA965.onsuccess = function(event) {
-																																								console.log("Dados A965 inseridos. " + event);
-																																							};
-
-																																							requestA965.onerror = function(event) {
-																																								console.log(
-																																									"Dados A965 não foram inseridos :" + event);
-																																							};
-																																						}
-
-																																						oModel.read("/A966", {
-																																							success: function(retornoA966) {
-
-																																								var txA966 = db.transaction("A966",
-																																									"readwrite");
-																																								var objA966 = txA966.objectStore("A966");
-
-																																								for (i = 0; i < retornoA966.results.length; i++) {
-
-																																									var objBancoA966 = {
-																																										idA966: retornoA966.results[i].Werks + "." +
-																																											retornoA966.results[i].ZzRegra + "." +
-																																											retornoA966.results[i].ZzGrpmat + "." +
-																																											retornoA966.results[i].Pltyp,
-																																										werks: retornoA966.results[i].Werks,
-																																										zzRegra: retornoA966.results[i].ZzRegra,
-																																										zzGrpmat: retornoA966.results[i].ZzGrpmat,
-																																										pltyp: retornoA966.results[i].Pltyp,
-																																										zzTexto: retornoA966.results[i].ZzTexto
-																																									};
-
-																																									var requestA966 = objA966.add(
-																																										objBancoA966);
-
-																																									requestA966.onsuccess = function(event) {
-																																										console.log("Dados A966 inseridos. " +
-																																											event);
-																																									};
-
-																																									requestA966.onerror = function(event) {
-																																										console.log(
-																																											"Dados A966 não foram inseridos :" +
-																																											event);
-																																									};
-
-																																								}
-
-																																								oModel.read("/A967", {
-																																									success: function(retornoA967) {
-
-																																										var txA967 = db.transaction("A967", "readwrite");
-																																										var objA967 = txA967.objectStore("A967");
-
-																																										for (i = 0; i < retornoA967.results.length; i++) {
-
-																																											var objBancoA967 = {
-																																												idA967: retornoA967.results[i].Werks + "." +
-																																													retornoA967.results[i].ZzRegra + "." +
-																																													retornoA967.results[i].Knumh,
-																																												werks: retornoA967.results[i].Werks,
-																																												zzRegra: retornoA967.results[i].ZzRegra,
-																																												knumh: retornoA967.results[i].Knumh
-																																											};
-
-																																											var requestA967 = objA967.add(
-																																												objBancoA967);
-
-																																											requestA967.onsuccess = function(event) {
-																																												console.log("Dados A967 inseridos. " + event);
-																																											};
-
-																																											requestA967.onerror = function(event) {
-																																												console.log(
-																																													"Dados A967 não foram inseridos :" + event);
-																																											};
-																																										}
-
-																																										oModel.read("/Konm", {
-																																											success: function(retornoKonm) {
-
-																																												var txKonm = db.transaction("Konm", "readwrite");
-																																												var objKonm = txKonm.objectStore("Konm");
-
-																																												for (i = 0; i < retornoKonm.results.length; i++) {
-
-																																													var objBancoKonm = {
-																																														idKonm: retornoKonm.results[i].Knumh + "." +
-																																															retornoKonm.results[i].Kstbm + "." +
-																																															retornoKonm.results[i].Kbetr,
-																																														knumh: retornoKonm.results[i].Knumh, //(Condição define qual valor de range pegar)
-																																														kstbm: retornoKonm.results[i].Kstbm, //Escala até
-																																														kbetr: retornoKonm.results[i].Kbetr //Percentual de desconto
-																																													};
-
-																																													var requestKonm = objKonm.add(objBancoKonm);
-
-																																													requestKonm.onsuccess =
-																																														function(event) {
-																																															console.log("Dados Konm inseridos. " + event);
-																																														};
-
-																																													requestKonm.onerror =
-																																														function(event) {
-																																															console.log("Dados Konm não foram inseridos :" + event);
-																																														};
-																																												}
-
-																																												oModel.read("/A968", {
-																																													success: function(retornoA968) {
-
-																																														var txA968 = db.transaction("A968", "readwrite");
-																																														var objA968 = txA968.objectStore("A968");
-
-																																														for (i = 0; i < retornoA968.results.length; i++) {
-
-																																															var objBancoA968 = {
-																																																idA968: retornoA968.results[i].Werks + "." +
-																																																	retornoA968.results[i].ZzRegra + "." +
-																																																	retornoA968.results[i].ZzGrpmat + "." +
-																																																	retornoA968.results[i].Pltyp,
-																																																werks: retornoA968.results[i].Werks,
-																																																zzRegra: retornoA968.results[i].ZzRegra,
-																																																zzGrpmat: retornoA968.results[i].ZzGrpmat,
-																																																pltyp: retornoA968.results[i].Pltyp,
-																																																zzTexto: retornoA968.results[i].ZzTexto
-																																															};
-																																															var requestA968 = objA968.add(objBancoA968);
-
-																																															requestA968.onsuccess = function(event) {
-																																																console.log("Dados A968 inseridos. " + event);
-																																															};
-
-																																															requestA968.onerror = function(event) {
-																																																console.log("Dados A968 não foram inseridos :" + event);
-																																															};
-																																														}
-
-																																														oModel.read("/A969", {
-																																															success: function(retornoA969) {
-																																																var txA969 = db.transaction("A969", "readwrite");
-																																																var objA969 = txA969.objectStore("A969");
-
-																																																for (i = 0; i < retornoA969.results.length; i++) {
-
-																																																	var objBancoA969 = {
-																																																		idA969: retornoA969.results[i].Werks + "." +
-																																																			retornoA969.results[i].ZzRegra + "." +
-																																																			retornoA969.results[i].Knumh,
-																																																		werks: retornoA969.results[i].Werks,
-																																																		zzRegra: retornoA969.results[i].ZzRegra,
-																																																		knumh: retornoA969.results[i].Knumh
-																																																	};
-
-																																																	var requestA969 = objA969.add(objBancoA969);
-
-																																																	requestA969.onsuccess = function(event) {
-																																																		console.log("Dados A969 inseridos. " + event);
-																																																	};
-
-																																																	requestA969.onerror = function(event) {
-																																																		console.log("Dados A969 não foram inseridos :" + event);
-																																																	};
-																																																}
-																																																
-																																																oModel.read("/FormasPagamentos", {
-																																																	urlParameters: {
-																																																		"$filter": "IvCodRepres eq '" + CodRepres + "'"
-																																																	},
-																																																	success: function(retornoFormasPagamentos) {
-																																																		var txFormasPagamentos = db.transaction("FormasPagamentos", "readwrite");
-																																																		var objFormasPagamentos = txFormasPagamentos.objectStore("FormasPagamentos");
-
-																																																		for (i = 0; i < retornoFormasPagamentos.results.length; i++) {
-
-																																																			var objBancoFormasPagamentos = {
-																																																				idFormasPagamentos: i,
-																																																				zlsch: retornoFormasPagamentos.results[i].Zlsch,
-																																																				text1: retornoFormasPagamentos.results[i].Text1
-																																																			};
-
-																																																			var requestFormasPagamentos = objFormasPagamentos.put(objBancoFormasPagamentos);
-
-																																																			requestFormasPagamentos.onsuccess = function(event) {
-																																																				console.log("Dados FormasPagamentos inseridos. " + event);
-																																																			};
-
-																																																			requestFormasPagamentos.onerror = function(event) {
-																																																				console.log("Dados FormasPagamentos não foram inseridos :" + event);
-																																																			};
-																																																		}
-																																																	
-																																																	
-																																																	MessageBox.show(
-																																																		"Tabelas carregadas com sucesso!", {
-																																																			icon: MessageBox.Icon.SUCCESS,
-																																																			title: "Carregamento Completo",
-																																																			actions: [MessageBox.Action.OK],
-																																																			onClose: function() {
-																																																				if (that._ItemDialog) {
-																																																					that._ItemDialog.destroy(true);
-																																																				}
-																																																				that.onUpdateDateTime();
-																																																			}
-																																																		});
-																																																},
-																																																error: function(error) {
-																																																	console.log(error);
-																																																	that.onMensagemErroODATA(error.statusCode);
-																																																}
-																																															});
-																																																
-																																															},
-																																															error: function(error) {
-																																																console.log(error);
-																																																that.onMensagemErroODATA(
-																																																	error
-																																																	.statusCode);
-																																															}
-																																														});
-																																													},
-																																													error: function(error) {
-																																														console.log(error);
-																																														that.onMensagemErroODATA(error.statusCode);
-																																													}
-																																												});
-																																											},
-																																											error: function(error) {
-																																												console.log(error);
-																																												that.onMensagemErroODATA(error.statusCode);
-																																											}
-																																										});
-																																									},
-																																									error: function(error) {
-																																										console.log(error);
-																																										that.onMensagemErroODATA(error.statusCode);
-																																									}
-																																								});
-																																							},
-																																							error: function(error) {
-																																								console.log(error);
-																																								that.onMensagemErroODATA(error.statusCode);
-																																							}
-																																						});
-																																					},
-																																					error: function(error) {
-																																						console.log(error);
-																																						that.onMensagemErroODATA(error.statusCode);
-																																					}
-																																				});
-																																			},
-																																			error: function(error) {
-																																				console.log(error);
-																																				that.onMensagemErroODATA(error.statusCode);
-																																			}
-																																		});
-																																	},
-																																	error: function(error) {
-																																		console.log(error);
-																																		that.onMensagemErroODATA(error.statusCode);
-																																	}
-																																});
-																															},
-																															error: function(error) {
-																																console.log(error);
-																																that.onMensagemErroODATA(error.statusCode);
+																																that.onUpdateDateTime();
 																															}
 																														});
-																													},
-																													error: function(error) {
-																														console.log(error);
-																														that.onMensagemErroODATA(error.statusCode);
-																													}
-																												});
+																												},
+																												error: function (error) {
+																													console.log(error);
+																													that.onMensagemErroODATA(error.statusCode);
+																												}
+																											});
 																											},
-																											error: function(error) {
+																											error: function (error) {
 																												console.log(error);
 																												that.onMensagemErroODATA(error.statusCode);
 																											}
 																										});
 																									},
-																									error: function(error) {
+																									error: function (error) {
 																										console.log(error);
 																										that.onMensagemErroODATA(error.statusCode);
 																									}
 																								});
 																							},
-																							error: function(error) {
+																							error: function (error) {
 																								console.log(error);
 																								that.onMensagemErroODATA(error.statusCode);
 																							}
 																						});
 																					},
-																					error: function(error) {
+																					error: function (error) {
 																						console.log(error);
 																						that.onMensagemErroODATA(error.statusCode);
 																					}
 																				});
 																			},
-																			error: function(error) {
+																			error: function (error) {
 																				console.log(error);
 																				that.onMensagemErroODATA(error.statusCode);
 																			}
 																		});
 																	},
-																	error: function(error) {
+																	error: function (error) {
 																		console.log(error);
 																		that.onMensagemErroODATA(error.statusCode);
 																	}
 																});
+															},
+															error: function (error) {
+																console.log(error);
+																that.onMensagemErroODATA(error.statusCode);
 															}
-														},
-														error: function(error) {
-															console.log(error);
-															that.onMensagemErroODATA(error.statusCode);
-														}
-													});
-											} else {
-												MessageBox.show(
-													"Por Favor Faça o preenchimento de credenciais em pelo menos uma empresa antes de atualizar as tabelas.", {
-														icon: MessageBox.Icon.ERROR,
-														title: "Erro com as credenciais",
-														actions: [MessageBox.Action.OK],
-														onClose: function() {
-															that._ItemDialog.close();
-														}
-													});
-											}
-										};
-										request.onerror = function(ex) {
-											console.log(ex);
-											console.log("Não foi possivel encontrar o registro na tabela de usuários");
-										};
+														});
+													}
+												},
+												error: function (error) {
+													console.log(error);
+													that.onMensagemErroODATA(error.statusCode);
+												}
+											});
+									} else {
+										MessageBox.show(
+											"Por Favor Faça o preenchimento de credenciais em pelo menos uma empresa antes de atualizar as tabelas.", {
+												icon: MessageBox.Icon.ERROR,
+												title: "Erro com as credenciais",
+												actions: [MessageBox.Action.OK],
+												onClose: function () {
+													that._ItemDialog.close();
+												}
+											});
 									}
-								}
-							});
+								};
+								request.onerror = function (ex) {
+									console.log(ex);
+									console.log("Não foi possivel encontrar o registro na tabela de usuários");
+								};
+							}
 						}
-					};
+					});
 				};
 				/*-------------------------------------------------------------------------------------------------*/
 			},
 
-			onAfterRendering: function() {
+			onAfterRendering: function () {
 
 			},
 
-			DropDBTables: function(vTables) {
+			DropDBTables: function (vTables) {
 				var open = indexedDB.open("VB_DataBase");
 
-				open.onerror = function(e) {
+				open.onerror = function (e) {
 					console.log("Erro ao abrir conexão.");
 					console.log(e.Message);
 				};
 
-				open.onsuccess = function(e) {
+				open.onsuccess = function (e) {
 					var db = e.target.result;
 
 					for (var i = 0; i <= vTables.length - 1; i++) {
@@ -1682,10 +1030,10 @@ sap.ui.define([
 						var objectStore = transaction.objectStore(sTableName);
 						var objectStoreRequest = objectStore.clear();
 
-						objectStoreRequest.onsuccess = function(event) {
+						objectStoreRequest.onsuccess = function (event) {
 							console.log("Dados da tabela " + sTableName + " removidos com sucesso");
 						};
-						objectStoreRequest.onerror = function(event) {
+						objectStoreRequest.onerror = function (event) {
 							console.log("Erro ao limpar tabela " + sTableName);
 						};
 
@@ -1693,37 +1041,37 @@ sap.ui.define([
 				};
 			},
 
-			onBusyDialogClosed: function() {
+			onBusyDialogClosed: function () {
 
 				if (this._ItemDialog) {
 					this._ItemDialog.destroy(true);
 				}
 			},
 
-			onBusyDialogClosed2: function() {
+			onBusyDialogClosed2: function () {
 
 				if (this._ItemDialog2) {
 					this._ItemDialog2.destroy(true);
 				}
 			},
 
-			onBusyDialogClosed3: function() {
+			onBusyDialogClosed3: function () {
 
 				if (this._ItemDialog3) {
 					this._ItemDialog3.destroy(true);
 				}
 			},
 
-			onStartWorking: function() {
+			onStartWorking: function () {
 				var that = this;
 				var open = indexedDB.open("VB_DataBase");
 
-				open.onerror = function(hxr) {
+				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
 					console.log(hxr.Message);
 				};
 
-				open.onsuccess = function(e) {
+				open.onsuccess = function (e) {
 					var db = e.target.result;
 					var tx = db.transaction("Usuarios", "readwrite");
 					var objUsuarios = tx.objectStore("Usuarios");
@@ -1732,7 +1080,7 @@ sap.ui.define([
 					var request = objUsuarios.get(Werks);
 
 					/* Verifico se existe a tabela de Usuários.*/
-					request.onsuccess = function(e1) {
+					request.onsuccess = function (e1) {
 						var result1 = e1.target.result;
 
 						if (result1 == undefined) {
@@ -1741,7 +1089,7 @@ sap.ui.define([
 									icon: MessageBox.Icon.ERROR,
 									title: "Banco de dados desatualizado",
 									actions: [MessageBox.Action.OK],
-									onClose: function() {
+									onClose: function () {
 										return;
 									}
 								});
@@ -1753,7 +1101,6 @@ sap.ui.define([
 						var bAtualizarTabelas = false;
 
 						var sData = result1.dataAtualizacao;
-						var dData;
 						var dDataAtual = new Date();
 
 						if (sData == undefined || sData.trim() == "") {
@@ -1788,7 +1135,7 @@ sap.ui.define([
 									icon: MessageBox.Icon.ERROR,
 									title: "Banco de dados desatualizado",
 									actions: [MessageBox.Action.OK],
-									onClose: function() {}
+									onClose: function () {}
 								});
 
 							return;
@@ -1812,7 +1159,7 @@ sap.ui.define([
 									icon: MessageBox.Icon.ERROR,
 									title: "Erro com as credenciais",
 									actions: [MessageBox.Action.OK],
-									onClose: function() {
+									onClose: function () {
 										that._ItemDialog.close();
 									}
 								});
@@ -1821,17 +1168,17 @@ sap.ui.define([
 				};
 			},
 
-			onEnviarDocs: function() {
+			onEnviarDocs: function () {
 				var that = this;
 
 				var open = indexedDB.open("VB_DataBase");
 
-				open.onerror = function(hxr) {
+				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
 					console.log(hxr.Message);
 				};
 
-				open.onsuccess = function(e) {
+				open.onsuccess = function (e) {
 					var db = e.target.result;
 					var tx = db.transaction("Usuarios", "readwrite");
 					var objUsuarios = tx.objectStore("Usuarios");
@@ -1840,16 +1187,17 @@ sap.ui.define([
 					var request = objUsuarios.get(Werks);
 
 					/* Verifico se existe a tabela de Usuários.*/
-					request.onsuccess = function(e1) {
+					request.onsuccess = function (e1) {
 						var result1 = e1.target.result;
 
 						if (result1 == undefined) {
+
 							MessageBox.show(
 								"Por Favor atualize o banco de dados para conectar no sistema.", {
 									icon: MessageBox.Icon.ERROR,
 									title: "Banco de dados desatualizado",
 									actions: [MessageBox.Action.OK],
-									onClose: function() {
+									onClose: function () {
 										return;
 									}
 								});
@@ -1859,21 +1207,17 @@ sap.ui.define([
 							that.getOwnerComponent().getModel("modelAux").setProperty("/Usuario", result1);
 
 							sap.m.MessageBox.warning(
-								"Escolha o documento que gostaria de enviar.", {
+								"Deseja entrar no envio de pedidos?", {
 									title: "Envio de documentos",
-									actions: ["Pedido", "Entrega", sap.m.MessageBox.Action.CANCEL],
-									onClose: function(sAction) {
+									actions: ["Pedido", sap.m.MessageBox.Action.CANCEL],
+									onClose: function (sAction) {
 										switch (sAction) {
-											case "Pedido":
-												that.getOwnerComponent().getModel("modelAux").setProperty("/bEnviarPedido", true);
-												sap.ui.core.UIComponent.getRouterFor(that).navTo("enviarPedidos");
-												break;
-											case "Entrega":
-												that.getOwnerComponent().getModel("modelAux").setProperty("/bEnviarPedido", false);
-												sap.ui.core.UIComponent.getRouterFor(that).navTo("enviarPedidos");
-												break;
-											case "CANCEL":
-												return;
+										case "Pedido":
+											that.getOwnerComponent().getModel("modelAux").setProperty("/bEnviarPedido", true);
+											sap.ui.core.UIComponent.getRouterFor(that).navTo("enviarPedidos");
+											break;
+										case "CANCEL":
+											return;
 										}
 									}
 								}
@@ -1884,7 +1228,7 @@ sap.ui.define([
 			},
 
 			//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DIALOG CREDENCIAIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-			onOpenCredenciais: function() {
+			onOpenCredenciais: function () {
 
 				if (this._ItemDialog) {
 					this._ItemDialog.destroy(true);
@@ -1906,12 +1250,12 @@ sap.ui.define([
 
 				var open = indexedDB.open("VB_DataBase");
 
-				open.onerror = function(hxr) {
+				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
 					console.log(hxr.Message);
 				};
 
-				open.onsuccess = function(e) {
+				open.onsuccess = function (e) {
 
 					var werks = that.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
 					var db = e.target.result;
@@ -1921,7 +1265,7 @@ sap.ui.define([
 
 					var request = objectStoreUsuarios.get(werks);
 
-					request.onsuccess = function(e) {
+					request.onsuccess = function (e) {
 
 						var result = e.target.result;
 						if (result !== null && result !== undefined) {
@@ -1937,12 +1281,12 @@ sap.ui.define([
 				};
 			},
 
-			onUpdateDateTime: function() {
+			onUpdateDateTime: function () {
 				var that = this;
 				var open = indexedDB.open("VB_DataBase");
 				var Werks = this.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
 
-				open.onsuccess = function(e) {
+				open.onsuccess = function (e) {
 					var db = e.target.result;
 
 					var objUsuarios = db.transaction(["Usuarios"], "readwrite");
@@ -1950,30 +1294,30 @@ sap.ui.define([
 
 					var request = objectStoreUsuarios.get(Werks);
 
-					request.onsuccess = function(e) {
+					request.onsuccess = function (e) {
 						var data = e.target.result;
 
 						data.dataAtualizacao = that.retornaDataAtualizacao();
 						var requestUpdate = objectStoreUsuarios.put(data);
 
-						requestUpdate.onsuccess = function() {
+						requestUpdate.onsuccess = function () {
 							console.log("Data de atualização das tabelas atualizada");
 
 							that.getOwnerComponent().getModel("modelAux").setProperty("/DataAtualizacao", data.dataAtualizacao);
 						};
 
-						requestUpdate.onerror = function() {
+						requestUpdate.onerror = function () {
 							console.log("Erro ao atualizar campo data de atualização no banco.");
 						};
 					};
 				};
 			},
 
-			onLoginChange: function() {
+			onLoginChange: function () {
 				sap.ui.getCore().byId("idSenha").focus();
 			},
 
-			onDialogChecarLoginsButton: function() {
+			onDialogChecarLoginsButton: function () {
 				var that = this;
 
 				function onDialogCancelLoginsButton() {
@@ -1999,7 +1343,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Campo(s) em branco!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								sap.ui.getCore().byId("idUsuario").focus();
 
 							}
@@ -2011,7 +1355,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Campo(s) em branco!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								sap.ui.getCore().byId("idSenha").focus();
 
 							}
@@ -2032,9 +1376,9 @@ sap.ui.define([
 
 					sap.ui.getCore().byId("idDialogLogin").setBusy(true);
 
-					oModel.read("/Login(IvCodRepres='" + codUsr + "',IvWerks='" + werks + "',IvSenha='" + senha +
-						"',IvImei='" + imeiCelular + "',IvVersaoapp='" + numVersao + "')", {
-							success: function(retorno) {
+					oModel.read("/Login(IvRepres='" + codUsr + "',IvWerks='" + werks + "',IvSenha='" +
+						senha + "',IvVersaoapp='" + numVersao + "')", {
+							success: function (retorno) {
 								if (retorno.EvRettyp == "E") {
 
 									sap.m.MessageBox.show(
@@ -2042,7 +1386,7 @@ sap.ui.define([
 											icon: sap.m.MessageBox.Icon.WARNING,
 											title: "Falha ao realizar Login!",
 											actions: [sap.m.MessageBox.Action.OK],
-											onClose: function(oAction) {
+											onClose: function (oAction) {
 												sap.ui.getCore().byId("idDialogLogin").setBusy(false);
 
 											}
@@ -2053,13 +1397,13 @@ sap.ui.define([
 
 									var open = indexedDB.open("VB_DataBase");
 
-									open.onerror = function(hxr) {
+									open.onerror = function (hxr) {
 										console.log("Erro ao abrir tabelas.");
 										console.log(hxr.Message);
 									};
 
 									//Load tables
-									open.onsuccess = function(e) {
+									open.onsuccess = function (e) {
 
 										var db = e.target.result;
 
@@ -2068,7 +1412,7 @@ sap.ui.define([
 
 										var request = objectStoreUsuarios.get(werks);
 
-										request.onsuccess = function(e1) {
+										request.onsuccess = function (e1) {
 											var result = e1.target.result;
 
 											var codRepres = retorno.CodRepres;
@@ -2082,46 +1426,20 @@ sap.ui.define([
 												imei: imeiCelular,
 												numVersao: numVersao,
 												codRepres: codRepres,
-												tipousuario: retorno.Tipousuario,
-												// Utiliza Campanha Prod Acab
-												utilcampProdAcab: retorno.UtilcampAmo == "S",
-												//Utiliza Campanha Brinde
-												utilcampBri: retorno.UtilcampBri == "S",
-												//Utiliza Campanha Enxoval
-												utilcampEnxoval: retorno.UtilcampDesc == "S",
-												//Utiliza Campanha Prz
-												utilcampPrz: retorno.UtilcampPrz == "S",
-												//Utiliza Campanha Global
-												utilcampGbl: retorno.UtilcampBon == "S",
-												utilcomAmo: retorno.UtilcomAmo == "S",
-												utilcomBon: retorno.UtilcomBon == "S",
-												utilcomBri: retorno.UtilcomBri == "S",
-												utilcomDesc: retorno.UtilcomDesc == "S",
-												utilcomPrz: retorno.UtilcomPrz == "S",
-												utilverbAmo: retorno.UtilverbAmo == "S",
-												utilverbBon: retorno.UtilverbBon == "S",
-												utilverbBri: retorno.UtilverbBri == "S",
-												utilverbDesc: retorno.UtilverbDesc == "S",
-												utilverbPrz: retorno.UtilverbPrz == "S",
-												buGroup: retorno.BuGroup,
-												tabbon: retorno.Tabbon,
-												tabamo: retorno.Tabamo,
-												tabbri: retorno.Tabbri,
-												usrped: retorno.Usrped,
-												usrapr: retorno.Usrapr
+												tipousuario: retorno.Tipousuario
 											};
 
 											if (result == null || result == undefined) {
 
 												var requestUsuariosAdd = objectStoreUsuarios.add(entryUsuario);
 
-												requestUsuariosAdd.onsuccess = function() {
+												requestUsuariosAdd.onsuccess = function () {
 
 													MessageBox.show(retorno.EvReturn, {
 														icon: MessageBox.Icon.SUCCESS,
 														title: "Confirmação",
 														actions: [MessageBox.Action.OK],
-														onClose: function() {
+														onClose: function () {
 
 															that.getOwnerComponent().getModel("modelAux").setProperty("/CodRepres", codRepres);
 															that.getOwnerComponent().getModel("modelAux").setProperty("/CodUsr", codUsr);
@@ -2136,20 +1454,20 @@ sap.ui.define([
 													});
 
 												};
-												requestUsuariosAdd.onerror = function() {
+												requestUsuariosAdd.onerror = function () {
 													console.log("Erro ao adicionar dados de login.");
 												};
 
 											} else {
 												var requestUsuariosUpdate = objectStoreUsuarios.put(entryUsuario);
 
-												requestUsuariosUpdate.onsuccess = function() {
+												requestUsuariosUpdate.onsuccess = function () {
 
 													MessageBox.show("Login foi Atualizado com Sucesso!", {
 														icon: MessageBox.Icon.SUCCESS,
 														title: "Confirmação",
 														actions: [MessageBox.Action.OK],
-														onClose: function() {
+														onClose: function () {
 
 															if (that._ItemDialog) {
 																that._ItemDialog.destroy(true);
@@ -2157,7 +1475,7 @@ sap.ui.define([
 														}
 													});
 												};
-												requestUsuariosUpdate.onerror = function() {
+												requestUsuariosUpdate.onerror = function () {
 													console.log("Erro ao adicionar dados de login");
 												};
 											}
@@ -2165,7 +1483,7 @@ sap.ui.define([
 									};
 								}
 							},
-							error: function(error) {
+							error: function (error) {
 
 								sap.ui.getCore().byId("idDialogLogin").setBusy(false);
 								that.onMensagemErroODATA(error.statusCode);
@@ -2175,7 +1493,7 @@ sap.ui.define([
 				}
 			},
 
-			onDialogCancelLoginsButton: function() {
+			onDialogCancelLoginsButton: function () {
 
 				if (this._ItemDialog) {
 					this._ItemDialog.destroy(true);
@@ -2183,16 +1501,16 @@ sap.ui.define([
 
 			},
 
-			onOpenMudarSenha: function() {
+			onOpenMudarSenha: function () {
 				var that = this;
 				var open = indexedDB.open("VB_DataBase");
 
-				open.onerror = function(hxr) {
+				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
 					console.log(hxr.Message);
 				};
 
-				open.onsuccess = function(e) {
+				open.onsuccess = function (e) {
 
 					var werks = that.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
 					var db = e.target.result;
@@ -2202,7 +1520,7 @@ sap.ui.define([
 
 					var request = objectStoreUsuarios.get(werks);
 
-					request.onsuccess = function(e) {
+					request.onsuccess = function (e) {
 
 						var result = e.target.result;
 						if (result !== null && result !== undefined) {
@@ -2229,7 +1547,7 @@ sap.ui.define([
 									icon: sap.m.MessageBox.Icon.WARNING,
 									title: "Autenticação no sistema!",
 									actions: [sap.m.MessageBox.Action.OK],
-									onClose: function(oAction) {
+									onClose: function (oAction) {
 
 									}
 								}
@@ -2239,7 +1557,7 @@ sap.ui.define([
 				};
 			},
 
-			onFecharAlteracaoSenha: function() {
+			onFecharAlteracaoSenha: function () {
 
 				if (this._ItemDialog) {
 					this._ItemDialog.destroy(true);
@@ -2248,7 +1566,7 @@ sap.ui.define([
 				this.onOpenCredenciais();
 			},
 
-			onDialogMudarSenha: function() {
+			onDialogMudarSenha: function () {
 				var that = this;
 				var senha = sap.ui.getCore().byId("idSenha").getValue();
 				var senhaNova = sap.ui.getCore().byId("idSenhaNova").getValue();
@@ -2263,7 +1581,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Corrija as Senhas!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								sap.ui.getCore().byId("idSenhaNova").focus();
 							}
 						}
@@ -2281,105 +1599,105 @@ sap.ui.define([
 
 					sap.ui.getCore().byId("idDialogAlterarSenha").setBusy(true);
 
-					oModel.read("/MudarSenha(IvCodRepres='" + codUsuario + "',IvWerks='" + werks + "',IvSenha='" + senha + "',IvNovaSenha='" + senhaNova + "')", {
-						success: function(retorno) {
-							if (retorno.EvRettyp == "E") {
+					oModel.read("/MudarSenha(IvCodRepres='" + codUsuario + "',IvWerks='" + werks + "',IvSenha='" + senha + "',IvNovaSenha='" +
+						senhaNova + "')", {
+							success: function (retorno) {
+								if (retorno.EvRettyp == "E") {
 
-								sap.m.MessageBox.show(
-									retorno.EvReturn, {
-										icon: sap.m.MessageBox.Icon.WARNING,
-										title: "Falha ao atualizar Senha!",
-										actions: [sap.m.MessageBox.Action.OK],
-										onClose: function(oAction) {
-											sap.ui.getCore().byId("idDialogAlterarSenha").setBusy(false);
+									sap.m.MessageBox.show(
+										retorno.EvReturn, {
+											icon: sap.m.MessageBox.Icon.WARNING,
+											title: "Falha ao atualizar Senha!",
+											actions: [sap.m.MessageBox.Action.OK],
+											onClose: function (oAction) {
+												sap.ui.getCore().byId("idDialogAlterarSenha").setBusy(false);
 
+											}
 										}
-									}
-								);
+									);
 
-							} else if (retorno.EvRettyp == "S") {
+								} else if (retorno.EvRettyp == "S") {
 
-								var open = indexedDB.open("VB_DataBase");
+									var open = indexedDB.open("VB_DataBase");
 
-								open.onerror = function(hxr) {
-									console.log("Erro ao abrir tabelas.");
-									console.log(hxr.Message);
-								};
-
-								//Load tables
-								open.onsuccess = function(e) {
-
-									var db = e.target.result;
-
-									var objUsuarios = db.transaction(["Usuarios"], "readwrite");
-									var objectStoreUsuarios = objUsuarios.objectStore("Usuarios");
-
-									var request = objectStoreUsuarios.get(werks);
-
-									request.onsuccess = function(e1) {
-										var result = e1.target.result;
-
-										if (result != null || result != undefined) {
-
-											result.senha = senhaNova;
-
-											var requestUsuariosAdd = objectStoreUsuarios.put(result);
-
-											requestUsuariosAdd.onsuccess = function() {
-
-												MessageBox.show(retorno.EvReturn, {
-													icon: MessageBox.Icon.SUCCESS,
-													title: "Confirmação",
-													actions: [MessageBox.Action.OK],
-													onClose: function() {
-														if (that._ItemDialog) {
-															that._ItemDialog.destroy(true);
-														}
-													}
-												});
-
-											};
-											requestUsuariosAdd.onerror = function() {
-												console.log("Erro ao adicionar dados de login.");
-											};
-
-										}
+									open.onerror = function (hxr) {
+										console.log("Erro ao abrir tabelas.");
+										console.log(hxr.Message);
 									};
-								};
+
+									//Load tables
+									open.onsuccess = function (e) {
+
+										var db = e.target.result;
+
+										var objUsuarios = db.transaction(["Usuarios"], "readwrite");
+										var objectStoreUsuarios = objUsuarios.objectStore("Usuarios");
+
+										var request = objectStoreUsuarios.get(werks);
+
+										request.onsuccess = function (e1) {
+											var result = e1.target.result;
+
+											if (result != null || result != undefined) {
+
+												result.senha = senhaNova;
+
+												var requestUsuariosAdd = objectStoreUsuarios.put(result);
+
+												requestUsuariosAdd.onsuccess = function () {
+
+													MessageBox.show(retorno.EvReturn, {
+														icon: MessageBox.Icon.SUCCESS,
+														title: "Confirmação",
+														actions: [MessageBox.Action.OK],
+														onClose: function () {
+															if (that._ItemDialog) {
+																that._ItemDialog.destroy(true);
+															}
+														}
+													});
+
+												};
+												requestUsuariosAdd.onerror = function () {
+													console.log("Erro ao adicionar dados de login.");
+												};
+
+											}
+										};
+									};
+								}
+							},
+							error: function (error) {
+
+								sap.ui.getCore().byId("idDialogAlterarSenha").setBusy(false);
+								that.onMensagemErroODATA(error.statusCode);
+
 							}
-						},
-						error: function(error) {
-
-							sap.ui.getCore().byId("idDialogAlterarSenha").setBusy(false);
-							that.onMensagemErroODATA(error.statusCode);
-
-						}
-					});
+						});
 				}
 			},
 
-			onDialogResetarLoginsButton: function() {
+			onDialogResetarLoginsButton: function () {
 				var that = this;
 
 				MessageBox.show("Deseja mesmo resetar as credenciais? Todos os dados serão perdidos. Inclusive pedidos digitados e não enviados!!", {
 					icon: MessageBox.Icon.ERROR,
 					title: "Cuidado!",
 					actions: ["Resetar credenciais", sap.m.MessageBox.Action.CANCEL],
-					onClose: function(oAction) {
+					onClose: function (oAction) {
 						if (oAction === "Resetar credenciais") {
 
 							// Excluir os valores das tabelas
 							var open = indexedDB.open("VB_DataBase");
-							open.onerror = function(hxr) {
+							open.onerror = function (hxr) {
 								console.log("Erro ao abrir tabelas.");
 								console.log(hxr.Message);
 							};
 							//Load tables
-							open.onsuccess = function() {
+							open.onsuccess = function () {
 								// Tabelas para serem limpadas
-								var vTables = ["Clientes", "A969", "Usuarios", "A959", "A960", "A961", "A962", "A963", "A964", "A965", "A966", "A967", "A968",
-									"Materiais", "PrePedidos", "ItensPedido", "TitulosAbertos", "Konm", "EntregaFutura", "EntregaFutura2", "EntregaFutura3", "TiposPedidos", "FormasPagamentos", "CmpPrzMed",
-									"StatusPedidos", "CmpGbItensBrindes", "CmpSldBrindes", "CmpProdsAcabs", "CmpGbQtdItens", "CmpGbProdsAcabs", "CmpGbGrpProdsAcabs", "CmpEnxoval", "ControleAmostra", "SaldoVerba"
+								var vTables = ["Clientes", "Usuarios", "Materiais", "PrePedidos", "StatusPedidos", "OrdensTabPreco",
+									"ItensPedido", "TitulosAbertos", "TiposPedidos", "FormasPagamentos", "A900", "A406", "A950", "TabPreco"
 								];
 
 								that.DropDBTables(vTables);
@@ -2398,13 +1716,13 @@ sap.ui.define([
 				});
 			},
 
-			onDialogPromocoesCancelButton: function() {
+			onDialogPromocoesCancelButton: function () {
 				if (this._ItemDialog) {
 					this._ItemDialog.destroy(true);
 				}
 			},
 
-			onMensagemErroODATA: function(codigoErro) {
+			onMensagemErroODATA: function (codigoErro) {
 				var that = this;
 
 				if (codigoErro == 0) {
@@ -2413,7 +1731,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Falha na Conexão!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								if (that._ItemDialog) {
 									that._ItemDialog.destroy(true);
 								}
@@ -2426,7 +1744,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Erro no programa Fiori!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								if (that._ItemDialog) {
 									that._ItemDialog.destroy(true);
 								}
@@ -2439,7 +1757,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Erro no programa Abap!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								if (that._ItemDialog) {
 									that._ItemDialog.destroy(true);
 								}
@@ -2452,7 +1770,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Erro no programa Abap!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								if (that._ItemDialog) {
 									that._ItemDialog.destroy(true);
 								}
@@ -2465,7 +1783,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Erro no programa Abap!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								if (that._ItemDialog) {
 									that._ItemDialog.destroy(true);
 								}
@@ -2478,7 +1796,7 @@ sap.ui.define([
 							icon: sap.m.MessageBox.Icon.WARNING,
 							title: "Erro no programa Abap!",
 							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function(oAction) {
+							onClose: function (oAction) {
 								if (that._ItemDialog) {
 									that._ItemDialog.destroy(true);
 								}

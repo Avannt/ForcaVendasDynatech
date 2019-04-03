@@ -31,42 +31,12 @@
 							<layout:GridData span="L4 M2"/>
 						</layoutData>
 					</Input>
-					<!--<Label text="Preço tabela">-->
-					<!--	<layoutData>-->
-					<!--		<layout:GridData span="L2 M2" linebreakXL="true" linebreakL="true"/>-->
-					<!--	</layoutData>-->
-					<!--</Label>-->
-					<!--<Input id="idPrecoTabela" enabled="false" class="desabilitado">-->
-					<!--	<layoutData>-->
-					<!--		<layout:GridData span="L4 M2"/>-->
-					<!--	</layoutData>-->
-					<!--</Input>-->
 					<Label text="Quantidade">
 						<layoutData>
 							<layout:GridData span="L2 M2"/>
 						</layoutData>
 					</Label>
 					<Input id="idQuantidade" class="editableForm" editable="true" change="onQuantidadeChange" submit="onFocusQnt" type="Number">
-						<layoutData>
-							<layout:GridData span="L4 M2"/>
-						</layoutData>
-					</Input>
-					<Label text="Quantidade Campanha Brinde" visible="false">
-						<layoutData>
-							<layout:GridData span="L2 M2"/>
-						</layoutData>
-					</Label>
-					<Input id="idQuantidadeBrinde" visible="false" class="editableForm" editable="false" change="onQuantidadeBrindeChange" type="Number">
-						<layoutData>
-							<layout:GridData span="L4 M2"/>
-						</layoutData>
-					</Input>
-					<Label text="Preço S/ Desc" visible="false">
-						<layoutData>
-							<layout:GridData span="L2 M2"/>
-						</layoutData>
-					</Label>
-					<Input id="idPrecoCheio" enabled="false" class="desabilitado" visible="false">
 						<layoutData>
 							<layout:GridData span="L4 M2"/>
 						</layoutData>
@@ -91,52 +61,12 @@
 							<layout:GridData span="L4 M2"/>
 						</layoutData>
 					</Input>
-					<!--<Label text="Preço Unid.">-->
-					<!--	<layoutData>-->
-					<!--		<layout:GridData span="L2 M2"/>-->
-					<!--	</layoutData>-->
-					<!--</Label>-->
-					<!--<Input id="idPrecoUnidade" enabled="false" class="desabilitadoPRECOUNI">-->
-					<!--	<layoutData>-->
-						<!--		<layout:GridData span="L2 M2"/>-->
-					<!--	</layoutData>-->
-					<!--</Input>-->
-					<Label text="Perc. Verba (%)" visible="false">
+					<Label text="" visible="false">
 						<layoutData>
 							<layout:GridData span="L2 M2"/>
 						</layoutData>
 					</Label>
-					<Input id="idVerba" enabled="false" class="desabilitado" visible="false">
-						<layoutData>
-							<layout:GridData span="L4 M2"/>
-						</layoutData>
-					</Input>
-					<Label text="Perc. Comissão (%)" visible="false">
-						<layoutData>
-							<layout:GridData span="L2 M2"/>
-						</layoutData>
-					</Label>
-					<Input id="idComissao" enabled="false" class="desabilitado" visible="false">
-						<layoutData>
-							<layout:GridData span="L4 M2"/> 
-						</layoutData>
-					</Input>
-					<!--<Label text="Preço Mínimo">-->
-					<!--	<layoutData>-->
-					<!--		<layout:GridData span="L2 M2"/>-->
-					<!--	</layoutData>-->
-					<!--</Label>-->
-					<!--<Input id="idPrecoMinimo" enabled="false" class="desabilitado">-->
-					<!--	<layoutData>-->
-					<!--		<layout:GridData span="L2 M2"/>-->
-					<!--	</layoutData>-->
-					<!--</Input>-->
-					<Label text="">
-						<layoutData>
-							<layout:GridData span="L2 M2"/>
-						</layoutData>
-					</Label>
-					<Image id="idImgProduto" width="100%" height="70%">
+					<Image id="idImgProduto" visible="false" width="100%" height="70%">
 						<layoutData>
 							<layout:GridData span="L2 M2"/>
 						</layoutData>

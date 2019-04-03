@@ -12,20 +12,20 @@
 									<f:SimpleForm id="form0" minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" labelSpanM="4"
 										emptySpanL="2" emptySpanM="3" columnsL="2" columnsM="2">
 										<f:content>
-											<Label text="Cod Cli - Cod Repres - Cod Prep"/>
-											<Input id="idCodCliente" value="" enabled="false"/>
-											<Label text="Nome"/>
-											<Input id="idNome" value="{modelCliente>/Name1}" enabled="false"/>
-											<Label text="CPF/CNPJ"/>
-											<Input id="idCNPJ" value="{modelCliente>/Stcd1} {modelCliente>/Stcd2} " enabled="false"/>
-											<Label text="Endereço"/>
+											<Label text="Cod Cli - Cod Repres" />
+											<Input id="idCodCliente" value="{modelAux>/Kunnr} - {modelAux>/CodRepres}" enabled="false" />
+											<Label text="Nome" />
+											<Input id="idNome" value="{modelCliente>/Name1}" enabled="false" />
+											<Label text="CPF/CNPJ" />
+											<Input id="idCNPJ" value="{modelCliente>/Stcd1} {modelCliente>/Stcd2} " enabled="false" />
+											<Label text="Endereço" />
 											<Input id="idEndereco" value="{modelCliente>/Stras}" enabled="false"/>
-											<Label text="Cidade"/>
-											<Input id="idCidade" value="{modelCliente>/Ort01} - {modelCliente>/Regio}" enabled="false"/>
+											<Label text="Cidade" />
+											<Input id="idCidade" value="{modelCliente>/Ort01} - {modelCliente>/Regio}" enabled="false" />
 											<!--<Label text="E-mail envio XML"/>-->
 											<!--<Input id="idEmail" value="" enabled="false"/>-->
-											<Label text="Telefone"/>
-											<Input id="idFone" value="{modelCliente>/Telf1}" enabled="false"/>
+											<Label text="Telefone" />
+											<Input id="idFone" value="{modelCliente>/Telf1}" enabled="false" />
 										</f:content>
 									</f:SimpleForm>
 								</ScrollContainer>

@@ -5,7 +5,7 @@
 			<u:ShellHeadItem visible="{modelAux>/homeVisible}" id="label" tooltip="Home" icon="sap-icon://home" press="handlePressHome"/>
 		</u:headItems>
 		<u:user>
-			<u:ShellHeadUserItem id="shellHeadUser" image="sap-icon://customer" username="{modelAux>/userID}" press="showId"/>
+			<u:ShellHeadUserItem id="shellHeadUser" image="sap-icon://customer" username="{modelAux>/CodUsr}" press="showId"/>
 		</u:user>
 		<u:headEndItems>
 			<u:ShellHeadItem id="idLogoff" icon="sap-icon://log" tooltip="Logoff" press="handleLogoffPress"/>

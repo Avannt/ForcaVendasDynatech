@@ -3,45 +3,6 @@
 	<Page id="master" navButtonPress="onNavBack" showNavButton="true" title="Envio de Pedidos">
 		<!--<subHeader></subHeader>-->
 		<content>
-			<Table id="table_entregas" width="100%" backgroundDesign="Translucent" visible="false" items="{ path:'EntregasEnviar>/' }"
-				mode="MultiSelect" itemPress="onItemPressEF" growingThreshold="3"
-				growingTriggerText="Proximas entregas " growing="true" noDataText="Nenhum pedido pendente para envio" busyIndicatorDelay="0"
-				fixedLayout="false">
-				<headerToolbar>
-					<Toolbar>
-						<Title text="Pedidos Entrega Futura"/>
-						<ToolbarSpacer/>
-					</Toolbar>
-				</headerToolbar>
-				<columns>
-					<!--<Column minScreenWidth="300px" hAlign="Left" width="auto" popinDisplay="Inline">-->
-					<!--	<Text text="ID"/>-->
-					<!--</Column>-->
-					<Column minScreenWidth="300px" hAlign="Left" width="auto" popinDisplay="Inline">
-						<Text text="Doc Vendas"/>
-					</Column>
-					<Column minScreenWidth="300px" hAlign="Left" width="auto" popinDisplay="Inline">
-						<Text text="Usuário"/>
-					</Column>
-					<Column minScreenWidth="600px" demandPopin="true" hAlign="Center" width="auto">
-						<Text text="Cliente"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem type="Active">
-						<customData>
-							<core:CustomData key="mydataEF" value="{path: 'EntregasEnviar>tipoUsuario', type: 'sap.ui.model.type.String'}" writeToDom="true"/>
-						</customData>
-						<cells>
-							<!--<Text text="{path : 'EntregasEnviar>idEntregaFutura'}"/>-->
-							<Text text="{path : 'EntregasEnviar>idEntregaFutura'}"/>
-							<Text text="{path : 'EntregasEnviar>codUsr'}"/>
-							<Text text="{path : 'EntregasEnviar>NameOrg1'} {path : 'EntregasEnviar&gt;NameOrg2'}"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-			
 			<Table id="table_pedidos" width="100%" backgroundDesign="Translucent"
 				items="{ path:'PedidosEnviar>/', sorter: { path: 'NrPedCli', descending: true}}" mode="MultiSelect" selectionChange="onSelectionChange"
 				itemPress="onItemPress" growingThreshold="3" growingTriggerText="Proximos Pedidos &gt;&gt;" growing="true"
@@ -93,11 +54,7 @@
 			<Bar id="bar0">
 				<contentRight>
 					<Button xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns="sap.m"
-						text="Enviar" press="onEnviarEntrega" icon="sap-icon://upload" type="Accept" id="btnEnviarEntrega"/>
-					<Button xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns="sap.m"
 						text="Enviar" press="onEnviarPedido" icon="sap-icon://upload" type="Accept" id="btnEnviarPedido"/>
-					<Button xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns="sap.m"
-						text="Excluir" press="onExcluirEntregas" icon="sap-icon://delete" type="Reject" id="btnExcluir"/>
 					<Button xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns="sap.m"
 						text="Excluir" press="onDeletarPedido" icon="sap-icon://delete" type="Reject" id="btnExcluirPedido"/>
 				</contentRight>
