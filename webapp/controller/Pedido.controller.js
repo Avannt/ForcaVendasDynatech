@@ -236,7 +236,11 @@ sap.ui.define([
 					that.getOwnerComponent().getModel("modelCliente").setProperty("/Parvw", result.parvw);
 					that.getOwnerComponent().getModel("modelCliente").setProperty("/Lifnr", result.lifnr);
 					that.getOwnerComponent().getModel("modelCliente").setProperty("/Telf1", result.telf1);
-					that.getOwnerComponent().getModel("modelCliente").setProperty("/efetuoucompra", result.efetuoucompra);
+					that.getOwnerComponent().getModel("modelCliente").setProperty("/Vkorg", result.vkorg);
+					that.getOwnerComponent().getModel("modelCliente").setProperty("/Vtweg", result.vtweg);
+					that.getOwnerComponent().getModel("modelCliente").setProperty("/Spart", result.spart);
+					
+					// that.getOwnerComponent().getModel("modelCliente").setProperty("/efetuoucompra", result.efetuoucompra);
 					resolve();
 				} else {
 					console.log("ERRO!! Falha ao ler Clientes.");
@@ -375,7 +379,7 @@ sap.ui.define([
 				
 				new Promise(function(res1, rej1){
 					/* Se o status for PEN (Pendente), devo perguntar se o usuário deseja editar o pedido */
-					if (sStatus == "PEN" || sStatus == "Preposto"){
+					if (sStatus == "Pendente"){
 						MessageBox.show("Deseja reabrir o pedido?", {
 							icon: MessageBox.Icon.WARNING,
 							title: "Pedido finalizado.",
@@ -392,7 +396,7 @@ sap.ui.define([
 										var result = ret.target.result;
 										var oPed = result;
 										oPed.idStatusPedido = 1; // Em digitação
-										oPed.situacaoPedido = "EM DIGITAÇÃO";
+										oPed.situacaoPedido = "Em Digitação";
 						
 										store1 = db.transaction("PrePedidos", "readwrite");
 										objPedido = store1.objectStore("PrePedidos");

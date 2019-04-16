@@ -121,7 +121,7 @@
 											<Column minScreenWidth="600px" visible="true" width="35px" hAlign="Left">
 												<Text text="Id"/>
 											</Column>
-											<Column minScreenWidth="320px" width="90px" hAlign="Left">
+											<Column minScreenWidth="320px" width="160px" hAlign="Left">
 												<Text text="Item"/>
 											</Column>
 											<Column minScreenWidth="870px" demandPopin="true" popinDisplay="Inline" width="auto" hAlign="Left">
@@ -137,10 +137,10 @@
 											<Column minScreenWidth="360px" demandPopin="true" width="80px" hAlign="Left">
 												<Text text="Desc"/>
 											</Column>
-											<Column minScreenWidth="450px" demandPopin="false" width="auto" hAlign="Left">
+											<Column minScreenWidth="450px" demandPopin="true" width="110px" hAlign="Left" popinDisplay="Inline">
 												<Text text="Valor UN"/>
 											</Column>
-											<Column minScreenWidth="360px" demandPopin="false" width="110px" hAlign="Left">
+											<Column minScreenWidth="450px" demandPopin="true" width="110px" hAlign="Left" popinDisplay="Inline">
 												<Text text="Valor Total"/>
 											</Column>
 											<!--<Column minScreenWidth="500px" demandPopin="false" hAlign="Left" vAlign="Left" width="110px">-->
@@ -165,7 +165,7 @@
 													<!--<Text text="R$: {ItensPedidoGrid>zzVprod}" />-->
 													<Text text="{ItensPedidoGrid>zzQnt}"/>
 													<!--<Text text="{ItensPedidoGrid>zzDesitem} %"/>-->
-													<Text text="{ItensPedidoGrid>zzPercDescTotal} %"/>
+													<Text text="{ItensPedidoGrid>zzDesitem} %"/>
 													<Text text="R$: {path: 'ItensPedidoGrid>zzVprodDesc', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
 													<Text text="R$: {path: 'ItensPedidoGrid>zzVprodDescTotal', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
 													<!--<Text text="{ItensPedidoGrid>zzPercom} %" />-->

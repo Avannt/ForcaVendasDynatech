@@ -105,10 +105,10 @@ tr[data-mydata="Normal"], tr[data-mydata="Normal"] + tr.sapMListTblSubRow {
 }
 
 .backgroundAzul {
-    background-image: linear-gradient(rgb(239, 244, 249), white);
+    background-image: linear-gradient(rgb(201, 216, 231), white);
     
     padding-top: 0px !important;
-    
+    padding-botton: 10px !important;
 }
 
 .backgroundAzul1 {

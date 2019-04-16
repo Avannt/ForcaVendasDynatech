@@ -34,12 +34,12 @@ sap.ui.define([
 				var sUrl;
 				//Versão App
 				if (this.getOwnerComponent().getModel("modelAux").getProperty("/ReleasePRD")) {
-					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.0.37");
-					sUrl = "http://104.208.137.3:8000/sap/opu/odata/sap/ZFORCA_VENDAS_VB_SRV/";
+					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.00");
+					sUrl = "http://192.168.235.5:8000/sap/opu/odata/sap/ZFORCA_VENDAS_SRV/?sap-client=210";
 
 					var oModel = new sap.ui.model.odata.v2.ODataModel(sUrl, {
 						json: true,
-						user: "appadmin",
+						user: "rcardilo",
 						password: "sap123"
 					});
 
@@ -52,7 +52,7 @@ sap.ui.define([
 					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.00");
 				}
 
-				this.getOwnerComponent().getModel("modelAux").setProperty("/Werks", "1000");
+				this.getOwnerComponent().getModel("modelAux").setProperty("/Werks", "1100");
 				this.getOwnerComponent().getModel("modelAux").setProperty("/EditarIndexItem", 0);
 
 				this.getOwnerComponent().getModel("modelAux").setProperty("/bConectado", false);
@@ -65,7 +65,7 @@ sap.ui.define([
 
 				if (idbSupported) {
 
-					var open = indexedDB.open("VB_DataBase", 5);
+					var open = indexedDB.open("VB_DataBase", 6);
 
 					// Create the Tables
 					open.onupgradeneeded = function (e) {
@@ -227,14 +227,14 @@ sap.ui.define([
 							});
 						}
 
-						if (!db.objectStoreNames.contains("A950")) {
-							var objA950 = db.createObjectStore("A950", {
-								keyPath: "idA950",
+						if (!db.objectStoreNames.contains("A990")) {
+							var objA990 = db.createObjectStore("A990", {
+								keyPath: "idA990",
 								unique: true,
 								autoIncrement: true
 							});
 							
-							objA950.createIndex("matnr", "matnr", {
+							objA990.createIndex("matnr", "matnr", {
 								unique: false
 							});
 						}
@@ -251,14 +251,14 @@ sap.ui.define([
 							});
 						}
 
-						if (!db.objectStoreNames.contains("A900")) {
-							var objA900 = db.createObjectStore("A900", {
-								keyPath: "idA900",
+						if (!db.objectStoreNames.contains("A991")) {
+							var objA991 = db.createObjectStore("A991", {
+								keyPath: "idA991",
 								unique: true,
 								autoIncrement: true
 							});
 							
-							objA900.createIndex("matnr", "matnr", {
+							objA991.createIndex("matnr", "matnr", {
 								unique: false
 							});
 						}
@@ -571,7 +571,7 @@ sap.ui.define([
 							if (oAction === sap.m.MessageBox.Action.YES) {
 
 								var vTables = ["Clientes", "Materiais", "PrePedidos", "StatusPedidos", "OrdensTabPreco",
-									"ItensPedido", "TitulosAbertos", "TiposPedidos", "FormasPagamentos", "A900", "A406", "A950", "TabPreco"
+									"ItensPedido", "TitulosAbertos", "TiposPedidos", "FormasPagamentos", "A991", "A406", "A990", "TabPreco"
 								];
 
 								that.DropDBTables(vTables);
@@ -632,7 +632,7 @@ sap.ui.define([
 																for (var i = 0; i < 3; i++) {
 
 																	var objBancoCliente = {
-																		kunnr: "202269" + i,
+																		kunnr: String(parseInt("100010", 10) + i),
 																		land1: "BR",
 																		lifnr: "203453",
 																		name1: "PAULO SERGIO MONTEIRO BORGES",
@@ -645,8 +645,14 @@ sap.ui.define([
 																		stcd1: "",
 																		stcd2: "53636309153",
 																		stras: "AV CURITIBA, 411 411",
-																		telf1: "6634195164"
+																		telf1: "6634195164",
+																		spart: 10*i,
+																		vkorg: "1100",
+																		vtweg: "AG"
+																		
 																			// kunnr: retornoCliente.results[i].Kunnr,
+																			// vkorg: retornoCliente.results[i].Vkorg
+																			// vtweg: retornoCliente.results[i].Vtweg,
 																			// land1: retornoCliente.results[i].Land1,
 																			// name1: retornoCliente.results[i].Name1,
 																			// name2: retornoCliente.results[i].Name2,
@@ -657,10 +663,11 @@ sap.ui.define([
 																			// pstlz: retornoCliente.results[i].Pstlz,
 																			// stcd1: retornoCliente.results[i].Stcd1,
 																			// stcd2: retornoCliente.results[i].Stcd2,
-																			// // inco1: retornoCliente.results[i].Inco1,
+																			// inco1: retornoCliente.results[i].Inco1,
 																			// parvw: retornoCliente.results[i].Parvw,
 																			// lifnr: retornoCliente.results[i].Lifnr,
-																			// telf1: retornoCliente.results[i].Telf1
+																			// telf1: retornoCliente.results[i].Telf1,
+																			// spart: retornoCliente.results[i].Spart
 																	};
 
 																	var requestCliente = objCliente.add(objBancoCliente);
@@ -766,31 +773,33 @@ sap.ui.define([
 																							WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
 																							MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
 																							KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
+																							SPART	1 Tipo	SPART	CHAR	2	0	Setor de atividade
 																						*/
-																						oModel.read("/A900", {
-																							success: function (retornoA900) {
-																								var txA900 = db.transaction("A900", "readwrite");
-																								var objA900 = txA900.objectStore("A900");
+																						oModel.read("/A991", {
+																							success: function (retornoA991) {
+																								var txA991 = db.transaction("A991", "readwrite");
+																								var objA991 = txA991.objectStore("A991");
 
-																								for (i = 0; i < retornoA900.results.length; i++) {
+																								for (i = 0; i < retornoA991.results.length; i++) {
 
-																									var objBancoA900 = {
-																										idA900: i,
-																										kappl: retornoA900.results[i].Kappl,
-																										kschl: retornoA900.results[i].Kschl,
-																										werks: retornoA900.results[i].Werks,
-																										matnr: retornoA900.results[i].Matnr,
-																										kbetr: retornoA900.results[i].Kbetr
+																									var objBancoA991 = {
+																										idA991: i,
+																										kappl: retornoA991.results[i].Kappl,
+																										kschl: retornoA991.results[i].Kschl,
+																										werks: retornoA991.results[i].Werks,
+																										matnr: retornoA991.results[i].Matnr,
+																										kbetr: retornoA991.results[i].Kbetr,
+																										spart: retornoA991.results[i].Spart
 																									};
 
-																									var requestA900 = objA900.put(objBancoA900);
-
-																									requestA900.onsuccess = function (event) {
-																										console.log("Dados A900 inseridos. " + event);
+																									var requestA991 = objA991.put(objBancoA991);
+																									
+																									requestA991.onsuccess = function (event) {
+																										console.log("Dados A991 inseridos. " + event);
 																									};
 
-																									requestA900.onerror = function (event) {
-																										console.log("Dados A900 não foram inseridos :" + event);
+																									requestA991.onerror = function (event) {
+																										console.log("Dados A991 não foram inseridos :" + event);
 																									};
 																								}
 																								
@@ -798,45 +807,45 @@ sap.ui.define([
 																									KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
 																									KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
 																									WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
-																									PLTYP	1 Tipo	PLTYP	CHAR	2	0	Tipo de lista de preços
+																									KUNNR	1 Tipo	KUNNR	CHAR	10	0	Nº cliente
 																									MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
 																									KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
 																								*/
 																								
-																								oModel.read("/A950", {
-																									success: function (retornoA950) {
-																										var txA950 = db.transaction("A950", "readwrite");
-																										var objA950 = txA950.objectStore("A950");
+																								oModel.read("/A990", {
+																									success: function (retornoA990) {
+																										var txA990 = db.transaction("A990", "readwrite");
+																										var objA990 = txA990.objectStore("A990");
 
-																										for (i = 0; i < retornoA950.results.length; i++) {
+																										for (i = 0; i < retornoA990.results.length; i++) {
 
-																											var objBancoA950 = {
-																												idA950: i,
-																												kappl: retornoA950.results[i].Kappl,
-																												kschl: retornoA950.results[i].Kschl,
-																												werks: retornoA950.results[i].Werks,
-																												matnr: retornoA950.results[i].Matnr,
-																												kbetr: retornoA950.results[i].Kbetr,
-																												pltyp: retornoA950.results[i].Pltyp
+																											var objBancoA990 = {
+																												idA990: i,
+																												kappl: retornoA990.results[i].Kappl,
+																												kschl: retornoA990.results[i].Kschl,
+																												werks: retornoA990.results[i].Werks,
+																												matnr: retornoA990.results[i].Matnr,
+																												kbetr: retornoA990.results[i].Kbetr,
+																												kunnr: retornoA990.results[i].Kunnr
 																											};
 
-																											var requestA950 = objA950.put(objBancoA950);
+																											var requestA990 = objA990.put(objBancoA990);
 
-																											requestA950.onsuccess = function (event) {
-																												console.log("Dados A950 inseridos. " + event);
+																											requestA990.onsuccess = function (event) {
+																												console.log("Dados A990 inseridos. " + event);
 																											};
 
-																											requestA950.onerror = function (event) {
-																												console.log("Dados A950 não foram inseridos :" + event);
+																											requestA990.onerror = function (event) {
+																												console.log("Dados A990 não foram inseridos :" + event);
 																											};
 																										}
 																										
 																										/*
 																											KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
-																											KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição		
+																											KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
 																											WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
 																											MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
-																											KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala	
+																											KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
 																										*/
 																										
 																										oModel.read("/A406", {
@@ -1209,11 +1218,11 @@ sap.ui.define([
 							sap.m.MessageBox.warning(
 								"Deseja entrar no envio de pedidos?", {
 									title: "Envio de documentos",
-									actions: ["Pedido", sap.m.MessageBox.Action.CANCEL],
+									actions: ["OK", sap.m.MessageBox.Action.CANCEL],
 									onClose: function (sAction) {
 										switch (sAction) {
-										case "Pedido":
-											that.getOwnerComponent().getModel("modelAux").setProperty("/bEnviarPedido", true);
+										case "OK":
+											// that.getOwnerComponent().getModel("modelAux").setProperty("/bEnviarPedido", true);
 											sap.ui.core.UIComponent.getRouterFor(that).navTo("enviarPedidos");
 											break;
 										case "CANCEL":
@@ -1589,7 +1598,7 @@ sap.ui.define([
 
 				} else {
 
-					var oModel = this.getOwnerComponent().getModel("modelAux").getProperty("/DBModel")
+					var oModel = this.getOwnerComponent().getModel("modelAux").getProperty("/DBModel");
 
 					// var oModel = new sap.ui.model.odata.v2.ODataModel("http://104.208.137.3:8000/sap/opu/odata/sap/ZFORCA_VENDAS_VB_SRV/", { 
 					// 	json     : true,
@@ -1697,7 +1706,7 @@ sap.ui.define([
 							open.onsuccess = function () {
 								// Tabelas para serem limpadas
 								var vTables = ["Clientes", "Usuarios", "Materiais", "PrePedidos", "StatusPedidos", "OrdensTabPreco",
-									"ItensPedido", "TitulosAbertos", "TiposPedidos", "FormasPagamentos", "A900", "A406", "A950", "TabPreco"
+									"ItensPedido", "TitulosAbertos", "TiposPedidos", "FormasPagamentos", "A991", "A406", "A990", "TabPreco"
 								];
 
 								that.DropDBTables(vTables);

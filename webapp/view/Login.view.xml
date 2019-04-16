@@ -1,11 +1,9 @@
-<View controllerName="testeui5.controller.Login" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
+<View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" controllerName="testeui5.controller.Login">
 	<Page title="Login" showHeader="false" class="backgroundAzul">
 		<content>
 			<f:Form id="idForm" editable="true" ariaLabelledBy="Title1">
 				<f:layout>
-					<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="2" adjustLabelSpan="true" emptySpanXL="3" emptySpanL="4"
-						emptySpanM="2" emptySpanS="0" columnsXL="12" columnsL="12" columnsM="12"/>
+					<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="2" adjustLabelSpan="true" emptySpanXL="3" emptySpanL="4" emptySpanM="2" emptySpanS="0" columnsXL="12" columnsL="12" columnsM="12"/>
 				</f:layout>
 				<f:FormContainer ariaLabelledBy="Title1">
 					<f:formElements>
@@ -19,7 +17,7 @@
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="">
-							<f:fields></f:fields>
+							<f:fields/>
 						</f:FormElement>
 						<f:FormElement label="">
 							<f:fields>
@@ -61,20 +59,22 @@
 				</f:FormContainer>
 			</f:Form>
 		</content>
-		<!--<footer>-->
-		<!--	<Bar>-->
-		<!--		<contentLeft>-->
-		<!--			<Text id="idAtualizacao" text="Atual: {modelAux>/DataAtualizacao}" class=""/>-->
-		<!--			{modelAux>/dataUltimoUpdate}-->
-		<!--		</contentLeft>-->
-		<!--		<contentRight>-->
-		<!--			<Label text="Versão: {modelAux>/VersaoApp}" class=""></Label>-->
-		<!--			<Label text="{modelAux>/nomeEmpresa}"/>-->
-		<!--		</contentRight>-->
-		<!--		<contentMiddle>-->
-		<!--			<Label text="v2.15" class="sapUiMediumMarginEnd"></Label>-->
-		<!--		</contentMiddle>-->
-		<!--	</Bar>-->
-		<!--</footer>-->
+	<footer>
+	    <Bar xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns="sap.m" id="bar2">
+	        <contentLeft>
+	            <Text id="idAtualizacao" text="Atual: {modelAux>/DataAtualizacao}"/>
+	            <!--{modelAux>/dataUltimoUpdate}-->
+	            
+	        </contentLeft>
+	        <contentRight>
+	            <Label text="Versão: {modelAux>/VersaoApp}" id="label3"/>
+	            <Label text="{modelAux>/nomeEmpresa}" id="label4"/>
+	            </contentRight>
+	        <!--<contentMiddle>-->
+	        <!--    <Label text="v2.15" class="sapUiMediumMarginEnd" id="label5"/>-->
+	            
+	        <!--</contentMiddle>-->
+	        </Bar>
+	</footer>
 	</Page>
 </View>

@@ -35,16 +35,10 @@ sap.ui.define([
 
 			that.byId("table_pedidos").setVisible(envioPedidos);
 			that.byId("btnEnviarPedido").setVisible(envioPedidos);
-			that.byId("btnExcluir").setVisible(!envioPedidos);
 			that.byId("btnExcluirPedido").setVisible(envioPedidos);
 
-			if (envioPedidos) {
-
-				this.onLoadPedidos();
-			} else {
-
-				this.onLoadEntregas();
-			}
+			this.onLoadPedidos();
+			
 		},
 		/*FIM _onLoadFields*/
 
@@ -374,7 +368,8 @@ sap.ui.define([
 
 		onEnviarPedido: function(oEvent) {
 			var that = this;
-
+			var werks = this.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
+			
 			if (oPedidosEnviar.length == 0) {
 
 				MessageBox.show("Selecione pelo menos um pedido para enviar!", {
@@ -440,11 +435,11 @@ sap.ui.define([
 									
 									var objItensPedido = {
 										Nrped: String(oItensPedidoGridEnviar[j].nrPedCli),
-										Iditempedido: oItensPedidoGridEnviar[j].index,
+										Iditempedido: String(oItensPedidoGridEnviar[j].idItemPedido),
 										Matnr: String(oItensPedidoGridEnviar[j].matnr),
 										Ntgew: String(oItensPedidoGridEnviar[j].ntgew),
 										Kwmeng: String(oItensPedidoGridEnviar[j].zzQnt),
-										Werks: String(oItensPedidoGridEnviar[j].werks),
+										Werks: String(werks),
 										Vlrped: String(oItensPedidoGridEnviar[j].zzVprod)
 									};
 									
@@ -507,6 +502,15 @@ sap.ui.define([
 
 								for (var i = 0; i < oPedidosEnviar.length; i++) {
 									
+									var data = String(oPedidosEnviar[i].dataImpl.substr(6, 4) + "/" + oPedidosEnviar[i].dataImpl.substr(3, 2) +  "/" +
+											oPedidosEnviar[i].dataImpl.substr(0, 2));
+									var hora = String(oPedidosEnviar[i].dataImpl.substr(11, 2) + ":" + oPedidosEnviar[i].dataImpl.substr(14, 2) +  ":" +
+											oPedidosEnviar[i].dataImpl.substr(17, 2));
+											
+									var retorno = that.onReturnData(data, hora);
+									var Erdat = retorno[0];
+									var Erzeit = retorno[0];
+									
 								/*  VKORG	VKORG	CHAR	4	0	Organização de vendas
 									VTWEG	VTWEG	CHAR	2	0	Canal de distribuição
 									SPART	SPART	CHAR	2	0	Setor de atividade
@@ -517,91 +521,93 @@ sap.ui.define([
 									PLTYP	PLTYP	CHAR	2	0	Tipo de lista de preços
 									ERDAT	ERDAT	DATS	8	0	Data de criação do registro
 									ERZEIT	ERZEIT	TIMS	6	0	Hora da criação do registro
-									ERNAM	ERNAM	CHAR	12	0	Nome do responsável que adicionou o objeto */
-
+									ERNAM	ERNAM	CHAR	12	0	Nome do responsável que adicionou o objeto 
+								*/
 									var objPedido = {
-										Nrped: oPedidosEnviar[i].nrPedCli,
-										Idstatuspedido: String(oPedidosEnviar[i].idStatusPedido),
-										Kunnr: oPedidosEnviar[i].kunnr,
-										Werks: oPedidosEnviar[i].werks,
-										Lifnr: repres,
-										Auart: oPedidosEnviar[i].tipoPedido,
-										Situacaopedido: oPedidosEnviar[i].situacaoPedido,
-										Ntgew: String(oPedidosEnviar[i].ntgew),
+										
+										Nrped: String(oPedidosEnviar[i].nrPedCli),
+										// Idstatuspedido: String(oPedidosEnviar[i].idStatusPedido),
+										Kunnr: String(oPedidosEnviar[i].kunnr),
+										Vkorg: String(oPedidosEnviar[i].vkorg),
+										Vtweg: String(oPedidosEnviar[i].vtweg),
+										Spart: String(oPedidosEnviar[i].spart),
+										// Werks: String(oPedidosEnviar[i].werks),
+										Reprs: String(repres),
+										Auart: String(oPedidosEnviar[i].tipoPedido),
+										// Situacaopedido: oPedidosEnviar[i].situacaoPedido,
+										// Ntgew: String(oPedidosEnviar[i].ntgew),
+										Zlsch: String(oPedidosEnviar[i].zlsch),
+										Pltyp: String(oPedidosEnviar[i].tabPreco),
+										Erdat: Erdat,
+										// Erzeit: "",
+										Ernam: String(oPedidosEnviar[i].codUsr)
 										// Brgew: null, // Não usa
 										// Dataentrega: "20181116", //Não usa
-										Pltyp: String(oPedidosEnviar[i].tabPreco),
-										Completo: oPedidosEnviar[i].completo,
-										Valminped: String(oPedidosEnviar[i].valMinPedido),
-										Erdat: String(oPedidosEnviar[i].dataImpl.substr(6, 4) + oPedidosEnviar[i].dataImpl.substr(3, 2) +
-											oPedidosEnviar[i].dataImpl.substr(0, 2)),
-										Horaped: String(oPedidosEnviar[i].dataImpl.substr(11, 2) + oPedidosEnviar[i].dataImpl.substr(14, 2) +
-											oPedidosEnviar[i].dataImpl.substr(17, 2)),
-										Obsped: oPedidosEnviar[i].observacaoPedido,
-										Obsaudped: oPedidosEnviar[i].observacaoAuditoriaPedido,
-										Existeentradapedido: String(oPedidosEnviar[i].existeEntradaPedido),
-										Percentradapedido: String(oPedidosEnviar[i].percEntradaPedido),
-										Valorentradapedido: String(oPedidosEnviar[i].valorEntradaPedido),
-										Inco1: String(oPedidosEnviar[i].tipoTransporte),
-										Diasprimeiraparcela: String(oPedidosEnviar[i].diasPrimeiraParcela),
-										Quantparcelas: String(oPedidosEnviar[i].quantParcelas),
-										Intervaloparcelas: String(oPedidosEnviar[i].intervaloParcelas),
-										Tiponego: String(oPedidosEnviar[i].tipoNegociacao),
-										// CodRepres: oPedidosEnviar[i].codRepres,
-										Totitens: oPedidosEnviar[i].totalItensPedido,
-										Valorcomissao: String(parseFloat(oPedidosEnviar[i].valComissaoPedido)),
-										// ValDescontoTotal: oPedidosEnviar[i].valDescontoTotal,
-										// ValMinPedido: oPedidosEnviar[i].valMinPedido,
-										Valtotpedido: String(oPedidosEnviar[i].valTotPed),
-										Valtotabcomissao: String(oPedidosEnviar[i].valTotalAbatidoComissao),
-										Valabverba: String(oPedidosEnviar[i].valTotalAbatidoVerba),
-										Vlrprz: String(oPedidosEnviar[i].valTotalExcedentePrazoMed),
-										VlrprzCom: String(oPedidosEnviar[i].valUtilizadoComissaoPrazoMed),
-										VlrprzVm: String(oPedidosEnviar[i].valUtilizadoVerbaPrazoMed), //NÃO UTILIZA VERBA PARA PRAZO 
-										VlrprzDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										VlrprzVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										Vlrdsc: String(oPedidosEnviar[i].valTotalExcedenteDesconto),
-										VlrdscCom: String(oPedidosEnviar[i].valComissaoUtilizadaDesconto),
-										VlrdscVm: String(oPedidosEnviar[i].valVerbaUtilizadaDesconto),
-										VlrdscDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										VlrdscVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										Vlramo: String(oPedidosEnviar[i].valTotalExcedenteAmostra),
-										VlramoCom: String(oPedidosEnviar[i].valUtilizadoComissaoAmostra),
-										VlramoVm: String(oPedidosEnviar[i].valUtilizadoVerbaAmostra),
-										VlramoDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										VlramoVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										Vlrbri: String(oPedidosEnviar[i].valTotalExcedenteBrinde),
-										VlrbriCom: String(oPedidosEnviar[i].valUtilizadoComissaoBrinde),
-										VlrbriVm: String(oPedidosEnviar[i].valUtilizadoVerbaBrinde),
-										VlrbriDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										VlrbriVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										Vlrbon: String(oPedidosEnviar[i].valTotalExcedenteBonif),
-										VlrbonCom: String(oPedidosEnviar[i].valUtilizadoComissaoBonif),
-										VlrbonVm: String(oPedidosEnviar[i].valUtilizadoVerbaBonif),
-										VlrbonDd: String(0),
-										VlrbonVvb: String(0),
-										Valtotabcamppa: String(oPedidosEnviar[i].valUtilizadoCampProdutoAcabado),
-										Valtotabcampbrinde: String(oPedidosEnviar[i].valTotalCampBrinde || 0),
-										Valtotexcndirdesc: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoDesconto),
-										Valtotexcndirprazo: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoPrazoMed),
-										Valverbapedido: String(oPedidosEnviar[i].valVerbaPedido),
-										BuGruop: "",
-										Obscom: "",
-										Obsdd: "",
-										Obsvm: "",
-										Obsvvb: "",
-										Vlrutilvpm: String(oPedidosEnviar[i].valUtilizadoVerbaPrazoMed),
-										Vltotexcndirbri: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoBrinde),
-										Vltotexcndiramo: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoAmostra),
-										Vltotexcndirbon: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoBonif),
-										Valcampenxoval: String(oPedidosEnviar[i].valUtilizadoCampEnxoval),
-										Valcampglobal: String(oPedidosEnviar[i].valCampGlobal),
-										Vlrutilcampenx: String(oPedidosEnviar[i].valCampEnxoval),
-										Valcampbrinde: String(oPedidosEnviar[i].valUtilizadoCampBrinde || 0),
-										Usuario: String(oPedidosEnviar[i].codUsr),
-										Tipousuario: String(oPedidosEnviar[i].tipoUsuario),
-										Zlsch: String(oPedidosEnviar[i].zlsch),
-										Zzprazomed: String(oPedidosEnviar[i].zzPrazoMedio)
+										// Completo: oPedidosEnviar[i].completo,
+										// Valminped: String(oPedidosEnviar[i].valMinPedido),
+										// Obsped: oPedidosEnviar[i].observacaoPedido,
+										// Obsaudped: oPedidosEnviar[i].observacaoAuditoriaPedido,
+										// Existeentradapedido: String(oPedidosEnviar[i].existeEntradaPedido),
+										// Percentradapedido: String(oPedidosEnviar[i].percEntradaPedido),
+										// Valorentradapedido: String(oPedidosEnviar[i].valorEntradaPedido),
+										// Inco1: String(oPedidosEnviar[i].tipoTransporte),
+										// Diasprimeiraparcela: String(oPedidosEnviar[i].diasPrimeiraParcela),
+										// Quantparcelas: String(oPedidosEnviar[i].quantParcelas),
+										// Intervaloparcelas: String(oPedidosEnviar[i].intervaloParcelas),
+										// Tiponego: String(oPedidosEnviar[i].tipoNegociacao),
+										// // CodRepres: oPedidosEnviar[i].codRepres,
+										// Totitens: oPedidosEnviar[i].totalItensPedido,
+										// Valorcomissao: String(parseFloat(oPedidosEnviar[i].valComissaoPedido)),
+										// // ValDescontoTotal: oPedidosEnviar[i].valDescontoTotal,
+										// // ValMinPedido: oPedidosEnviar[i].valMinPedido,
+										// Valtotpedido: String(oPedidosEnviar[i].valTotPed),
+										// Valtotabcomissao: String(oPedidosEnviar[i].valTotalAbatidoComissao),
+										// Valabverba: String(oPedidosEnviar[i].valTotalAbatidoVerba),
+										// Vlrprz: String(oPedidosEnviar[i].valTotalExcedentePrazoMed),
+										// VlrprzCom: String(oPedidosEnviar[i].valUtilizadoComissaoPrazoMed),
+										// VlrprzVm: String(oPedidosEnviar[i].valUtilizadoVerbaPrazoMed), //NÃO UTILIZA VERBA PARA PRAZO 
+										// VlrprzDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// VlrprzVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// Vlrdsc: String(oPedidosEnviar[i].valTotalExcedenteDesconto),
+										// VlrdscCom: String(oPedidosEnviar[i].valComissaoUtilizadaDesconto),
+										// VlrdscVm: String(oPedidosEnviar[i].valVerbaUtilizadaDesconto),
+										// VlrdscDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// VlrdscVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// Vlramo: String(oPedidosEnviar[i].valTotalExcedenteAmostra),
+										// VlramoCom: String(oPedidosEnviar[i].valUtilizadoComissaoAmostra),
+										// VlramoVm: String(oPedidosEnviar[i].valUtilizadoVerbaAmostra),
+										// VlramoDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// VlramoVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// Vlrbri: String(oPedidosEnviar[i].valTotalExcedenteBrinde),
+										// VlrbriCom: String(oPedidosEnviar[i].valUtilizadoComissaoBrinde),
+										// VlrbriVm: String(oPedidosEnviar[i].valUtilizadoVerbaBrinde),
+										// VlrbriDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// VlrbriVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
+										// Vlrbon: String(oPedidosEnviar[i].valTotalExcedenteBonif),
+										// VlrbonCom: String(oPedidosEnviar[i].valUtilizadoComissaoBonif),
+										// VlrbonVm: String(oPedidosEnviar[i].valUtilizadoVerbaBonif),
+										// VlrbonDd: String(0),
+										// VlrbonVvb: String(0),
+										// Valtotabcamppa: String(oPedidosEnviar[i].valUtilizadoCampProdutoAcabado),
+										// Valtotabcampbrinde: String(oPedidosEnviar[i].valTotalCampBrinde || 0),
+										// Valtotexcndirdesc: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoDesconto),
+										// Valtotexcndirprazo: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoPrazoMed),
+										// Valverbapedido: String(oPedidosEnviar[i].valVerbaPedido),
+										// BuGruop: "",
+										// Obscom: "",
+										// Obsdd: "",
+										// Obsvm: "",
+										// Obsvvb: "",
+										// Vlrutilvpm: String(oPedidosEnviar[i].valUtilizadoVerbaPrazoMed),
+										// Vltotexcndirbri: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoBrinde),
+										// Vltotexcndiramo: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoAmostra),
+										// Vltotexcndirbon: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoBonif),
+										// Valcampenxoval: String(oPedidosEnviar[i].valUtilizadoCampEnxoval),
+										// Valcampglobal: String(oPedidosEnviar[i].valCampGlobal),
+										// Vlrutilcampenx: String(oPedidosEnviar[i].valCampEnxoval),
+										// Valcampbrinde: String(oPedidosEnviar[i].valUtilizadoCampBrinde || 0),
+										// Tipousuario: String(oPedidosEnviar[i].tipoUsuario),
+										// Zzprazomed: String(oPedidosEnviar[i].zzPrazoMedio)
 									};
 
 									oModel.create("/InserirOV", objPedido, {
@@ -609,27 +615,27 @@ sap.ui.define([
 										success: function(data) {
 
 											var tx = db.transaction("PrePedidos", "readwrite");
-											var objPedido = tx.objectStore("PrePedidos");
+											var objPedidoStore = tx.objectStore("PrePedidos");
 
-											var requestPrePedidos = objPedido.get(data.Nrpedcli);
+											var requestPrePedidos = objPedidoStore.get(data.Nrped);
 
 											requestPrePedidos.onsuccess = function(e) {
 												var oPrePedido = e.target.result;
 
 												oPrePedido.idStatusPedido = 3;
-												oPrePedido.situacaoPedido = "FIN";
+												oPrePedido.situacaoPedido = "Finalizado";
 
-												var requestPutItens = objPedido.put(oPrePedido);
+												var requestPutItens = objPedidoStore.put(oPrePedido);
 
 												requestPutItens.onsuccess = function() {
-													MessageBox.show("Pedido: " + data.Nrpedcli + " Enviado!", {
+													MessageBox.show("Pedido: " + data.Nrped + " Enviado!", {
 														icon: MessageBox.Icon.SUCCESS,
 														title: "Pedido enviado!",
 														actions: [MessageBox.Action.OK],
 														onClose: function() {
 
 															for (var o = 0; o < oPedidoGrid.length; o++) {
-																if (oPedidoGrid[o].nrPedCli == data.Nrpedcli) {
+																if (oPedidoGrid[o].nrPedCli == data.Nrped) {
 																	oPedidoGrid.splice(o, 1);
 																}
 															}
@@ -657,6 +663,16 @@ sap.ui.define([
 			}
 		},
 		/*FIM onEnviarPedido*/
+		
+		onReturnData: function(date, hora){
+		
+		  var yyyySlashMMSlashDD = date + " " + hora;
+		  
+		  var jsDateObject = new Date(yyyySlashMMSlashDD);
+		
+		  return [jsDateObject, jsDateObject.getTime()];
+		
+		},
 		
 		onDataAtualizacao: function() {
 			var date = new Date();
