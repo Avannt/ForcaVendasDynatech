@@ -34,8 +34,8 @@ sap.ui.define([
 				var sUrl;
 				//Versão App
 				if (this.getOwnerComponent().getModel("modelAux").getProperty("/ReleasePRD")) {
-					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.00");
-					sUrl = "http://192.168.235.5:8000/sap/opu/odata/sap/ZFORCA_VENDAS_SRV/?sap-client=210";
+					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.0.3");
+					sUrl = "http://34.195.216.197:8080/sap/opu/odata/sap/ZFORCA_VENDAS_SRV/?sap-client=310";
 
 					var oModel = new sap.ui.model.odata.v2.ODataModel(sUrl, {
 						json: true,
@@ -49,7 +49,7 @@ sap.ui.define([
 					// QAS
 					this.getOwnerComponent().getModel("modelAux").setProperty("/DBModel", this.getView().getModel());
 					//Esse parâmetro está cadastrado na tabela tvarv no S4/HANA
-					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.00");
+					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.0.3");
 				}
 
 				this.getOwnerComponent().getModel("modelAux").setProperty("/Werks", "1100");
@@ -65,7 +65,7 @@ sap.ui.define([
 
 				if (idbSupported) {
 
-					var open = indexedDB.open("VB_DataBase", 6);
+					var open = indexedDB.open("VB_DataBase", 7);
 
 					// Create the Tables
 					open.onupgradeneeded = function (e) {
@@ -85,7 +85,7 @@ sap.ui.define([
 						//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TABELA DE CLIENTES >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 						if (!db.objectStoreNames.contains("Clientes")) {
 							var objCliente = db.createObjectStore("Clientes", {
-								keyPath: "kunnr",
+								keyPath: "idCliente",
 								unique: true
 							});
 							objCliente.createIndex("werks", "werks", {
@@ -628,47 +628,50 @@ sap.ui.define([
 																var txCliente = db.transaction("Clientes", "readwrite");
 																var objCliente = txCliente.objectStore("Clientes");
 
-																// for (var i = 0; i < retornoCliente.results.length; i++) {
-																for (var i = 0; i < 3; i++) {
-
+																for (var i = 0; i < retornoCliente.results.length; i++) {
+																	
 																	var objBancoCliente = {
-																		kunnr: String(parseInt("100010", 10) + i),
-																		land1: "BR",
-																		lifnr: "203453",
-																		name1: "PAULO SERGIO MONTEIRO BORGES",
-																		name2: "",
-																		ort01: "CAMPO VERDE",
-																		ort02: "CENTRO",
-																		parvw: "YR",
-																		pstlz: "78840-000",
-																		regio: "MT",
-																		stcd1: "",
-																		stcd2: "53636309153",
-																		stras: "AV CURITIBA, 411 411",
-																		telf1: "6634195164",
-																		spart: 10*i,
-																		vkorg: "1100",
-																		vtweg: "AG"
-																		
-																			// kunnr: retornoCliente.results[i].Kunnr,
-																			// vkorg: retornoCliente.results[i].Vkorg
-																			// vtweg: retornoCliente.results[i].Vtweg,
-																			// land1: retornoCliente.results[i].Land1,
-																			// name1: retornoCliente.results[i].Name1,
-																			// name2: retornoCliente.results[i].Name2,
-																			// ort01: retornoCliente.results[i].Ort01,
-																			// ort02: retornoCliente.results[i].Ort02,
-																			// regio: retornoCliente.results[i].Regio,
-																			// stras: retornoCliente.results[i].Stras,
-																			// pstlz: retornoCliente.results[i].Pstlz,
-																			// stcd1: retornoCliente.results[i].Stcd1,
-																			// stcd2: retornoCliente.results[i].Stcd2,
-																			// inco1: retornoCliente.results[i].Inco1,
-																			// parvw: retornoCliente.results[i].Parvw,
-																			// lifnr: retornoCliente.results[i].Lifnr,
-																			// telf1: retornoCliente.results[i].Telf1,
-																			// spart: retornoCliente.results[i].Spart
+																		idCliente: retornoCliente.results[i].Kunnr + "." + retornoCliente.results[i].Vkorg 
+																			+ "." + retornoCliente.results[i].Vtweg + "." + retornoCliente.results[i].Spart,
+																		kunnr: retornoCliente.results[i].Kunnr,
+																		vkorg: retornoCliente.results[i].Vkorg,
+																		vtweg: retornoCliente.results[i].Vtweg,
+																		land1: retornoCliente.results[i].Land1,
+																		name1: retornoCliente.results[i].Name1,
+																		name2: retornoCliente.results[i].Name2,
+																		ort01: retornoCliente.results[i].Ort01,
+																		ort02: retornoCliente.results[i].Ort02,
+																		regio: retornoCliente.results[i].Regio,
+																		stras: retornoCliente.results[i].Stras,
+																		pstlz: retornoCliente.results[i].Pstlz,
+																		stcd1: retornoCliente.results[i].Stcd1,
+																		stcd2: retornoCliente.results[i].Stcd2,
+																		inco1: retornoCliente.results[i].Inco1,
+																		parvw: retornoCliente.results[i].Parvw,
+																		lifnr: retornoCliente.results[i].Lifnr,
+																		telf1: retornoCliente.results[i].Telf1,
+																		spart: retornoCliente.results[i].Spart
 																	};
+																	
+																// for (var i = 0; i < 3; i++) {
+																		// kunnr: String(parseInt("100010", 10) + i),
+																		// land1: "BR",
+																		// lifnr: "203453",
+																		// name1: "PAULO SERGIO MONTEIRO BORGES",
+																		// name2: "",
+																		// ort01: "CAMPO VERDE",
+																		// ort02: "CENTRO",
+																		// parvw: "YR",
+																		// pstlz: "78840-000",
+																		// regio: "MT",
+																		// stcd1: "",
+																		// stcd2: "53636309153",
+																		// stras: "AV CURITIBA, 411 411",
+																		// telf1: "6634195164",
+																		// spart: 10*i,
+																		// vkorg: "1100",
+																		// vtweg: "AG"
+																		
 
 																	var requestCliente = objCliente.add(objBancoCliente);
 

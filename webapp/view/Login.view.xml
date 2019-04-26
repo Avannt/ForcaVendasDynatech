@@ -37,15 +37,15 @@
 								</Button>
 							</f:fields>
 						</f:FormElement>
-						<f:FormElement label="">
-							<f:fields>
-								<Button text="ENVIAR" id="idEnviarDocs" press="onEnviarDocs" class="sapUiLargeMarginEnd" icon="sap-icon://upload" width="100%">
-									<layoutData>
-										<l:GridData span="XL4 L4 M4 S8" linebreakS="false"/>
-									</layoutData>
-								</Button>
-							</f:fields>
-						</f:FormElement>
+						<!--<f:FormElement label="">-->
+						<!--	<f:fields>-->
+						<!--		<Button text="ENVIAR" id="idEnviarDocs" press="onEnviarDocs" class="sapUiLargeMarginEnd" icon="sap-icon://upload" width="100%">-->
+						<!--			<layoutData>-->
+						<!--				<l:GridData span="XL4 L4 M4 S8" linebreakS="false"/>-->
+						<!--			</layoutData>-->
+						<!--		</Button>-->
+						<!--	</f:fields>-->
+						<!--</f:FormElement>-->
 						<f:FormElement label="">
 							<f:fields>
 								<Button text="CONFIGUR." id="log1" press="onOpenCredenciais" icon="sap-icon://action-settings" width="100%">

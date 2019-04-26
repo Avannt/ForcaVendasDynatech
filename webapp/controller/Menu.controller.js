@@ -24,6 +24,9 @@ sap.ui.define([
 				case "aprovacoes":
 					sap.ui.core.UIComponent.getRouterFor(this).navTo("Aprovacoes");
 					break;
+				case "enviarPedidos":
+					sap.ui.core.UIComponent.getRouterFor(this).navTo("enviarPedidos");
+					break;
 					// case "relatorios":
 					// 	sap.ui.core.UIComponent.getRouterFor(this).navTo("menuRelatorios");
 					// 	break;

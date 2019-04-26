@@ -215,7 +215,7 @@ sap.ui.define([
 		},
 
 		onNavBack: function() {
-			sap.ui.core.UIComponent.getRouterFor(this).navTo("login");
+			sap.ui.core.UIComponent.getRouterFor(this).navTo("menu");
 		},
 		/*FIM onNavBack*/
 

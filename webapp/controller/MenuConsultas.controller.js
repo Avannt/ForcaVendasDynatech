@@ -43,7 +43,7 @@ sap.ui.define([
 		onAfterRendering: function() {
 			//tive que colocar porque tem um bug no tile container que mostra uma tile 
 			//só se deixar o showHeader da page=true na view
-			this.byId("page").setShowHeader(true);
+			// this.byId("page").setShowHeader(true);
 		},
 		
 		onTileConsultas: function(oEvent){
