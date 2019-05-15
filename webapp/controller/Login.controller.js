@@ -17,12 +17,60 @@ sap.ui.define([
 			onInit: function () {
 				this.getRouter().getRoute("login").attachPatternMatched(this._onLoadFields, this);
 			},
+			
+			getImei: function() {
+				var that = this;
+				var isTablet = this.getOwnerComponent().getModel("modelAux").getProperty("/isTablet");
+				if (device.platform == 'Android') {
+					window.plugins.sim.hasReadPermission(successCallback1, errorCallback1);
+					window.plugins.sim.requestReadPermission(successCallback2, errorCallback2);
+
+					if (isTablet == true) {
+						that.getOwnerComponent().getModel("modelAux").setProperty("/imei", device.uuid);
+
+					} else {
+						window.plugins.sim.getSimInfo(successCallback3, errorCallback3);
+
+					}
+
+				} else if (device.platform == 'iOS') {
+
+					that.getOwnerComponent().getModel("modelAux").setProperty("/imei", device.uuid);
+
+				}
+				//checa permisao
+				function successCallback1(result) {
+					console.log(result);
+				}
+
+				function errorCallback1(error) {
+					console.log(error);
+				}
+				//READ PERMISSION
+				function successCallback2(result) {
+					console.log(result);
+				}
+
+				function errorCallback2(error) {
+					console.log(error);
+				}
+				//pega info device
+				function successCallback3(result) {
+					console.log(result);
+					imeiResult = result;
+					that.getOwnerComponent().getModel("modelAux").setProperty("/imei", imeiResult.deviceId);
+				}
+
+				function errorCallback3(error) {
+					console.log(error);
+				}
+			},
 
 			_onLoadFields: function () {
 				var that = this;
 
 				this.onInicializaModels();
-
+				
 				// this.getView().setModel(oModel2, "VBModel");
 				/* 
 				Alterar aqui o ambiente:
