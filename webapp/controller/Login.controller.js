@@ -57,7 +57,7 @@ sap.ui.define([
 				//pega info device
 				function successCallback3(result) {
 					console.log(result);
-					imeiResult = result;
+					var imeiResult = result;
 					that.getOwnerComponent().getModel("modelAux").setProperty("/imei", imeiResult.deviceId);
 				}
 
@@ -502,55 +502,6 @@ sap.ui.define([
 				function errorCallback(error) {
 					console.log(error);
 					that.getImei();
-				}
-			},
-
-			getImei: function () {
-				var that = this;
-				var isTablet = this.getOwnerComponent().getModel("modelAux").getProperty("/isTablet");
-				var isTablet = "Android";
-				if (device.platform == 'Android') {
-					window.plugins.sim.hasReadPermission(successCallback1, errorCallback1);
-					window.plugins.sim.requestReadPermission(successCallback2, errorCallback2);
-
-					if (isTablet == true) {
-						that.getOwnerComponent().getModel("modelAux").setProperty("/Imei", device.uuid);
-
-					} else {
-						window.plugins.sim.getSimInfo(successCallback3, errorCallback3);
-
-					}
-
-				} else if (device.platform == 'iOS') {
-
-					that.getOwnerComponent().getModel("modelAux").setProperty("/Imei", device.uuid);
-
-				}
-				//checa permisao
-				function successCallback1(result) {
-					console.log(result);
-				}
-
-				function errorCallback1(error) {
-					console.log(error);
-				}
-				//READ PERMISSION
-				function successCallback2(result) {
-					console.log(result);
-				}
-
-				function errorCallback2(error) {
-					console.log(error);
-				}
-				//pega info device
-				function successCallback3(result) {
-					console.log(result);
-					ImeiResult = result;
-					that.getOwnerComponent().getModel("modelAux").setProperty("/Imei", ImeiResult.deviceId);
-				}
-
-				function errorCallback3(error) {
-					console.log(error);
 				}
 			},
 
