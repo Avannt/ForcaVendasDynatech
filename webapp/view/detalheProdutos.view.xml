@@ -1,9 +1,10 @@
 <mvc:View controllerName="testeui5.controller.detalheProdutos" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:wt="sap.ui.demo.wt.control">
 	<Page title="{i18n>detailPageTitleProdutos}" showNavButton="true" navButtonPress="onNavBack">
 		<ObjectHeader responsive="true" fullScreenOptimized="true"
-			text="{ parts: [{path: 'Predilecta>Name'}, {path: 'view>/currency'}], type: 'sap.ui.model.type.Currency', formatOptions: { showMeasure: false } }"
 			intro="{Predilecta>Name}" title="{Predilecta>Category}">
 			<attributes>
+							<!--text="{ parts: [{path: 'Predilecta>Name'}, {path: 'view>/currency'}], type: 'sap.ui.model.type.Currency', formatOptions: { showMeasure: false } }"-->
+
 				<ObjectAttribute title="Quantidade" text="{Predilecta>Quantity}"></ObjectAttribute>
 				<ObjectAttribute title="Data Vencimento"
 					text="{ path: 'Predilecta>dueDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'long', source: { pattern: 'yyyy-MM-ddTHH:mm:ss' } } }"/>

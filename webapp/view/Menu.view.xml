@@ -6,32 +6,5 @@
 				title="{menu>title}" info="{menu>info}" infoState="{menu>infoState}" busy="{menu>busy}" busyIndicatorDelay="0" busyIndicatorSize="Medium"
 				app:opcao="{menu>id}" press="onTile" visible="{menu>visible}"/>
 		</TileContainer>
-		
-		<!--<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="{menu>/Principal>title}" subheader="{menu>/Principal>subTittle}" press="press">-->
-		<!--	<TileContent unit="{menu>/Principal>numberUnit}" footer="{menu>/Principal>infoState}" >-->
-		<!--		<NumericContent value="{menu>/Principal>number}" icon="sap-icon://{menu>/Principal>icon}"/>-->
-		<!--	</TileContent>-->
-		<!--</GenericTile>-->
-		<!--<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Cumulative Totals" subheader="Expenses" press="press">-->
-		<!--	<TileContent unit="Unit" footer="Footer Text">-->
-		<!--		<NumericContent value="12"/>-->
-		<!--	</TileContent>-->
-		<!--</GenericTile>-->
-		
-		<!--<footer>-->
-		<!--	<Bar>-->
-		<!--		<contentLeft>-->
-		<!--			<Text id="idAtualizacao" text="Atual: {modelAux>/DataAtualizacao}" />-->
-		<!--{modelAux>/dataUltimoUpdate}-->
-		<!--		</contentLeft>-->
-		<!--		<contentRight>-->
-		<!--			<Label text="Versão: {modelAux>/VersaoApp}" ></Label>-->
-		<!--<Label text="{modelAux>/nomeEmpresa}"/>-->
-		<!--		</contentRight>-->
-		<!--<contentMiddle>-->
-		<!--	<Label text="v2.15" class="sapUiMediumMarginEnd"></Label>-->
-		<!--</contentMiddle>-->
-		<!--	</Bar>-->
-		<!--</footer>-->
 	</Page>
 </mvc:View>

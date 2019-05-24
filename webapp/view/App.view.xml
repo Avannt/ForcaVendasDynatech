@@ -1,4 +1,4 @@
-<mvc:View controllerName="testeui5.controller.App" displayBlock="true" xmlns="sap.m" xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc">
+<mvc:View controllerName="testeui5.controller.App" displayBlock="false" xmlns="sap.m" xmlns:u="sap.ui.unified" xmlns:mvc="sap.ui.core.mvc">
 	<u:Shell headerHiding="false" headerVisible="true" id="MyShell" icon="">
 		<!--{modelAux>/iconeEmpresa}-->
 		<u:headItems>

@@ -1,20 +1,8 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<SelectDialog noDataText="Nenhum pedido para entrega futura encontrado" 
-		id="sdVbeln"
-		title="Escolha o pedido" 
-		search="onDialogSearch"
-		confirm="onDialogClose" 
-		cancel="onDialogClose" 
-		items="{ path: 'PedidosEF>/' }">
+	<SelectDialog noDataText="Nenhum pedido para entrega futura encontrado" id="sdVbeln" title="Escolha o pedido" search="onDialogSearch"
+		confirm="onDialogClose" cancel="onDialogClose" items="{ path: 'PedidosEF>/' }">
 		<items>
-			<StandardListItem 
-				id="sliItens" 
-				title="{PedidosEF>Vbeln}" 
-				description=""
-				iconDensityAware="false"
-				iconInset="false" 
-				type="Active"
-			/>
+			<StandardListItem id="sliItens" title="{PedidosEF>Vbeln}" description="" iconDensityAware="false" iconInset="false" type="Active"/>
 		</items>
 	</SelectDialog>
 </core:FragmentDefinition>
