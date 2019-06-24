@@ -1,0 +1,40 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns="sap.m" height="100%" controllerName="testeui5.controller.produtoConsultas">
+	<Page id="masterProdutos" title="Produtos" class="sapUiStdPage" showNavButton="true" navButtonPress="onNavBack">
+		<HeaderContainer>
+			<Toolbar>
+				<Select xmlns="sap.m" id="idTabelaPreco" showSecondaryValues="false" forceSelection="false" items="{ path: 'tabPreco>/' }" change="onChangeTabelaPreco">
+					<core:Item key="{tabPreco>pltyp}" text="{tabPreco>pltyp} - {tabPreco>ptext}"/>
+				</Select>
+			</Toolbar>
+		</HeaderContainer>
+		<subHeader>
+			<Toolbar>
+				<SearchField id="searchField" xmlns="sap.m" showRefreshButton="false" placeholder="Digite Desc./Cód. Produto" tooltip="Pesquisar Clientes pelo Nome." liveChange="onSearch" search="onSearch"/>
+			</Toolbar>
+		</subHeader>
+		<content>
+			<Table id="tableProdutos" noDataText="Sem dados." growing="true" growingThreshold="100" growingTriggerText="Próximos >>" busyIndicatorDelay="0" width="100%" alternateRowColors="true" items="{ path: 'consultasProdutos>/', sorter: { path: 'matnr', descending: false, parameter: 'matnr'}}">
+				<columns>
+					<Column minScreenWidth="320px" hAlign="Left" demandPopin="false" width="100px">
+						<Text text="Código"/>
+					</Column>
+					<Column minScreenWidth="450px" hAlign="Left" demandPopin="true" popinDisplay="Inline">
+						<Text text="Descrição"/>
+					</Column>
+					<Column minScreenWidth="320px" hAlign="Left" demandPopin="false">
+						<Text text="Preço"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Inactive" id="item1">
+						<cells>
+							<Text text="{consultasProdutos>matnr}"/>
+							<Text text="{consultasProdutos>maktx}"/>
+							<Text text="R$: {path: 'consultasProdutos>zzVprod', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
+</mvc:View>

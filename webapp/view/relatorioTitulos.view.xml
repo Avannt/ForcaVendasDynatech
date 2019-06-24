@@ -1,0 +1,58 @@
+<mvc:View height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="testeui5.controller.relatorioTitulos"
+	xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic">
+	<Page id="master" navButtonPress="onNavBack" showNavButton="true" title="Relatório de Títulos" showFooter="false">
+		<subHeader>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<ToolbarSpacer/>
+				<!--<Button icon="sap-icon://download" press="onDataExport"/>-->
+				<SearchField id="idClientesRelatorio" placeholder="Cód/Desc/Status" liveChange="onItemChange" width="100%" />
+				<DateRangeSelection id="idCDatePicker" change="onItemChange2" placeholder="Range Vencimento" width="100%" />
+			</Toolbar>
+		</subHeader>
+		<content>
+			<Table id="idtableTitulos" growing="true" growingScrollToLoad="false" growingThreshold="5" noDataText="Não possui duplicatas em aberto" 
+				updateFinished="onUpdateFinished" width="100%" selectionChange="onSelectionChange" alternateRowColors="true" growingTriggerText="Próximo >>>"
+				items="{ path: 'TitulosAbertos>/', sorter: { path: 'Cliente', ascending: true}}">
+				<columns>
+					<Column minScreenWidth="320px" demandPopin="false" hAlign="Left">
+						<Text text="Cliente"/>
+					</Column>
+					<!--<Column minScreenWidth="320px" hAlign="Left" demandPopin="false">-->
+					<!--	<Text text="Titulo"/>-->
+					<Column demandPopin="true" minScreenWidth="550px" hAlign="Left" popinDisplay="Inline">
+						<Text text="Emissão"/>
+					</Column>
+					<Column minScreenWidth="500px" demandPopin="true" hAlign="Left" popinDisplay="Inline">
+						<Text text="Vencimento"/>
+					</Column>
+					<!--</Column>-->
+					<Column minScreenWidth="520px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="100px">
+						<Text text="Vlr Orig"/>
+					</Column>
+					<Column minScreenWidth="320px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="70px">
+						<Text text="Status"/>
+					</Column>
+					<Column minScreenWidth="320px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="50px">
+						<Text text=""/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Inactive">
+						<cells>
+							<Text text="{TitulosAbertos>kunnr} - {TitulosAbertos>name1}" />
+							<!--<Text text="{TitulosAbertos>belnr}" />-->
+							
+							<Text text="{path: 'TitulosAbertos>budat', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd/MM/yyyy' }}" />
+							<Text text="{path: 'TitulosAbertos>zfbdt', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd/MM/yyyy' }}" />
+							<Text text="R$ {path: 'TitulosAbertos>dmbtr', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}" />
+							<Text text="{path : 'TitulosAbertos>status'}"/>
+							<Image src="{path : 'TitulosAbertos>pathImg'}" width="50%" tooltip="{path : 'TitulosAbertos>status'}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
+</mvc:View>

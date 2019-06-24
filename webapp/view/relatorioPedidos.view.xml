@@ -1,0 +1,84 @@
+<mvc:View height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="testeui5.controller.relatorioPedidos"
+	xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic">
+	<Page id="master" navButtonPress="onNavBack" showNavButton="true" title="Relatório de Pedidos" showFooter="false">
+		<subHeader>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<ToolbarSpacer/>	
+				<!--<Button icon="sap-icon://download" press="onDataExport"/>-->
+				<DatePicker visible="false" id="DP6" placeholder="Filtre Data" displayFormat="short" change="handleChange" width="50%"/>
+				<SearchField id="idClientesRelatorio" placeholder="Digite Nº Ped, Cliente, Repres, Status, Tipo Doc, Inconsistente" liveChange="onSearch" width="100%"></SearchField>
+			</Toolbar>
+		</subHeader>
+		<content>
+			<Table id="table_relatorio_pedidos" busyIndicatorDelay="0" growing="true" growingThreshold="5" growingScrollToLoad="false" mode="None"
+				noDataText="Nenhum pedido encontrado" width="100%" alternateRowColors="true" itemPress="onItemPressPED"
+				growingTriggerText="Próximo >>>" items="{ path: 'pedidoRelatorio>/', sorter: { path: 'Nrpedcli', descending: true}}">
+				<columns>
+					<Column minScreenWidth="320px" demandPopin="false" popinDisplay="Inline" hAlign="Left" width="170px">
+						<Text text="N°Ped"/>
+					</Column>
+					<!--<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="100px">-->
+					<!--	<Text text="Cód.Cliente"/>-->
+					<!--</Column>-->
+					<!--<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="100px">-->
+					<!--	<Text text="Cód.Aprovador"/>-->
+					<!--</Column>-->
+					<Column minScreenWidth="320px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="70px">
+						<Text text="Data"/>
+					</Column>
+					<Column minScreenWidth="450px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="80px">
+						<Text text="Status"/>
+					</Column>
+					<Column minScreenWidth="320px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="30px">
+						<Text text=""/>
+					</Column>
+					<Column minScreenWidth="1000px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="auto">
+						<Text text="Cliente"/>
+					</Column>
+					<Column minScreenWidth="1000px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="auto" >
+						<Text text="Aprovador"/>
+					</Column>
+					<Column minScreenWidth="1000px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="auto" >
+						<Text text="Tipo Doc"/>
+					</Column>
+					<Column minScreenWidth="1000px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="auto" >
+						<Text text="Inconsistente"/>
+					</Column>
+					<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" width="110px">
+						<Text text="Valor Total"/>
+					</Column>
+					<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" width="110px">
+						<Text text="Valor Excedente"/>
+					</Column>
+					<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" width="80px">
+						<Text text="DocVenda"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Active">
+						<customData>
+							<core:CustomData key="mydataRP" value="{path: 'pedidoRelatorio>PedInconsistente', type: 'sap.ui.model.type.String'}" writeToDom="true"/>
+						</customData>
+						<cells>
+							<Text text="{path : 'pedidoRelatorio>Nrpedcli'}"/>
+							<!--<Text text="{path : 'pedidoRelatorio>Kunnr'}"/>-->
+							<Text text="{path : 'pedidoRelatorio>Erdat'}"/>
+							<Text text="{path : 'pedidoRelatorio>AprovadoDesc'}"/>
+							<Image src="{path : 'pedidoRelatorio>PathImg'}" width="50%" tooltip="{path : 'pedidoRelatorio>AprovadoDesc'}"/>
+							<Text text="{path : 'pedidoRelatorio>Kunnr'} - {path : 'pedidoRelatorio>NameOrg1', formatter:'.myFormatterName'}"/>
+							<!--<Text text="{path : 'pedidoRelatorio>Aprov'}"/>-->
+							<Text text="{path : 'pedidoRelatorio>Aprov'} - {path : 'pedidoRelatorio>AprovNome', formatter:'.myFormatterName'}"/>
+							<Text text="{path : 'pedidoRelatorio>Auart'}"/>
+							<Text text="{path : 'pedidoRelatorio>PedInconsistente'}"/>
+							<Text text="R$: {path :'pedidoRelatorio>Valtotpedido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+							<Text text="R$: {path :'pedidoRelatorio>Vlrexc', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+							<Text text="{path :'pedidoRelatorio>Vbeln'}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
+</mvc:View>

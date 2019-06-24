@@ -1,0 +1,64 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic"
+	height="100%" controllerName="testeui5.controller.enviarPedidos">
+	<Page id="master" navButtonPress="onNavBack" showNavButton="true" title="Envio de Pedidos">
+		<!--<subHeader></subHeader>-->
+		<content>
+			<Table id="table_pedidos" width="100%" backgroundDesign="Translucent"
+				items="{ path:'PedidosEnviar>/', sorter: { path: 'NrPedCli', descending: true}}" mode="MultiSelect" selectionChange="onSelectionChange"
+				itemPress="onItemPress" growingThreshold="3" growingTriggerText="Proximos Pedidos &gt;&gt;" growing="true"
+				noDataText="Nenhum pedido pendente para envio" busyIndicatorDelay="0" fixedLayout="false">
+				<headerToolbar>
+					<Toolbar>
+						<Title text="Pedidos de Venda"/>
+						<ToolbarSpacer/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column minScreenWidth="320px" demandPopin="false" popinDisplay="Inline" hAlign="Left" width="100px">
+						<Text text="Cliente"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Left" popinDisplay="Inline">
+						<Text text="N°Ped"/>
+					</Column>
+					<Column minScreenWidth="320px" hAlign="Left" width="auto" popinDisplay="Inline">
+						<Text text="Data"/>
+					</Column>
+					<Column minScreenWidth="550px" demandPopin="true" popinDisplay="Inline">
+						<Text text="Total Itens"/>
+					</Column>
+					<Column minScreenWidth="550px" demandPopin="true" popinDisplay="Inline">
+						<Text text="Valor total"/>
+					</Column>
+					<Column minScreenWidth="320px" hAlign="Left" width="80px" popinDisplay="Inline">
+						<Text text="Status"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Active">
+						<!--<customData>-->
+						<!--	<core:CustomData key="mydataPED" value="{path: 'PedidosEnviar>idStatusPedido', type: 'sap.ui.model.type.String'}" writeToDom="true"/>-->
+						<!--</customData>-->
+						<cells>
+							<Text text="{path : 'PedidosEnviar>kunnr'}"/>
+							<Text text="{path : 'PedidosEnviar>nrPedCli'}"/>
+							<Text text="{path : 'PedidosEnviar>dataImpl', formatter:'.myFormatterDataImp'}"/>
+							<Text text="{path : 'PedidosEnviar>totalItensPedido'}"/>
+							<Text text="R$: {path : 'PedidosEnviar>valTotPed', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+							<Text text="{path :'PedidosEnviar>situacaoPedido'}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<Bar id="bar0">
+				<contentRight>
+					<Button xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns="sap.m"
+						text="Enviar" press="onEnviarPedido" icon="sap-icon://upload" type="Accept" id="btnEnviarPedido"/>
+					<Button xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns="sap.m"
+						text="Excluir" press="onDeletarPedido" icon="sap-icon://delete" type="Reject" id="btnExcluirPedido"/>
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</mvc:View>

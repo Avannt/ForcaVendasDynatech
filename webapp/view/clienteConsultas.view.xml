@@ -1,0 +1,47 @@
+<mvc:View height="100%" xmlns:mvc="sap.ui.core.mvc" xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	controllerName="testeui5.controller.clienteConsultas" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:semantic="sap.m.semantic">
+	<Page id="master" navButtonPress="onNavBack" showNavButton="true" title="Consultar Clientes">
+		<subHeader>
+			<Toolbar>
+				<SearchField id="searchField" liveChange="onSearch" placeholder="Digite o Cód Cliente/Razão" tooltip="{i18n>worklistSearchTooltip}"
+					width="100%"/>
+			</Toolbar>
+		</subHeader>
+		<semantic:FullscreenPage id="page">
+			<semantic:content>
+				<Table id="table_clientes" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+					noDataText="{worklistView>/tableNoDataText}" updateFinished="onUpdateFinished" width="100%" selectionChange="onSelectionChange"
+					items="{ path: 'clientesCadastrados>/', sorter: { path: 'NomeEmit', descending: false, parameter: 'Codigo'}}">
+					<columns>
+						<Column minScreenWidth="320px" hAlign="Left" width="70px" demandPopin="false">
+							<Text text="Cód"/>
+						</Column>
+						<Column minScreenWidth="500px" demandPopin="true" hAlign="Left">
+							<Text text="Nome"/>
+						</Column>
+						<Column hAlign="Left" demandPopin="false" minScreenWidth="600px">
+							<Text text="Endereço"/>
+						</Column>
+						<Column hAlign="Left" demandPopin="true" minScreenWidth="660px">
+							<Text text="Cidade"/>
+						</Column>
+						<Column demandPopin="true" minScreenWidth="320px" hAlign="Left">
+							<Text text="CNPJ"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem press="onSelectionChange" type="Navigation">
+							<cells>
+								<Text text="{clientesCadastrados>kunnr}" />
+								<Text text="{clientesCadastrados>name1}" />
+								<Text text="{clientesCadastrados>stras}"/>
+								<Text text="{clientesCadastrados>ort01} - {clientesCadastrados>regio}"/>
+								<Text text="{clientesCadastrados>stcd1}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</semantic:content>
+		</semantic:FullscreenPage>
+	</Page>
+</mvc:View>

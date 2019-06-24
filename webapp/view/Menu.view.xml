@@ -1,0 +1,10 @@
+<mvc:View height="100%" controllerName="testeui5.controller.Menu" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified"
+	xmlns:l="sap.ui.layout" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+	<Page class="backgroundAzul" title="Força de vendas" showHeader="false">
+		<TileContainer id="container" tileDelete="handleTileDelete" tiles="{menu>/Principal}">
+			<StandardTile class="backgroundAzul1" icon="sap-icon://{menu>icon}" type="{menu>type}" number="{menu>number}" numberUnit="{menu>numberUnit}"
+				title="{menu>title}" info="{menu>info}" infoState="{menu>infoState}" busy="{menu>busy}" busyIndicatorDelay="0" busyIndicatorSize="Medium"
+				app:opcao="{menu>id}" press="onTile" visible="{menu>visible}"/>
+		</TileContainer>
+	</Page>
+</mvc:View>

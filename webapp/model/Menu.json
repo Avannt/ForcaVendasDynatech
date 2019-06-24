@@ -1,0 +1,95 @@
+{
+	"Principal": [{
+		"id": "pedido",
+		"icon": "sales-order",
+		"title": "Pedido",
+		"subTittle": "",
+		"type": "Monitor",
+		"info": "Digitação",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "entregaFutura",
+		"icon": "shipping-status",
+		"type": "Monitor",
+		"title": "Entrega Futura",
+		"subTittle": "",
+		"info": "Digitação",
+		"visible": false,
+		"number": ""
+	},{
+		"id": "enviarPedidos",
+		"icon": "expense-report",
+		"type": "Monitor",
+		"title": "Envio de Pedidos",
+		"subTittle": "",
+		"info": "Pendentes",
+		"visible": true,
+		"number": ""
+	},{
+		"id": "aprovacoes",
+		"icon": "approvals",
+		"type": "Monitor",
+		"title": "Aprovações",
+		"subTittle": "",
+		"info": "Pedidos",
+		"visible": false,
+		"number": ""
+	}, {
+		"id": "menuConsultas",
+		"icon": "search",
+		"type": "Monitor",
+		"title": "Consultas",
+		"subTittle": "",
+		"info": "Gerais",
+		"visible": true,
+		"number": ""
+	}],
+	"Consultas": [{
+		"id": "clienteConsultas",
+		"icon": "customer",
+		"title": "Clientes",
+		"type": "Monitor",
+		"subTittle": "",
+		"info": "Dados Gerais",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "produtoConsultas",
+		"icon": "product",
+		"type": "Monitor",
+		"title": "Tabela Preços",
+		"subTittle": "",
+		"info": "Produtos",
+		"visible": true,
+		"number": ""
+	},
+		{
+		"id": "relatorioPedidos",
+		"icon": "expense-report",
+		"type": "Monitor",
+		"title": "Pedidos",
+		"subTittle": "",
+		"info": "Históricos",
+		"visible": true,
+		"number": ""
+	}, {
+		"id": "verbaConsultas",
+		"icon": "waiver",
+		"type": "Monitor",
+		"title": "Verbas",
+		"subTittle": "",
+		"info": "Movim. e Saldo",
+		"visible": false,
+		"number": ""
+	}, {
+		"id": "relatorioTitulos",
+		"icon": "activity-individual",
+		"type": "Monitor",
+		"title": "Títulos",
+		"subTittle": "",
+		"info": "Venc. e a vencer ",
+		"visible": false,
+		"number": ""
+	}]
+}

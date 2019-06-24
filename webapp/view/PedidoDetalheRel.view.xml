@@ -1,0 +1,209 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	displayBlock="true" controllerName="testeui5.controller.PedidoDetalheRel">
+	<App>
+		<pages>
+			<Page title="Detalhes do pedido" showNavButton="true" navButtonPress="onNavBack" id="idPedAprovar" busyIndicatorDelay="0" busyIndicatorSize="Medium">
+				<content>
+					<IconTabBar id="idTopLevelIconTabBar" expanded="true" selectedKey="tab1" stretchContentHeight="true" enableTabReordering="true"
+						select="onTablFilterEvent">
+						<items>
+							<IconTabFilter id="tabPedidoWebStep" text="Pedido Web" enabled="true" icon="sap-icon://notes" key="tab2">
+								<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" labelSpanL="4" labelSpanM="4" emptySpanL="2" emptySpanM="3" columnsL="2"
+										columnsM="2" layout="ResponsiveGridLayout" title="">
+										<f:content>
+											<Label text="Cod - Nome Cli"/>
+											<Input id="idNomeRepres" value="{modelAux>/Kunnr} - {modelAux>/Namecli}" enabled="false"/>
+											<Label text="Nº Pedido"/>
+											<Input id="idNumeroPedido" value="{PedidosAprovarDetalhe>/Nrpedcli}" enabled="false"/>
+											<Label text="Situação"/>
+											<Input id="idSituacao" value="{PedidosAprovarDetalhe>/Situacaopedido}" enabled="false"/>
+											<Label text="Data pedido *"/>
+											<Input id="idDataPedido" value="{path: 'PedidosAprovarDetalhe>/Erdat'} - {path: 'PedidosAprovarDetalhe>/Hora'}"
+												enabled="false"/>
+											<Label text="Tipo pedido *"/>
+											<Input id="idTipoPedido" value="{PedidosAprovarDetalhe>/Auart}" enabled="false"/>
+											<Label text="Tipo negociação *"/>
+											<Input id="idTipoNegociacao" value="{PedidosAprovarDetalhe>/Tiponego}" enabled="false"/>
+											<Label text="Tabela preço *"/>
+											<Input id="idTabelaPreco" value="{PedidosAprovarDetalhe>/Pltyp}" enabled="false"/>
+											<Label text="Forma Pagamento *"/>
+											<Input id="idFormaPagamento" value="{PedidosAprovarDetalhe>/Zlsch}" enabled="false"/>
+											<Label text="Tipo transporte *"/>
+											<Input id="idTipoTransporte" value="{PedidosAprovarDetalhe>/Inco1}" enabled="false"/>
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm id="idFormParcelamento" minWidth="1024" maxContainerCols="2" editable="true" labelSpanL="4" labelSpanM="4" emptySpanL="2"
+										emptySpanM="3" columnsL="2" columnsM="2" layout="ResponsiveGridLayout" title="Parcelamento">
+										<f:content>
+											<Label text="Dias da primeira parcela *"/>
+											<Input id="idPrimeiraParcela" value="{path: 'PedidosAprovarDetalhe>/Diasprimeiraparcela', type: 'sap.ui.model.type.Integer'}" enabled="false"/>
+											<Label text="Quantidade de parcelas *"/>
+											<Input id="idQuantParcelas" value="{path: 'PedidosAprovarDetalhe>/Quantparcelas', type: 'sap.ui.model.type.Integer'}" enabled="false"/>
+											<Label text="Dias de intervalo entre as parcelas *"/>
+											<Input id="idIntervaloParcelas" value="{path: 'PedidosAprovarDetalhe>/Intervaloparcelas', type: 'sap.ui.model.type.Integer'}" enabled="false"/>
+											<Label text="Existe entrada"/>
+											<CheckBox id="idCheckEntrada" selected="{path: 'PedidosAprovarDetalhe>/Existeentradapedido', type: 'sap.ui.model.type.Date'}}" enabled="false"/>
+											<Label text="Valor (R$)"/>
+											<Input id="idValorEntrada" value="{path :'PedidosAprovarDetalhe>/Valorentradapedido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}" enabled="false"/>
+											<Label text="Perc. (%)"/>
+											<Input id="idPercEntrada" value="{path :'PedidosAprovarDetalhe>/Percentradapedido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}" enabled="false"/>
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" labelSpanL="4" labelSpanM="4" emptySpanL="2" emptySpanM="3" columnsL="2"
+										columnsM="2" layout="ResponsiveGridLayout" title="Informações Adicionais">
+										<f:content>
+											<Label text="Observações para auditoria"/>
+											<TextArea id="idObservacoesAuditoria" value="{PedidosAprovarDetalhe>/Obsaudped}" maxLength="100" enabled="false"/>
+											<!--<Label text="Observações para equipe de logística"/>-->
+											<!--<TextArea id="idObservacoes" value="{PedidosAprovarDetalhe>/ObservacaoPedido}" maxLength="100"/>-->
+										</f:content>
+									</f:SimpleForm>
+								</ScrollContainer>
+							</IconTabFilter>
+							<IconTabFilter id="tabItensPedidoStep" text="Itens Pedido" icon="sap-icon://add" key="tab3">
+								<ScrollContainer height="100%" width="100%" horizontal="true" vertical="true">
+									<Table id="table_pedidos" width="100%" items="{ path:'PedidosAprovarItens>/', sorter: { path: 'index', ascending: true }}"
+										updateFinished="onListUpdateFinished" mode="None" delete="onDeletarItemPedido" itemPress="onEditarItemPress"
+										noDataText="Nenhum item inserido" growing="true" growingThreshold="99" modeAnimationOn="true" growingTriggerText="Próximo &gt;&gt;&gt;"
+										busyIndicatorDelay="0" fixedLayout="false">
+										<columns>
+											<!--<Column minScreenWidth="600px" visible="true" width="20px" hAlign="Left">-->
+											<!--	<Text text="Id"/>-->
+											<!--</Column>-->
+											<Column minScreenWidth="320px" width="90px" hAlign="Left">
+												<Text text="Item"/>
+											</Column>
+											<Column minScreenWidth="870px" demandPopin="true" width="auto" hAlign="Left">
+												<Text text="Descrição"/>
+											</Column>
+											<Column minScreenWidth="320px" width="80px" hAlign="Left">
+												<Text text="Qnt"/>
+											</Column>
+											<Column minScreenWidth="360px" width="80px" demandPopin="true" popinDisplay="WithoutHeader" hAlign="Left">
+												<Text text="Desc"/>
+											</Column>
+											<Column minScreenWidth="450px" demandPopin="false" width="auto" hAlign="Left">
+												<Text text="Valor UN"/>
+											</Column>
+											<Column minScreenWidth="550px" demandPopin="false" width="auto" hAlign="Left">
+												<Text text="Valor Perm UN"/>
+											</Column>
+											<Column minScreenWidth="680px" demandPopin="false" width="auto" hAlign="Left">
+												<Text text="Valor Exc UN"/>
+											</Column>
+											<Column minScreenWidth="360px" demandPopin="false" width="100px" hAlign="Left">
+												<Text text="Valor Total"/>
+											</Column>
+										</columns>
+										<items class="margins">
+											<ColumnListItem type="Active">
+												<customData>
+													<core:CustomData key="mydataAprov" value="{path: 'PedidoAprovItens>tipoItem', type: 'sap.ui.model.type.String'}" writeToDom="true"/>
+												</customData>
+												<cells>
+													<!--<Text text="{path : 'PedidosAprovarItens>Index', type: 'sap.ui.model.type.Integer'}" visible="true"/>-->
+													<Text text="{PedidosAprovarItens>Matnr}"/>
+													<Text text="{path: 'PedidosAprovarItens>Maktx'}"/>
+													<Text text="{path: 'PedidosAprovarItens>Zzqnt', type: 'sap.ui.model.type.Integer'}"/>
+													<Text text="{path: 'PedidosAprovarItens>Zzpercdesctotal', type: 'sap.ui.model.type.Float', formatOptions: {decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }} %"/>
+													<Text text="R$: {path: 'PedidosAprovarItens>Zzvproddesc', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+													<Text text="R$: {path: 'PedidosAprovarItens>Zzvprodminpermitido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+													<Text text="R$: {path: 'PedidosAprovarItens>Zzvalexcedidoitem', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+													<Text text="R$: {path: 'PedidosAprovarItens>Zzvproddesctotal', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</ScrollContainer>
+							</IconTabFilter>
+							<IconTabFilter id="tabBalancoVerbaStep" text="Balanço Verbas" icon="sap-icon://waiver" key="tab5">
+								<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" labelSpanM="4"
+										id="balcampdesc" emptySpanL="2" emptySpanM="2" columnsL="2" columnsM="2" title="Balanço dos Excedentes">
+										<f:content>
+											<Label text="Valor excedente desconto (R$)" class="bold"/>
+											<Input id="idExcedenteDesconto"
+												value="{path: 'PedidosAprovarDetalhe>/Vlrdsc', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"
+												class="desabilitado" enabled="false" type="Text"/>
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" labelSpanM="4"
+										emptySpanL="2" emptySpanM="2" columnsL="2" columnsM="2">
+										<f:content>
+											<Label text="Valor excedente prazo médio (R$)" class="bold"/>
+											<Input id="idExcedentePrazo"
+												value="{path: 'PedidosAprovarDetalhe>/Vlrprz', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',' }, constraints : { minimum: '0', maximum: '99' }}"
+												enabled="false" class="desabilitado" type="Text"/>
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" labelSpanM="4"
+										emptySpanL="2" emptySpanM="2" columnsL="2" columnsM="2">
+										<f:content>
+											<Label text="Valor excedente bonificação (R$)" class="bold"/>
+											<Input id="idExcedenteBonif"
+												value="{path: 'PedidosAprovarDetalhe>/Vlrbon', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',' }, constraints : { minimum: '0', maximum: '99' }}"
+												enabled="false" class="desabilitado" type="Text"/>
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" labelSpanM="4"
+										emptySpanL="2" emptySpanM="2" columnsL="2" columnsM="2">
+										<f:content>
+											<Label text="Valor excedente brinde (R$)" class="bold"/>
+											<Input id="idExcedenteBrinde"
+												value="{path: 'PedidosAprovarDetalhe>/Vlrbri', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',' }, constraints : { minimum: '0', maximum: '99' }}"
+												enabled="false" class="desabilitado" type="Text"/>
+										</f:content>
+									</f:SimpleForm>
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" labelSpanM="4"
+										emptySpanL="2" emptySpanM="2" columnsL="2" columnsM="2">
+										<f:content>
+											<Label text="Valor excedente amostra (R$)" class="bold"/>
+											<Input id="idExcedenteAmostra"
+												value="{path: 'PedidosAprovarDetalhe>/Vlramo', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',' }, constraints : { minimum: '0', maximum: '99' }}"
+												enabled="false" class="desabilitado" type="Text"/>
+										</f:content>
+									</f:SimpleForm>
+								</ScrollContainer>
+							</IconTabFilter>
+							<IconTabFilter id="tabTotalStep" text="Total Pedido" enabled="true" icon="sap-icon://expense-report" key="tab6">
+								<ScrollContainer height="100%" width="100%" horizontal="false" vertical="true">
+									<f:SimpleForm minWidth="1024" maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" labelSpanL="4" labelSpanM="4"
+										emptySpanL="2" emptySpanM="2" columnsL="2" columnsM="2" title="Dados Gerais">
+										<f:content>
+											<Label text="Total Pedido (R$)"/>
+											<Input id="idTotalPedidoAbaTotal"
+												value="{path: 'PedidosAprovarDetalhe>/Valtotpedido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"
+												enabled="false" class="desabilitado" type="Text"/>
+											<Label text="Total Itens"/>
+											<Input id="idTotalItensAbaTotal" value="{path: 'PedidosAprovarDetalhe>/Totitens'}" enabled="false" class="desabilitado"
+												type="Number"/>
+											<Label text="Peso Total dos Itens"/>
+											<Input id="idPesoPedidoAbaTotal"
+												value="{path: 'PedidosAprovarDetalhe>/Ntgew', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }} KG"
+												enabled="false" class="desabilitado" type="Text"/>
+											<Label text="Verba Pedido (R$)"/>
+											<Input id="idVerbaAbaTotal"
+												value="{path: 'PedidosAprovarDetalhe>/Valverbapedido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"
+												enabled="false" class="desabilitado" type="Text"/>
+											<!--<Label text="Comissão (R$)"/>-->
+											<!--<Input id="idComissaoAbaTotal"-->
+											<!--	value="{path: 'PedidosAprovarDetalhe>/Valorcomissao', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"-->
+											<!--	enabled="false" class="desabilitado" type="Text"/>-->
+											<!--<Label text="Parcela "/>-->
+											<!--<Input id="idParcela"-->
+											<!--	value="{path: 'PedidosAprovarDetalhe>/Entradapedido'}{path: 'PedidosAprovarDetalhe>/Quantidadeparcelaspedido'} R$: {path: 'PedidosAprovarDetalhe>/Valparcelaspedido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"-->
+											<!--	enabled="false" class="desabilitado"/>-->
+											<Label text="Prazo Médio "/>
+											<Input id="idPrazoMedio" value="{path: 'PedidosAprovarDetalhe>/Zzprazomed'} dias" enabled="false" class="desabilitado"/>
+										</f:content>
+									</f:SimpleForm>
+								</ScrollContainer>
+							</IconTabFilter>
+						</items>
+					</IconTabBar>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
