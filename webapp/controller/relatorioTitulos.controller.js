@@ -62,7 +62,7 @@ sap.ui.define([
 
 			this.byId("idtableTitulos").setBusy(true);
 
-			var open1 = indexedDB.open("VB_DataBase");
+			var open1 = indexedDB.open("Dyna_DataBase");
 
 			open1.onerror = function() {
 				MessageBox.show(open1.error.mensage, {

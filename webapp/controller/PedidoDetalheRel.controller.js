@@ -19,7 +19,7 @@ sap.ui.define([
 			
 			var sNroPed = this.getOwnerComponent().getModel("modelAux").getProperty("/NrPedCli");
 			
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 			
 			open.onerror = function() {
 				MessageBox.show(open.error.mensage, {

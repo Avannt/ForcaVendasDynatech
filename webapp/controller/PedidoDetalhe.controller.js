@@ -48,7 +48,7 @@ sap.ui.define([
 			this.byId("tabItensPedidoStep").setProperty("enabled", false);
 			this.byId("tabTotalStep").setProperty("enabled", false);
 
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function () {
 				MessageBox.show("Não foi possivel fazer leitura do Banco Interno.", {
@@ -147,7 +147,7 @@ sap.ui.define([
 			// this.getOwnerComponent().getModel("modelDadosPedido").setProperty("/QuantidadeParcelasPedido", "");
 			// this.getOwnerComponent().getModel("modelDadosPedido").setProperty("/EntradaPedido", "");
 
-			this.byId("idTabelaPreco").setSelectedKey();
+			// this.byId("idTabelaPreco").setSelectedKey();
 			this.byId("idTipoPedido").setSelectedKey();
 			this.byId("idFormaPagamento").setSelectedKey();
 
@@ -383,7 +383,7 @@ sap.ui.define([
 					that.getOwnerComponent().getModel("modelDadosPedido").setProperty("/CodUsr", oPrePedido.codUsr);
 					that.getOwnerComponent().getModel("modelDadosPedido").setProperty("/FormaPagamento", oPrePedido.zlsch);
 
-					that.byId("idTabelaPreco").setSelectedKey(oPrePedido.tabPreco);
+					// that.byId("idTabelaPreco").setSelectedKey(oPrePedido.tabPreco);
 					that.byId("idTipoPedido").setSelectedKey(oPrePedido.tipoPedido);
 					that.byId("idFormaPagamento").setSelectedKey(oPrePedido.zlsch);
 
@@ -525,12 +525,18 @@ sap.ui.define([
 
 		onCarregaMateriais: function (db, tipoPedido, resolve, reject) {
 			var that = this;
-
+			var sFiltro = "";
+			
 			var transaction = db.transaction("Materiais", "readonly");
 			var objectStoreMaterial = transaction.objectStore("Materiais");
+			
+			/* Se for YVEN filtro somente itens do tipo NORM*/
+			if (tipoPedido === "YVEN"){
+				sFiltro = "NORM";
+			}
 
 			var indexMtpos = objectStoreMaterial.index("mtpos");
-			var request = indexMtpos.getAll();
+			var request = indexMtpos.getAll(sFiltro);
 
 			request.onsuccess = function (event) {
 				that.oVetorMateriais = event.target.result;
@@ -617,8 +623,8 @@ sap.ui.define([
 		onChangeTipoPedido: function (evt) {
 
 			//Toda vez tem que resetar a tabela de preço pra ativar novamente o evento e filtrar os materiais com preço.
-			this.byId("idTabelaPreco").setSelectedKey();
-			this.getOwnerComponent().getModel("modelDadosPedido").setProperty("/TabPreco", "");
+			// this.byId("idTabelaPreco").setSelectedKey();
+			// this.getOwnerComponent().getModel("modelDadosPedido").setProperty("/TabPreco", "");
 
 			var that = this;
 			var tipoPedido = "";
@@ -631,7 +637,7 @@ sap.ui.define([
 
 			// this.onBloqueioFormaPagamento(tipoPedido);
 
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 			open.onerror = function () {
 				MessageBox.show("Não foi possivel fazer leitura do Banco Interno.", {
 					icon: MessageBox.Icon.ERROR,
@@ -662,7 +668,7 @@ sap.ui.define([
 			//DEPOIS DISSO ESSE METODO IRÁ FILTRAR TODOS OS MATERIAIS COM PREÇO.
 			// this.getOwnerComponent().getModel("modelAux").setProperty("/ObrigaSalvar", false);
 
-			// var open = indexedDB.open("VB_DataBase");
+			// var open = indexedDB.open("Dyna_DataBase");
 
 			// open.onerror = function() {
 			// 	MessageBox.show("Não foi possivel fazer leitura do Banco Interno.", {
@@ -713,7 +719,7 @@ sap.ui.define([
 			// this.byId("idVencimento1").setProperty("enabled", false);
 			// this.byId("idVencimento2").setProperty("enabled", false);
 			// this.byId("idVencimento3").setProperty("enabled", false);
-			this.byId("idTabelaPreco").setProperty("enabled", false);
+			// this.byId("idTabelaPreco").setProperty("enabled", false);
 			this.byId("idFormaPagamento").setProperty("enabled", false);
 			// this.byId("idTipoTransporte").setProperty("enabled", false);
 
@@ -722,7 +728,7 @@ sap.ui.define([
 		desbloquearCampos: function () {
 			// this.byId("idEstabelecimento").setProperty("enabled", true);
 			this.byId("idTipoPedido").setProperty("enabled", true);
-			this.byId("idTabelaPreco").setProperty("enabled", true);
+			// this.byId("idTabelaPreco").setProperty("enabled", true);
 			this.byId("idFormaPagamento").setProperty("enabled", true);
 			// this.byId("idVencimento1").setProperty("enabled", true);
 			// this.byId("idVencimento2").setProperty("enabled", true);
@@ -784,157 +790,113 @@ sap.ui.define([
 		},
 
 		onItemChange: function (oEvent) {
-			var that = this;
-			var itemExistente = false;
-			var codItem = oEvent.getSource().getValue();
-			var oPanel = sap.ui.getCore().byId("idDialog");
-			oPanel.setBusy(true);
-			var encontrouPrecoMax = false;
-			var encontrouPrecoMin = false;
-
-			var cliente = that.getOwnerComponent().getModel("modelAux").getProperty("/Kunnr");
-			var spart = that.getOwnerComponent().getModel("modelAux").getProperty("/Spart");
-			var werks = this.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
-			var tabPreco = that.getOwnerComponent().getModel("modelDadosPedido").getProperty("/TabPreco");
-			var tipoPedido = that.getOwnerComponent().getModel("modelDadosPedido").getProperty("/TipoPedido");
-
-			var open = indexedDB.open("VB_DataBase");
-
-			open.onerror = function () {
-				MessageBox.show(open.error.mensage, {
-					icon: MessageBox.Icon.ERROR,
-					title: "Banco não encontrado!",
-					actions: [MessageBox.Action.OK]
-				});
-			};
-
-			open.onsuccess = function () {
-				var db = open.result;
-
+			/* Por algum motivo o evento é disparado duas vezes,
+			esse parâmetro retorna valor em uma das vezes, então utilizo ele para 
+			garantir que o evento só execute uma vez. */
+			if(oEvent.getParameter("suggestionItem")){
+				var that = this;
+				var itemExistente = false;
+				var codItem = oEvent.getSource().getValue();
+				var oPanel = sap.ui.getCore().byId("idDialog");
 				oPanel.setBusy(true);
-
-				if (codItem !== "") {
-
-					var store = db.transaction("Materiais", "readwrite");
-					var objMaterial = store.objectStore("Materiais");
-
-					var requestMaterial = objMaterial.get(codItem);
-
-					requestMaterial.onsuccess = function (e) {
-						var oMaterial = e.target.result;
-
-						if (oMaterial === undefined) {
-							oPanel.setBusy(false);
-
-							MessageBox.show("Não existe o produto: " + codItem, {
-								icon: MessageBox.Icon.ERROR,
-								title: "Produto não encontrado.",
-								actions: [MessageBox.Action.YES],
-								onClose: function () {
-									that.onResetaCamposDialog();
-									sap.ui.getCore().byId("idItemPedido").focus();
-								}
-							});
-
-						} else {
-							that.onInicializaItemPedido();
-
-							that.oItemPedido.zzQnt = 1;
-							that.oItemPedido.matnr = oMaterial.matnr;
-							that.oItemPedido.maktx = oMaterial.maktx;
-							that.oItemPedido.ntgew = parseFloat(oMaterial.ntgew);
-							that.oItemPedido.aumng = parseInt(oMaterial.aumng, 10);
-							that.oItemPedido.extwg = oMaterial.extwg;
-							that.oItemPedido.mtpos = oMaterial.mtpos;
-
-							//Lógica para encontrar o preço de venda do produto. Respeitar o vetor de seq das tabelas.
-							for (var i = 0; i < that.oVetorSeqPrecoMax.length; i++) {
-
-								if (that.oVetorSeqPrecoMax[i].kotabnr === "990") {
-
-									for (var j = 0; j < that.oVetorA990.length; j++) {
-										if (that.oVetorA990[j].werks === werks && that.oVetorA990[j].kschl === "ZPR0" && that.oVetorA990[j].kunnr === cliente &&
-											that.oVetorA990[j].matnr === codItem) {
-											that.oItemPedido.zzVprod = parseFloat(that.oVetorA990[j].kbetr);
-											encontrouPrecoMax = true;
-											break;
-										}
-									}
-
-								} else if (that.oVetorSeqPrecoMax[i].kotabnr === "406") {
-									for (j = 0; j < that.oVetorA406.length; j++) {
-										if (that.oVetorA406[j].werks === werks && that.oVetorA406[j].matnr === codItem) {
-											that.oItemPedido.zzVprod = parseFloat(that.oVetorA406[j].kbetr);
-											encontrouPrecoMax = true;
-											break;
-										}
-									}
-
-								} else if (that.oVetorSeqPrecoMax[i].kotabnr === "991") {
-									for (j = 0; j < that.oVetorA991.length; j++) {
-										if (that.oVetorA991[j].werks === werks && that.oVetorA991[j].kschl === "ZPR0" && that.oVetorA991[j].matnr === codItem &&
-											that.oVetorA991[j].spart === spart) {
-											that.oItemPedido.zzVprod = parseFloat(that.oVetorA991[j].kbetr);
-											encontrouPrecoMax = true;
-											break;
-										}
-									}
-								}
-							}
-
-							if (encontrouPrecoMax === false) {
-
-								MessageBox.show("Não existe preço de venda cadastrado para o produto: " + that.oItemPedido.matnr, {
+				var encontrouPrecoMax = false;
+				var encontrouPrecoMin = false;
+	
+				var cliente = that.getOwnerComponent().getModel("modelAux").getProperty("/Kunnr");
+				var spart = that.getOwnerComponent().getModel("modelCliente").getProperty("/Spart");
+				var werks = this.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
+				var tabPreco = that.getOwnerComponent().getModel("modelDadosPedido").getProperty("/TabPreco");
+				var tipoPedido = that.getOwnerComponent().getModel("modelDadosPedido").getProperty("/TipoPedido");
+	
+				var open = indexedDB.open("Dyna_DataBase");
+	
+				open.onerror = function () {
+					MessageBox.show(open.error.mensage, {
+						icon: MessageBox.Icon.ERROR,
+						title: "Banco não encontrado!",
+						actions: [MessageBox.Action.OK]
+					});
+				};
+	
+				open.onsuccess = function () {
+					var db = open.result;
+	
+					oPanel.setBusy(true);
+	
+					if (codItem !== "") {
+	
+						var store = db.transaction("Materiais", "readwrite");
+						var objMaterial = store.objectStore("Materiais");
+	
+						var requestMaterial = objMaterial.get(codItem);
+	
+						requestMaterial.onsuccess = function (e) {
+							var oMaterial = e.target.result;
+	
+							if (oMaterial === undefined) {
+								oPanel.setBusy(false);
+	
+								MessageBox.show("Não existe o produto: " + codItem, {
 									icon: MessageBox.Icon.ERROR,
-									title: "Produto sem preço de venda!",
-									actions: ["OK"],
+									title: "Produto não encontrado.",
+									actions: [MessageBox.Action.YES],
 									onClose: function () {
 										that.onResetaCamposDialog();
-										oPanel.setBusy(false);
-										sap.ui.getCore().byId("idItemPedido").setValue("");
-										return;
+										sap.ui.getCore().byId("idItemPedido").focus();
 									}
 								});
+	
 							} else {
-
-								//Lógica para encontrar o preço de Min permitido do produto. Respeitar o vetor de seq das tabelas.
-								for (i = 0; i < that.oVetorSeqPrecoMin.length; i++) {
-
-									if (that.oVetorSeqPrecoMin[i].kotabnr === "990") {
-
+								that.onInicializaItemPedido();
+	
+								that.oItemPedido.zzQnt = 1;
+								that.oItemPedido.matnr = oMaterial.matnr;
+								that.oItemPedido.maktx = oMaterial.maktx;
+								that.oItemPedido.ntgew = parseFloat(oMaterial.ntgew);
+								that.oItemPedido.aumng = parseInt(oMaterial.aumng, 10);
+								that.oItemPedido.extwg = oMaterial.extwg;
+								that.oItemPedido.mtpos = oMaterial.mtpos;
+	
+								//Lógica para encontrar o preço de venda do produto. Respeitar o vetor de seq das tabelas.
+								for (var i = 0; i < that.oVetorSeqPrecoMax.length; i++) {
+	
+									if (that.oVetorSeqPrecoMax[i].kotabnr === "990") {
+	
 										for (var j = 0; j < that.oVetorA990.length; j++) {
-											if (that.oVetorA990[j].werks === werks && that.oVetorA990[j].kschl === "ZMIN" && that.oVetorA990[j].kunnr === cliente &&
-												that.oVetorA990[j].matnr === codItem) {
-												that.oItemPedido.zzVprodMin = parseFloat(that.oVetorA990[j].kbetr);
-												encontrouPrecoMin = true;
-												break;
+											/* Verifico se é o item tem questão */
+											if (that.oVetorA990[j].matnr === codItem){
+												if (that.oVetorA990[j].werks === werks && that.oVetorA990[j].kschl === "ZPR0" && that.oVetorA990[j].kunnr === cliente) {
+													that.oItemPedido.zzVprod = parseFloat(that.oVetorA990[j].kbetr);
+													encontrouPrecoMax = true;
+													break;
+												}
 											}
 										}
-
-									} else if (that.oVetorSeqPrecoMin[i].kotabnr === "406") {
+	
+									} else if (that.oVetorSeqPrecoMax[i].kotabnr === "406") {
 										for (j = 0; j < that.oVetorA406.length; j++) {
 											if (that.oVetorA406[j].werks === werks && that.oVetorA406[j].matnr === codItem) {
-												that.oItemPedido.zzVprodMin = parseFloat(that.oVetorA406[j].kbetr);
+												that.oItemPedido.zzVprod = parseFloat(that.oVetorA406[j].kbetr);
 												encontrouPrecoMax = true;
 												break;
 											}
 										}
-
-									} else if (that.oVetorSeqPrecoMin[i].kotabnr === "991") {
+	
+									} else if (that.oVetorSeqPrecoMax[i].kotabnr === "991") {
 										for (j = 0; j < that.oVetorA991.length; j++) {
-											if (that.oVetorA991[j].werks === werks && that.oVetorA991[j].kschl === "ZMIN" && that.oVetorA991[j].matnr === codItem &&
+											if (that.oVetorA991[j].werks === werks && that.oVetorA991[j].kschl === "ZPR0" && that.oVetorA991[j].matnr === codItem &&
 												that.oVetorA991[j].spart === spart) {
-												that.oItemPedido.zzVprodMin = parseFloat(that.oVetorA991[j].kbetr);
+												that.oItemPedido.zzVprod = parseFloat(that.oVetorA991[j].kbetr);
 												encontrouPrecoMax = true;
 												break;
 											}
 										}
 									}
 								}
-
-								if (encontrouPrecoMin === false) {
-
-									MessageBox.show("Não existe preço mínimo cadastrado para o produto: " + that.oItemPedido.matnr, {
+	
+								if (encontrouPrecoMax === false) {
+	
+									MessageBox.show("Não existe preço de venda cadastrado para o produto: " + that.oItemPedido.matnr, {
 										icon: MessageBox.Icon.ERROR,
 										title: "Produto sem preço de venda!",
 										actions: ["OK"],
@@ -945,20 +907,74 @@ sap.ui.define([
 											return;
 										}
 									});
+								} else {
+	
+									//Lógica para encontrar o preço de Min permitido do produto. Respeitar o vetor de seq das tabelas.
+									for (i = 0; i < that.oVetorSeqPrecoMin.length; i++) {
+	
+										if (that.oVetorSeqPrecoMin[i].kotabnr === "990") {
+	
+											for (var j = 0; j < that.oVetorA990.length; j++) {
+												if (that.oVetorA990[j].werks === werks && that.oVetorA990[j].kschl === "ZMIN" && that.oVetorA990[j].kunnr === cliente &&
+													that.oVetorA990[j].matnr === codItem) {
+													that.oItemPedido.zzVprodMin = parseFloat(that.oVetorA990[j].kbetr);
+													encontrouPrecoMin = true;
+													break;
+												}
+											}
+	
+										} else if (that.oVetorSeqPrecoMin[i].kotabnr === "406") {
+											for (j = 0; j < that.oVetorA406.length; j++) {
+												if (that.oVetorA406[j].werks === werks && that.oVetorA406[j].matnr === codItem) {
+													that.oItemPedido.zzVprodMin = parseFloat(that.oVetorA406[j].kbetr);
+													encontrouPrecoMin = true;
+													break;
+												}
+											}
+	
+										} else if (that.oVetorSeqPrecoMin[i].kotabnr === "991") {
+											for (j = 0; j < that.oVetorA991.length; j++) {
+												if(that.oVetorA991[j].matnr === codItem){
+													if (that.oVetorA991[j].werks === werks && that.oVetorA991[j].kschl === "ZMIN" &&
+														that.oVetorA991[j].spart === spart) {
+														that.oItemPedido.zzVprodMin = parseFloat(that.oVetorA991[j].kbetr);
+														encontrouPrecoMin = true;
+														break;
+													}
+													
+												}
+											}
+										}
+									}
+	
+									if (encontrouPrecoMin === false) {
+	
+										MessageBox.show("Não existe preço mínimo cadastrado para o produto: " + that.oItemPedido.matnr, {
+											icon: MessageBox.Icon.ERROR,
+											title: "Produto sem preço de venda!",
+											actions: ["OK"],
+											onClose: function () {
+												that.onResetaCamposDialog();
+												oPanel.setBusy(false);
+												sap.ui.getCore().byId("idItemPedido").setValue("");
+												return;
+											}
+										});
+									}
+	
+									that.calculaPrecoItem();
+									that.popularCamposItemPedido();
+									sap.ui.getCore().byId("idQuantidade").focus();
+									oPanel.setBusy(false);
 								}
-
-								that.calculaPrecoItem();
-								that.popularCamposItemPedido();
-								sap.ui.getCore().byId("idQuantidade").focus();
-								oPanel.setBusy(false);
 							}
-						}
-					};
-				} else {
-					oPanel.setBusy(false);
-					that.onResetaCamposDialog();
-				}
-			};
+						};
+					} else {
+						oPanel.setBusy(false);
+						that.onResetaCamposDialog();
+					}
+				};
+			}
 		},
 
 		onCriarIndexItemPedido: function () {
@@ -1010,7 +1026,7 @@ sap.ui.define([
 
 		onQuantidadeChange: function (evt) {
 			var that = this;
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function () {
 				MessageBox.show(open.error.mensage, {
@@ -1182,7 +1198,7 @@ sap.ui.define([
 		onTablFilterEvent: function (evt) {
 			var that = this;
 			var item = evt.getParameters();
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function () {
 				MessageBox.show(open.error.mensage, {
@@ -1206,18 +1222,20 @@ sap.ui.define([
 							that.byId("idLiberarItens").focus();
 						}
 					});
-				} else if (that.getOwnerComponent().getModel("modelDadosPedido").getProperty("/TabPreco") === "" && item.selectedKey === "tab1" &&
-					item.selectedKey === "tab2") {
-					MessageBox.show("Escolha uma tabela de preço!", {
-						icon: MessageBox.Icon.ERROR,
-						title: "Preecher campo(s)",
-						actions: [MessageBox.Action.OK],
-						onClose: function () {
-							that.byId("idTopLevelIconTabBar").setSelectedKey("tab2");
-							that.byId("idTabelaPreco").focus();
-						}
-					});
-				} else if (item.selectedKey === "tab6") {
+				} 
+				// else if (that.getOwnerComponent().getModel("modelDadosPedido").getProperty("/TabPreco") === "" && item.selectedKey === "tab1" &&
+				// 	item.selectedKey === "tab2") {
+				// 	MessageBox.show("Escolha uma tabela de preço!", {
+				// 		icon: MessageBox.Icon.ERROR,
+				// 		title: "Preecher campo(s)",
+				// 		actions: [MessageBox.Action.OK],
+				// 		onClose: function () {
+				// 			that.byId("idTopLevelIconTabBar").setSelectedKey("tab2");
+				// 			that.byId("idTabelaPreco").focus();
+				// 		}
+				// 	});
+				// } 
+				else if (item.selectedKey === "tab6") {
 
 					that.calculaTotalPedido();
 
@@ -1307,7 +1325,7 @@ sap.ui.define([
 				this._ItemDialog.destroy(true);
 			}
 
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function () {
 				MessageBox.show(open.error.mensage, {
@@ -1453,7 +1471,7 @@ sap.ui.define([
 					});
 
 				} else {
-					var open = indexedDB.open("VB_DataBase");
+					var open = indexedDB.open("Dyna_DataBase");
 
 					open.onerror = function () {
 						oButtonSalvar.setEnabled(true);
@@ -1662,7 +1680,7 @@ sap.ui.define([
 					});
 
 				} else {
-					var open = indexedDB.open("VB_DataBase");
+					var open = indexedDB.open("Dyna_DataBase");
 
 					open.onerror = function () {
 
@@ -1871,7 +1889,7 @@ sap.ui.define([
 
 									if (that.objItensPedidoTemplate.length === 0) {
 
-										that.byId("idTabelaPreco").setProperty("enabled", true);
+										// that.byId("idTabelaPreco").setProperty("enabled", true);
 										that.byId("idFormaPagamento").setProperty("enabled", true);
 										that.byId("idInserirItem").setEnabled(true);
 
@@ -1883,7 +1901,7 @@ sap.ui.define([
 
 							that.onBloqueiaPrePedido();
 
-							var open = indexedDB.open("VB_DataBase");
+							var open = indexedDB.open("Dyna_DataBase");
 							open.onerror = function () {
 								MessageBox.show(open.error.mensage, {
 									icon: MessageBox.Icon.ERROR,
@@ -1961,7 +1979,7 @@ sap.ui.define([
 				var data = this.onDataAtualizacao();
 				var horario = data[1];
 
-				this.getOwnerComponent().getModel("modelDadosPedido").setProperty("/SituacaoPedido", "Pendente");
+				this.getOwnerComponent().getModel("modelDadosPedido").setProperty("/SituacaoPedido", "Não enviado");
 				this.getOwnerComponent().getModel("modelDadosPedido").setProperty("/IdStatusPedido", 2);
 
 				var totalItens = that.getOwnerComponent().getModel("modelDadosPedido").getProperty("/TotalItensPedido");
@@ -1982,7 +2000,7 @@ sap.ui.define([
 				// } 
 				else {
 					//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Atualizando o PrePedido PEDIDO NO BANCO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-					var open = indexedDB.open("VB_DataBase");
+					var open = indexedDB.open("Dyna_DataBase");
 
 					open.onerror = function () {
 						MessageBox.show(open.error.mensage, {
@@ -2096,13 +2114,15 @@ sap.ui.define([
 						title: "Corrigir o campo!",
 						actions: [MessageBox.Action.OK]
 					});
-				} else if (this.byId("idTabelaPreco").getSelectedKey() === "" || this.byId("idTabelaPreco").getSelectedKey() === undefined) {
-					MessageBox.show("Preencher a tabela de preço!", {
-						icon: MessageBox.Icon.ERROR,
-						title: "Corrigir o campo!",
-						actions: [MessageBox.Action.OK]
-					});
-				} else if (this.byId("idFormaPagamento").getSelectedKey() === "" || this.byId("idFormaPagamento").getSelectedKey() === undefined) {
+				} 
+				// else if (this.byId("idTabelaPreco").getSelectedKey() === "" || this.byId("idTabelaPreco").getSelectedKey() === undefined) {
+				// 	MessageBox.show("Preencher a tabela de preço!", {
+				// 		icon: MessageBox.Icon.ERROR,
+				// 		title: "Corrigir o campo!",
+				// 		actions: [MessageBox.Action.OK]
+				// 	});
+				// } 
+				else if (this.byId("idFormaPagamento").getSelectedKey() === "" || this.byId("idFormaPagamento").getSelectedKey() === undefined) {
 					MessageBox.show("Preencher a forma de pagamento!", {
 						icon: MessageBox.Icon.ERROR,
 						title: "Corrigir o campo!",
@@ -2118,7 +2138,7 @@ sap.ui.define([
 					// this.byId("tabBalancoVerbaStep").setProperty("enabled", true);
 					// this.byId("tabItensDiluicaoPedidoStep").setProperty("enabled", true);
 
-					var open = indexedDB.open("VB_DataBase");
+					var open = indexedDB.open("Dyna_DataBase");
 					open.onerror = function (hxr) {
 						console.log("falha abrir tabela PrePedido as tabelas");
 					};
@@ -2235,7 +2255,7 @@ sap.ui.define([
 
 		onBloqueiaPrePedidoTotal: function (habilitado) {
 
-			this.byId("idTabelaPreco").setEnabled(habilitado);
+			// this.byId("idTabelaPreco").setEnabled(habilitado);
 			this.byId("idFormaPagamento").setEnabled(habilitado);
 			this.byId("idTipoPedido").setEnabled(habilitado);
 			this.byId("idInserirItem").setEnabled(habilitado);
@@ -2288,7 +2308,7 @@ sap.ui.define([
 			// }
 
 			if (that.objItensPedidoTemplate.length > 0) {
-				this.byId("idTabelaPreco").setEnabled(false);
+				// this.byId("idTabelaPreco").setEnabled(false);
 				this.byId("idFormaPagamento").setEnabled(false);
 				this.byId("idTipoPedido").setEnabled(false);
 				// this.byId("idTipoTransporte").setEnabled(false);
@@ -2296,7 +2316,7 @@ sap.ui.define([
 
 			} else {
 
-				this.byId("idTabelaPreco").setEnabled(true);
+				// this.byId("idTabelaPreco").setEnabled(true);
 				this.byId("idFormaPagamento").setEnabled(true);
 				this.byId("idTipoPedido").setEnabled(true);
 				this.byId("idInserirItem").setEnabled(true);

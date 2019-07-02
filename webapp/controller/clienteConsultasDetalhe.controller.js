@@ -36,7 +36,7 @@ sap.ui.define([
 			this.byId("idTopLevelIconTabBar").setSelectedKey("tab1");
 			var codigoCliente = this.getOwnerComponent().getModel("modelCliente").getProperty("/codigoCliente");
 
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function() {
 				console.log(open.error.mensage);
@@ -44,38 +44,65 @@ sap.ui.define([
 
 			open.onsuccess = function() {
 				var db = open.result;
-				//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CARREGAR A TABELA DE PREÇOS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-				var store = db.transaction("Clientes", "readonly").objectStore("Clientes");
-				store.get(codigoCliente).onsuccess = function(event) {
-					var vCliente = event.target.result;
-
-					//var oModelCliente = new sap.ui.model.json.JSONModel(vCliente);
-					var oModelCliente = new sap.ui.model.json.JSONModel();
-					oModelCliente.setData(vCliente);
-
-					that.getView().setModel(oModelCliente, "clienteModel");
-					
-					var transactionA961 = db.transaction(["A961"], "readonly");
-					var objectStoreA961 = transactionA961.objectStore("A961");
-		
-					objectStoreA961.openCursor().onsuccess = function(event) {
-						var cursor = event.target.result;
-						if (cursor) {
-							
-							if (cursor.value.kunnr == codigoCliente) {
-		
-								oVetorTabPreco.push(cursor.value);
-							}
-		
-							cursor.continue();
-		
-						} else {
-		
-							var oModelTabPreco = new sap.ui.model.json.JSONModel(oVetorTabPreco);
-							that.getView().setModel(oModelTabPreco, "tabPreco");
-						}
+				
+				var store = db.transaction("Materiais", "readonly").objectStore("Materiais");
+				
+				new Promise(function(res, rej){
+					store.getAll().onsuccess = function(event){
+						var vMateriais = event.target.result;
+						
+						res(vMateriais);
 					};
-				};
+				}).then(function(vMateriais){
+					//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CARREGAR A TABELA DE PREÇOS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+					store = db.transaction("Clientes", "readonly").objectStore("Clientes");
+					var ixKunnr = store.index("kunnr");
+					ixKunnr.get(codigoCliente).onsuccess = function(event) {
+						var vCliente = event.target.result;
+	
+						//var oModelCliente = new sap.ui.model.json.JSONModel(vCliente);
+						var oModelCliente = new sap.ui.model.json.JSONModel();
+						oModelCliente.setData(vCliente);
+	
+						that.getView().setModel(oModelCliente, "clienteModel");
+						
+						var transactionA961 = db.transaction(["A990"], "readonly");
+						var objectStoreA961 = transactionA961.objectStore("A990");
+			
+						objectStoreA961.openCursor().onsuccess = function(event) {
+							var cursor = event.target.result;
+							if (cursor) {
+								
+								if (cursor.value.kunnr == codigoCliente) {
+									
+									/* Somente adiciono preço de vendas */
+									if(cursor.value.kschl === "ZPR0"){
+										
+										var oMaterial = vMateriais.find(function(material){
+											if(material.matnr == cursor.value.matnr){
+												return true;
+											}
+										});
+										
+										if(oMaterial){
+											cursor.value.maktx = oMaterial.maktx;
+										}
+										oVetorTabPreco.push(cursor.value);
+									}
+								}
+			
+								cursor.continue();
+			
+							} else {
+			
+								var oModelTabPreco = new sap.ui.model.json.JSONModel(oVetorTabPreco);
+								that.getView().setModel(oModelTabPreco, "tabPreco");
+							}
+						};
+						
+						
+					};
+				});
 			};
 		}
 	});

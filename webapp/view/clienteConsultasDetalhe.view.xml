@@ -23,35 +23,35 @@
 											<Label text="Inscrição Estadual"/>
 											<Input id="idInscricaoEstadual" enabled="false" value="{clienteModel>/stcd2}"/>
 											<Label text="Telefone"/>
-											<Input id="idTelefone" enabled="false"/>
+											<Input id="idTelefone" enabled="false" value="{clienteModel>/telf1}"/>
 											<Label text="Endereço"/>
 											<Input id="idEndereco" enabled="false" value="{clienteModel>/stras}"/>
 											<Label text="Cidade"/>
 											<Input id="idCidade" enabled="false" value="{clienteModel>/ort01}"/>
-											<Label text="Data Cadastro Cliente"/>
-											<Input id="idDataCadastroCliente" enabled="false"/>
-											<Label text="Email"/>
-											<Input id="idEmail" enabled="false"/>
-											<Label text="Email Envio XML"/>
-											<Input id="idEmailXML" enabled="false"/>
-											<Label text="Email Contas a Pagar"/>
-											<Input id="idEmailPagar" enabled="false"/>
-											<Label text="Microrregião"/>
-											<Input id="idMicrorregiao" enabled="false"/>
-											<Label text="Insc. Aux Subst. Trib."/>
-											<Input id="idInscAuxSubstTrib" enabled="false"/>
-											<Label text="Grupo Cliente"/>
-											<Input id="idGrupoCliente" enabled="false"/>
-											<Label text="Canal Venda"/>
-											<Input id="idCanalVenda" enabled="false"/>
-											<Label text="Matriz"/>
-											<Input id="idMatriz" enabled="false"/>
-											<Label text="Cod. Suframa"/>
-											<Input id="idCodSuframa" enabled="false"/>
-											<Label text="Faturar Saldo?"/>
-											<Input id="idFaturarSaldo" enabled="false"/>
-											<Label text="Status Crédito"/>
-											<Input id="idStatusCredito" enabled="false"/>
+											<!--<Label text="Data Cadastro Cliente"/>-->
+											<!--<Input id="idDataCadastroCliente" enabled="false"/>-->
+											<!--<Label text="Email"/>-->
+											<!--<Input id="idEmail" enabled="false"/>-->
+											<!--<Label text="Email Envio XML"/>-->
+											<!--<Input id="idEmailXML" enabled="false"/>-->
+											<!--<Label text="Email Contas a Pagar"/>-->
+											<!--<Input id="idEmailPagar" enabled="false"/>-->
+											<!--<Label text="Microrregião"/>-->
+											<!--<Input id="idMicrorregiao" enabled="false"/>-->
+											<!--<Label text="Insc. Aux Subst. Trib."/>-->
+											<!--<Input id="idInscAuxSubstTrib" enabled="false"/>-->
+											<!--<Label text="Grupo Cliente"/>-->
+											<!--<Input id="idGrupoCliente" enabled="false"/>-->
+											<!--<Label text="Canal Venda"/>-->
+											<!--<Input id="idCanalVenda" enabled="false"/>-->
+											<!--<Label text="Matriz"/>-->
+											<!--<Input id="idMatriz" enabled="false"/>-->
+											<!--<Label text="Cod. Suframa"/>-->
+											<!--<Input id="idCodSuframa" enabled="false"/>-->
+											<!--<Label text="Faturar Saldo?"/>-->
+											<!--<Input id="idFaturarSaldo" enabled="false"/>-->
+											<!--<Label text="Status Crédito"/>-->
+											<!--<Input id="idStatusCredito" enabled="false"/>-->
 										</f:content>
 									</f:SimpleForm>
 								</ScrollContainer>
@@ -88,18 +88,22 @@
 												<Text text="Cliente"/>
 											</Column>
 											<Column>
-												<Text text="Tabela"/>
+												<Text text="Material"/>
 											</Column>
 											<Column minScreenWidth="Tablet" demandPopin="true">
 												<Text text="Descrição"/>
+											</Column>
+											<Column minScreenWidth="Tablet" demandPopin="true">
+												<Text text="Preço"/>
 											</Column>
 										</columns>
 										<items >
 											<ColumnListItem type="Inactive">
 												<cells>
 													<Text text="{tabPreco>kunnr}"/>
-													<Text text="{tabPreco>pltyp}"/>
-													<Text text="{tabPreco>ptext}"/>
+													<Text text="{tabPreco>matnr}"/>
+													<Text text="{tabPreco>maktx}"/>
+													<Text text="{tabPreco>kbetr}"/>
 												</cells>
 											</ColumnListItem>
 										</items>

@@ -61,7 +61,7 @@
 		"title": "Tabela Preços",
 		"subTittle": "",
 		"info": "Produtos",
-		"visible": true,
+		"visible": false,
 		"number": ""
 	},
 		{
@@ -89,7 +89,7 @@
 		"title": "Títulos",
 		"subTittle": "",
 		"info": "Venc. e a vencer ",
-		"visible": false,
+		"visible": true,
 		"number": ""
 	}]
 }

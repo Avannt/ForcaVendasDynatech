@@ -38,7 +38,7 @@ sap.ui.define([
 
 		onExibicaoMenu: function() {
 			var that = this;
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function(hxr) {
 				console.log("Erro ao abrir tabelas.");

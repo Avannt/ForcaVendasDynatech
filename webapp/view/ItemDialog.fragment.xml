@@ -56,7 +56,7 @@
 							<layout:GridData span="L2 M2"/>
 						</layoutData>
 					</Label>
-					<Input id="idPrecoUN" value="{path: 'modelItemPedido>/valorUnitario', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}" class="desabilitado" editable="true" change="onChangePrecoVenda" submit="onFocus" type="Text">
+					<Input id="idPrecoUN" value="{path: 'modelItemPedido>/valorUnitario', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}" class="desabilitado" editable="false" change="onChangePrecoVenda" submit="onFocus" type="Text">
 						<layoutData>
 							<layout:GridData span="L4 M2"/>
 						</layoutData>

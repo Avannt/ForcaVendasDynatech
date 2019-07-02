@@ -65,7 +65,7 @@ sap.ui.define([
 		/* onItemPressEF */
 
 		onLoadPedidos: function() {
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 			var that = this;
 
 			open.onerror = function() {
@@ -159,7 +159,7 @@ sap.ui.define([
 
 			var that = this;
 			var oModel = new sap.ui.model.json.JSONModel();
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function() {
 				MessageBox.show(open.error.mensage, {
@@ -247,7 +247,7 @@ sap.ui.define([
 				actions: [MessageBox.Action.YES, sap.m.MessageBox.Action.CANCEL],
 				onClose: function(oAction) {
 					if (oAction == sap.m.MessageBox.Action.YES) {
-						var open = indexedDB.open("VB_DataBase");
+						var open = indexedDB.open("Dyna_DataBase");
 
 						open.onerror = function() {
 							console.log("não foi possivel encontrar e/ou carregar a base de clientes");
@@ -307,8 +307,9 @@ sap.ui.define([
 
 			var tx = db.transaction("Clientes", "readwrite");
 			var objUsuarios = tx.objectStore("Clientes");
+			var ixKunnr = objUsuarios.index("kunnr");
 
-			var request = objUsuarios.get(codCliente);
+			var request = ixKunnr.get(codCliente);
 
 			request.onsuccess = function(e1) {
 
@@ -380,7 +381,7 @@ sap.ui.define([
 
 			} else {
 
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onerror = function() {
 					MessageBox.show(open.error.mensage, {
@@ -524,90 +525,19 @@ sap.ui.define([
 									ERNAM	ERNAM	CHAR	12	0	Nome do responsável que adicionou o objeto 
 								*/
 									var objPedido = {
-										
 										Nrped: String(oPedidosEnviar[i].nrPedCli),
-										// Idstatuspedido: String(oPedidosEnviar[i].idStatusPedido),
 										Kunnr: String(oPedidosEnviar[i].kunnr),
 										Vkorg: String(oPedidosEnviar[i].vkorg),
 										Vtweg: String(oPedidosEnviar[i].vtweg),
 										Spart: String(oPedidosEnviar[i].spart),
-										// Werks: String(oPedidosEnviar[i].werks),
 										Reprs: String(repres),
 										Auart: String(oPedidosEnviar[i].tipoPedido),
-										// Situacaopedido: oPedidosEnviar[i].situacaoPedido,
-										// Ntgew: String(oPedidosEnviar[i].ntgew),
 										Zlsch: String(oPedidosEnviar[i].zlsch),
 										Pltyp: String(oPedidosEnviar[i].tabPreco),
 										Erdat: Erdat,
-										// Erzeit: "",
-										Ernam: String(oPedidosEnviar[i].codUsr)
-										// Brgew: null, // Não usa
-										// Dataentrega: "20181116", //Não usa
-										// Completo: oPedidosEnviar[i].completo,
-										// Valminped: String(oPedidosEnviar[i].valMinPedido),
-										// Obsped: oPedidosEnviar[i].observacaoPedido,
-										// Obsaudped: oPedidosEnviar[i].observacaoAuditoriaPedido,
-										// Existeentradapedido: String(oPedidosEnviar[i].existeEntradaPedido),
-										// Percentradapedido: String(oPedidosEnviar[i].percEntradaPedido),
-										// Valorentradapedido: String(oPedidosEnviar[i].valorEntradaPedido),
-										// Inco1: String(oPedidosEnviar[i].tipoTransporte),
-										// Diasprimeiraparcela: String(oPedidosEnviar[i].diasPrimeiraParcela),
-										// Quantparcelas: String(oPedidosEnviar[i].quantParcelas),
-										// Intervaloparcelas: String(oPedidosEnviar[i].intervaloParcelas),
-										// Tiponego: String(oPedidosEnviar[i].tipoNegociacao),
-										// // CodRepres: oPedidosEnviar[i].codRepres,
-										// Totitens: oPedidosEnviar[i].totalItensPedido,
-										// Valorcomissao: String(parseFloat(oPedidosEnviar[i].valComissaoPedido)),
-										// // ValDescontoTotal: oPedidosEnviar[i].valDescontoTotal,
-										// // ValMinPedido: oPedidosEnviar[i].valMinPedido,
-										// Valtotpedido: String(oPedidosEnviar[i].valTotPed),
-										// Valtotabcomissao: String(oPedidosEnviar[i].valTotalAbatidoComissao),
-										// Valabverba: String(oPedidosEnviar[i].valTotalAbatidoVerba),
-										// Vlrprz: String(oPedidosEnviar[i].valTotalExcedentePrazoMed),
-										// VlrprzCom: String(oPedidosEnviar[i].valUtilizadoComissaoPrazoMed),
-										// VlrprzVm: String(oPedidosEnviar[i].valUtilizadoVerbaPrazoMed), //NÃO UTILIZA VERBA PARA PRAZO 
-										// VlrprzDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// VlrprzVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// Vlrdsc: String(oPedidosEnviar[i].valTotalExcedenteDesconto),
-										// VlrdscCom: String(oPedidosEnviar[i].valComissaoUtilizadaDesconto),
-										// VlrdscVm: String(oPedidosEnviar[i].valVerbaUtilizadaDesconto),
-										// VlrdscDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// VlrdscVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// Vlramo: String(oPedidosEnviar[i].valTotalExcedenteAmostra),
-										// VlramoCom: String(oPedidosEnviar[i].valUtilizadoComissaoAmostra),
-										// VlramoVm: String(oPedidosEnviar[i].valUtilizadoVerbaAmostra),
-										// VlramoDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// VlramoVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// Vlrbri: String(oPedidosEnviar[i].valTotalExcedenteBrinde),
-										// VlrbriCom: String(oPedidosEnviar[i].valUtilizadoComissaoBrinde),
-										// VlrbriVm: String(oPedidosEnviar[i].valUtilizadoVerbaBrinde),
-										// VlrbriDd: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// VlrbriVvb: String(0), //CAMPO UTILIZADO APENAS NA APROVAÇÃO
-										// Vlrbon: String(oPedidosEnviar[i].valTotalExcedenteBonif),
-										// VlrbonCom: String(oPedidosEnviar[i].valUtilizadoComissaoBonif),
-										// VlrbonVm: String(oPedidosEnviar[i].valUtilizadoVerbaBonif),
-										// VlrbonDd: String(0),
-										// VlrbonVvb: String(0),
-										// Valtotabcamppa: String(oPedidosEnviar[i].valUtilizadoCampProdutoAcabado),
-										// Valtotabcampbrinde: String(oPedidosEnviar[i].valTotalCampBrinde || 0),
-										// Valtotexcndirdesc: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoDesconto),
-										// Valtotexcndirprazo: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoPrazoMed),
-										// Valverbapedido: String(oPedidosEnviar[i].valVerbaPedido),
-										// BuGruop: "",
-										// Obscom: "",
-										// Obsdd: "",
-										// Obsvm: "",
-										// Obsvvb: "",
-										// Vlrutilvpm: String(oPedidosEnviar[i].valUtilizadoVerbaPrazoMed),
-										// Vltotexcndirbri: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoBrinde),
-										// Vltotexcndiramo: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoAmostra),
-										// Vltotexcndirbon: String(oPedidosEnviar[i].valTotalExcedenteNaoDirecionadoBonif),
-										// Valcampenxoval: String(oPedidosEnviar[i].valUtilizadoCampEnxoval),
-										// Valcampglobal: String(oPedidosEnviar[i].valCampGlobal),
-										// Vlrutilcampenx: String(oPedidosEnviar[i].valCampEnxoval),
-										// Valcampbrinde: String(oPedidosEnviar[i].valUtilizadoCampBrinde || 0),
-										// Tipousuario: String(oPedidosEnviar[i].tipoUsuario),
-										// Zzprazomed: String(oPedidosEnviar[i].zzPrazoMedio)
+										Ernam: String(oPedidosEnviar[i].codUsr),
+										valTotPed: String(oPedidosEnviar[i].valTotPed),
+										TotalItensPedido: String(oPedidosEnviar[i].totalItensPedido)
 									};
 
 									oModel.create("/InserirOV", objPedido, {
@@ -624,6 +554,7 @@ sap.ui.define([
 
 												oPrePedido.idStatusPedido = 3;
 												oPrePedido.situacaoPedido = "Finalizado";
+												oPrePedido.Vbeln = data.Vbeln;
 
 												var requestPutItens = objPedidoStore.put(oPrePedido);
 
@@ -728,7 +659,7 @@ sap.ui.define([
 
 			} else {
 
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onerror = function() {
 					MessageBox.show(open.error.mensage, {

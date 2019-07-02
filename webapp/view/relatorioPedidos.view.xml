@@ -19,26 +19,11 @@
 					<Column minScreenWidth="320px" demandPopin="false" popinDisplay="Inline" hAlign="Left" width="170px">
 						<Text text="N°Ped"/>
 					</Column>
-					<!--<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="100px">-->
-					<!--	<Text text="Cód.Cliente"/>-->
-					<!--</Column>-->
-					<!--<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="100px">-->
-					<!--	<Text text="Cód.Aprovador"/>-->
-					<!--</Column>-->
 					<Column minScreenWidth="320px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="70px">
 						<Text text="Data"/>
 					</Column>
-					<Column minScreenWidth="450px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="80px">
-						<Text text="Status"/>
-					</Column>
-					<Column minScreenWidth="320px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="30px">
-						<Text text=""/>
-					</Column>
 					<Column minScreenWidth="1000px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="auto">
 						<Text text="Cliente"/>
-					</Column>
-					<Column minScreenWidth="1000px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="auto" >
-						<Text text="Aprovador"/>
 					</Column>
 					<Column minScreenWidth="1000px" demandPopin="true" popinDisplay="Inline" hAlign="Left" width="auto" >
 						<Text text="Tipo Doc"/>
@@ -50,10 +35,10 @@
 						<Text text="Valor Total"/>
 					</Column>
 					<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" width="110px">
-						<Text text="Valor Excedente"/>
+						<Text text="Quantidade de itens"/>
 					</Column>
 					<Column minScreenWidth="700px" demandPopin="true" popinDisplay="Inline" width="80px">
-						<Text text="DocVenda"/>
+						<Text text="Documento Sap"/>
 					</Column>
 				</columns>
 				<items>
@@ -63,17 +48,12 @@
 						</customData>
 						<cells>
 							<Text text="{path : 'pedidoRelatorio>Nrpedcli'}"/>
-							<!--<Text text="{path : 'pedidoRelatorio>Kunnr'}"/>-->
 							<Text text="{path : 'pedidoRelatorio>Erdat'}"/>
-							<Text text="{path : 'pedidoRelatorio>AprovadoDesc'}"/>
-							<Image src="{path : 'pedidoRelatorio>PathImg'}" width="50%" tooltip="{path : 'pedidoRelatorio>AprovadoDesc'}"/>
 							<Text text="{path : 'pedidoRelatorio>Kunnr'} - {path : 'pedidoRelatorio>NameOrg1', formatter:'.myFormatterName'}"/>
-							<!--<Text text="{path : 'pedidoRelatorio>Aprov'}"/>-->
-							<Text text="{path : 'pedidoRelatorio>Aprov'} - {path : 'pedidoRelatorio>AprovNome', formatter:'.myFormatterName'}"/>
 							<Text text="{path : 'pedidoRelatorio>Auart'}"/>
 							<Text text="{path : 'pedidoRelatorio>PedInconsistente'}"/>
-							<Text text="R$: {path :'pedidoRelatorio>Valtotpedido', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
-							<Text text="R$: {path :'pedidoRelatorio>Vlrexc', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+							<Text text="R$: {path :'pedidoRelatorio>valTotPed', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
+							<Text text="{path : 'pedidoRelatorio>TotalItensPedido'}"/>
 							<Text text="{path :'pedidoRelatorio>Vbeln'}" />
 						</cells>
 					</ColumnListItem>

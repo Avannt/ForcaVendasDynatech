@@ -62,7 +62,7 @@ sap.ui.define([
 			var oModel = new sap.ui.model.json.JSONModel();
 			that.getView().setModel(oModel, "pedidosCadastrados");
 
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function() {
 				MessageBox.show("Não foi possivel fazer leitura do Banco Interno.", {
@@ -164,7 +164,7 @@ sap.ui.define([
 			var sCnpj = this.getModel("clientesCadastrados").getData()[iIndexCliente].stcd1;
 			this.getOwnerComponent().getModel("modelAux").setProperty("/idFiscalCliente", sCnpj);
 			
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function() {
 				MessageBox.show("Não foi possivel fazer leitura do Banco Interno.", {
@@ -212,8 +212,9 @@ sap.ui.define([
 
 			var tx = db.transaction("Clientes", "readwrite");
 			var objUsuarios = tx.objectStore("Clientes");
+			var ixKunnr = objUsuarios.index("kunnr");
 
-			var request = objUsuarios.get(codCliente);
+			var request = ixKunnr.get(codCliente);
 
 			request.onsuccess = function(e1) {
 
@@ -269,7 +270,7 @@ sap.ui.define([
 			var that = this;
 			var existeTituloVencido = false;
 			var date = new Date();
-			var open1 = indexedDB.open("VB_DataBase");
+			var open1 = indexedDB.open("Dyna_DataBase");
 
 			open1.onerror = function(hxr) {
 				console.log("Erro ao abrir tabelas.");
@@ -362,7 +363,7 @@ sap.ui.define([
 		onItemPress: function(oEvent) {
 			var that = this;
 			var oNumeroPedido = oEvent.getParameter("listItem") || oEvent.getSource();
-			var open1 = indexedDB.open("VB_DataBase");
+			var open1 = indexedDB.open("Dyna_DataBase");
 
 			open1.onerror = function(hxr) {
 				console.log("Erro ao abrir tabelas.");
@@ -378,8 +379,8 @@ sap.ui.define([
 				that.getOwnerComponent().getModel("modelAux").setProperty("/NrPedCli", NrPedido);
 				
 				new Promise(function(res1, rej1){
-					/* Se o status for PEN (Pendente), devo perguntar se o usuário deseja editar o pedido */
-					if (sStatus == "Pendente"){
+					/* Se o status for PEN (Não enviado), devo perguntar se o usuário deseja editar o pedido */
+					if (sStatus == "Não enviado"){
 						MessageBox.show("Deseja reabrir o pedido?", {
 							icon: MessageBox.Icon.WARNING,
 							title: "Pedido finalizado.",
@@ -460,7 +461,7 @@ sap.ui.define([
 				actions: [MessageBox.Action.YES, sap.m.MessageBox.Action.CANCEL],
 				onClose: function(oAction) {
 					if (oAction == sap.m.MessageBox.Action.YES) {
-						var open = indexedDB.open("VB_DataBase");
+						var open = indexedDB.open("Dyna_DataBase");
 
 						open.onerror = function() {
 							MessageBox.show(open.error.mensage, {

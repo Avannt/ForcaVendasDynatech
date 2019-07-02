@@ -45,29 +45,15 @@
 											<Select id="idTipoPedido" forceSelection="false" items="{ path: 'tiposPedidos>/' }" showSecondaryValues="true" change="onChangeTipoPedido">
 												<core:Item key="{tiposPedidos>idTipoPedido}" text="{tiposPedidos>idTipoPedido} - {tiposPedidos>descricao}"/>
 											</Select>
-											<!--<Label  text="Tipo negociação *"/>-->
-											<!--<Select id="idTipoNegociacao" forceSelection="false" items="{ path: 'tipoNegociacao>/' }" showSecondaryValues="true" change="onChangeTipoNegociacao">-->
-											<!--	<core:Item key="{tipoNegociacao>idNegociacao}" text="{tipoNegociacao>idNegociacao} - {tipoNegociacao>descNegociacao}"/>-->
+											<!--<Label text="Tabela preço *"/>-->
+											<!--<Select id="idTabelaPreco" showSecondaryValues="false" forceSelection="false" items="{ path: 'tabPreco>/' }" change="onChangeTabelaPreco">-->
+											<!--	<core:Item key="{tabPreco>pltyp}" text="{tabPreco>pltyp} - {tabPreco>ptext}"/>-->
 											<!--</Select>-->
-											<Label text="Tabela preço *"/>
-											<Select id="idTabelaPreco" showSecondaryValues="false" forceSelection="false" items="{ path: 'tabPreco>/' }" change="onChangeTabelaPreco">
-												<core:Item key="{tabPreco>pltyp}" text="{tabPreco>pltyp} - {tabPreco>ptext}"/>
-											</Select>
 											<Label text="Forma Pagamento *"/>
 											<Select id="idFormaPagamento" forceSelection="false" visible="true" items="{ path: 'formasPagamentos>/' }" showSecondaryValues="true"
 												change="onChangeFormaPagamento">
 												<core:Item key="{formasPagamentos>zlsch}" text="{formasPagamentos>zlsch} - {formasPagamentos>text1}"/>
 											</Select>
-											<!--<Label text="Tipo transporte *" />-->
-											<!--<Select id="idTipoTransporte" forceSelection="false" visible="true" items="{ path: 'tipoTransporte>/' }" showSecondaryValues="true"-->
-											<!--	change="onChangeTipoTransporte">-->
-											<!--	<core:Item key="{tipoTransporte>idTransporte}" text="{tipoTransporte>idTransporte}"/>-->
-											<!--</Select>-->
-											<!--	<Label text="Data entrega *"/>-->
-											<!--	<DatePicker id="idDataEntrega" class="readOnly" value="{modelDadosPedido>/DataEntrega}" displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy"-->
-											<!--		change="onChangeDataEntrega" busyIndicatorDelay="0"/>-->
-											<!--	<Label text="Local entrega *"/>-->
-											<!--	<Input id="idLocalEntrega" value="{modelDadosPedido>/LocalEntrega}" enabled="false"/>-->
 										</f:content>
 									</f:SimpleForm>
 									<!--<f:SimpleForm id="idFormParcelamento" minWidth="1024" visible="false" maxContainerCols="2" editable="true" labelSpanL="4" labelSpanM="4" emptySpanL="2"-->
@@ -121,7 +107,7 @@
 											<Column minScreenWidth="600px" visible="true" width="35px" hAlign="Left">
 												<Text text="Id"/>
 											</Column>
-											<Column minScreenWidth="320px" width="160px" hAlign="Left">
+											<Column minScreenWidth="870px" demandPopin="true" popinDisplay="Inline" width="auto" hAlign="Left">
 												<Text text="Item"/>
 											</Column>
 											<Column minScreenWidth="870px" demandPopin="true" popinDisplay="Inline" width="auto" hAlign="Left">

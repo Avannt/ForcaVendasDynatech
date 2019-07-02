@@ -17,8 +17,8 @@ sap.ui.define([
 			onInit: function () {
 				this.getRouter().getRoute("login").attachPatternMatched(this._onLoadFields, this);
 			},
-			
-			getImei: function() {
+
+			getImei: function () {
 				var that = this;
 				var isTablet = this.getOwnerComponent().getModel("modelAux").getProperty("/isTablet");
 				if (device.platform == 'Android') {
@@ -77,12 +77,12 @@ sap.ui.define([
 				PRD => ReleasePRD = TRUE
 				QAS => ReleasePRD = FALSE
 				*/
-				this.getOwnerComponent().getModel("modelAux").setProperty("/ReleasePRD", true);
+				this.getOwnerComponent().getModel("modelAux").setProperty("/ReleasePRD", false);
 
 				var sUrl;
 				//Versão App
 				if (this.getOwnerComponent().getModel("modelAux").getProperty("/ReleasePRD")) {
-					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.0.3");
+					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.2.6");
 					sUrl = "http://34.195.216.197:8080/sap/opu/odata/sap/ZFORCA_VENDAS_SRV/?sap-client=310";
 
 					var oModel = new sap.ui.model.odata.v2.ODataModel(sUrl, {
@@ -97,7 +97,7 @@ sap.ui.define([
 					// QAS
 					this.getOwnerComponent().getModel("modelAux").setProperty("/DBModel", this.getView().getModel());
 					//Esse parâmetro está cadastrado na tabela tvarv no S4/HANA
-					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.0.3");
+					this.getOwnerComponent().getModel("modelAux").setProperty("/VersaoApp", "1.2.6");
 				}
 
 				this.getOwnerComponent().getModel("modelAux").setProperty("/Werks", "1100");
@@ -113,7 +113,7 @@ sap.ui.define([
 
 				if (idbSupported) {
 
-					var open = indexedDB.open("VB_DataBase", 7);
+					var open = indexedDB.open("Dyna_DataBase", 10);
 
 					// Create the Tables
 					open.onupgradeneeded = function (e) {
@@ -137,6 +137,9 @@ sap.ui.define([
 								unique: true
 							});
 							objCliente.createIndex("werks", "werks", {
+								unique: false
+							});
+							objCliente.createIndex("kunnr", "kunnr", {
 								unique: false
 							});
 						}
@@ -281,7 +284,7 @@ sap.ui.define([
 								unique: true,
 								autoIncrement: true
 							});
-							
+
 							objA990.createIndex("matnr", "matnr", {
 								unique: false
 							});
@@ -293,7 +296,7 @@ sap.ui.define([
 								unique: true,
 								autoIncrement: true
 							});
-							
+
 							objA406.createIndex("matnr", "matnr", {
 								unique: false
 							});
@@ -305,12 +308,12 @@ sap.ui.define([
 								unique: true,
 								autoIncrement: true
 							});
-							
+
 							objA991.createIndex("matnr", "matnr", {
 								unique: false
 							});
 						}
-						
+
 						if (!db.objectStoreNames.contains("TabPreco")) {
 							var objTabPreco = db.createObjectStore("TabPreco", {
 								keyPath: "idTabPreco",
@@ -318,14 +321,14 @@ sap.ui.define([
 								autoIncrement: true
 							});
 						}
-						
+
 						if (!db.objectStoreNames.contains("OrdensTabPreco")) {
 							var objOrdensTabPreco = db.createObjectStore("OrdensTabPreco", {
 								keyPath: "idOrdensTabPreco",
 								unique: true,
 								autoIncrement: true
 							});
-							
+
 							objOrdensTabPreco.createIndex("kozgf", "kozgf", {
 								unique: false
 							});
@@ -580,7 +583,7 @@ sap.ui.define([
 				// Verifico pedido de vendas
 				var bExisteDocPendente = false;
 
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onsuccess = function () {
 					var db = open.result;
@@ -677,10 +680,10 @@ sap.ui.define([
 																var objCliente = txCliente.objectStore("Clientes");
 
 																for (var i = 0; i < retornoCliente.results.length; i++) {
-																	
+
 																	var objBancoCliente = {
-																		idCliente: retornoCliente.results[i].Kunnr + "." + retornoCliente.results[i].Vkorg 
-																			+ "." + retornoCliente.results[i].Vtweg + "." + retornoCliente.results[i].Spart,
+																		idCliente: retornoCliente.results[i].Kunnr + "." + retornoCliente.results[i].Vkorg + "." + retornoCliente.results[
+																			i].Vtweg + "." + retornoCliente.results[i].Spart,
 																		kunnr: retornoCliente.results[i].Kunnr,
 																		vkorg: retornoCliente.results[i].Vkorg,
 																		vtweg: retornoCliente.results[i].Vtweg,
@@ -700,26 +703,25 @@ sap.ui.define([
 																		telf1: retornoCliente.results[i].Telf1,
 																		spart: retornoCliente.results[i].Spart
 																	};
-																	
-																// for (var i = 0; i < 3; i++) {
-																		// kunnr: String(parseInt("100010", 10) + i),
-																		// land1: "BR",
-																		// lifnr: "203453",
-																		// name1: "PAULO SERGIO MONTEIRO BORGES",
-																		// name2: "",
-																		// ort01: "CAMPO VERDE",
-																		// ort02: "CENTRO",
-																		// parvw: "YR",
-																		// pstlz: "78840-000",
-																		// regio: "MT",
-																		// stcd1: "",
-																		// stcd2: "53636309153",
-																		// stras: "AV CURITIBA, 411 411",
-																		// telf1: "6634195164",
-																		// spart: 10*i,
-																		// vkorg: "1100",
-																		// vtweg: "AG"
-																		
+
+																	// for (var i = 0; i < 3; i++) {
+																	// kunnr: String(parseInt("100010", 10) + i),
+																	// land1: "BR",
+																	// lifnr: "203453",
+																	// name1: "PAULO SERGIO MONTEIRO BORGES",
+																	// name2: "",
+																	// ort01: "CAMPO VERDE",
+																	// ort02: "CENTRO",
+																	// parvw: "YR",
+																	// pstlz: "78840-000",
+																	// regio: "MT",
+																	// stcd1: "",
+																	// stcd2: "53636309153",
+																	// stras: "AV CURITIBA, 411 411",
+																	// telf1: "6634195164",
+																	// spart: 10*i,
+																	// vkorg: "1100",
+																	// vtweg: "AG"
 
 																	var requestCliente = objCliente.add(objBancoCliente);
 
@@ -759,243 +761,359 @@ sap.ui.define([
 																			};
 																		}
 
-																		oModel.read("/Materiais", {
-																			success: function (retornoMateriais) {
-
-																				var txMateriais = db.transaction("Materiais", "readwrite");
-																				var objMateriais = txMateriais.objectStore("Materiais");
-
-																				for (i = 0; i < retornoMateriais.results.length; i++) {
-
-																					var objBancoMateriais = {
-																						matnr: retornoMateriais.results[i].Matnr,
-																						meins: retornoMateriais.results[i].Meins,
-																						maktx: retornoMateriais.results[i].Maktx,
-																						aumng: retornoMateriais.results[i].Aumng,
-																						scmng: retornoMateriais.results[i].Scmng,
-																						vrkme: retornoMateriais.results[i].Vrkme,
-																						mtpos: retornoMateriais.results[i].Mtpos,
-																						ntgew: retornoMateriais.results[i].Ntgew,
-																						provg: retornoMateriais.results[i].Provg,
-																						extwg: retornoMateriais.results[i].Extwg
+																		oModel.read("/InserirOV", {
+																			urlParameters: {
+																				"$filter": "Reprs eq '" + CodRepres + "'"
+																			},
+																			
+																			success: function (retornoOVs) {
+																				var txOV = db.transaction("StatusPedidos", "readwrite");
+																				var objOV = txOV.objectStore("StatusPedidos");
+																				
+																				for (i = 0; i < retornoOVs.results.length; i++) {
+																					retornoOVs.results[i].Nrpedcli = retornoOVs.results[i].Nrped;
+																					var requestOVs = objOV.add(retornoOVs.results[i]);
+																					
+																					requestOVs.onsuccess = function (event) {
+																						event.stopPropagation();
+																						console.log("Dados Ordem de vendas inseridos");
 																					};
-
-																					var requestMateriais = objMateriais.add(objBancoMateriais);
-
-																					requestMateriais.onsuccess = function (event) {
-																						console.log("Dados Materiais inseridos. " + event);
-																					};
-
-																					requestMateriais.onerror = function (event) {
-																						console.log("Dados Materiais não foram inseridos :" + event);
+																					requestOVs.onerror = function (event) {
+																						event.stopPropagation();
+																						console.log("Dados Ordem de vendas não foram inseridos :" + event.srcElement.error);
 																					};
 																				}
 
-																				oModel.read("/FormasPagamentos", {
-																					// urlParameters: {
-																					// 	"$filter": "IvCodRepres eq '" + CodRepres + "'"
-																					// },
-																					success: function (retornoFormasPagamentos) {
-																						var txFormasPagamentos = db.transaction("FormasPagamentos", "readwrite");
-																						var objFormasPagamentos = txFormasPagamentos.objectStore("FormasPagamentos");
+																				oModel.read("/TitulosAbertos", {
+																					urlParameters: {
+																						"$filter": "IvRepres eq '" + CodRepres + "'"
+																					},
+																					success: function (retornoTitulosAbertos) {
+																						var txTitulosAbertos = db.transaction("TitulosAbertos", "readwrite");
+																						var objTitulosAbertos = txTitulosAbertos.objectStore("TitulosAbertos");
+																						// objTitulosAbertos.autoIncrement();
 
-																						for (i = 0; i < retornoFormasPagamentos.results.length; i++) {
+																						Date.prototype.shiftDays = function (days) {
+																							days = parseInt(days, 10);
+																							this.setDate(this.getDate() + days);
+																							return this;
+																						};
 
-																							var objBancoFormasPagamentos = {
-																								idFormasPagamentos: i,
-																								zlsch: retornoFormasPagamentos.results[i].Zlsch,
-																								text1: retornoFormasPagamentos.results[i].Text1
+																						for (i = 0; i < retornoTitulosAbertos.results.length; i++) {
+
+																							var dataVenc = retornoTitulosAbertos.results[i].Zfbdt;
+																							dataVenc = dataVenc.shiftDays(1);
+
+																							var auxDmbtr = parseFloat(retornoTitulosAbertos.results[i].Dmbtr);
+																							var date = retornoTitulosAbertos.results[i].Budat;
+																							var dia = String(date.getDate());
+																							var mes = String(date.getMonth() + 1);
+																							var ano = String(date.getFullYear());
+																							ano = ano.substring(2, 4);
+																							var minuto = String(date.getMinutes());
+																							var hora = String(date.getHours());
+																							var seg = String(date.getSeconds());
+
+																							if (dia.length == 1) {
+																								dia = "0" + String(dia);
+																							}
+
+																							if (mes.length == 1) {
+																								mes = "0" + String(mes);
+																							}
+
+																							if (minuto.length == 1) {
+																								minuto = "0" + String(minuto);
+																							}
+																							if (hora.length == 1) {
+																								hora = "0" + String(hora);
+																							}
+																							if (seg.length == 1) {
+																								seg = "0" + String(seg);
+																							}
+																							//HRIMP E DATIMP
+																							//var horario = String(hora) + ":" + String(minuto) + ":" + String(seg);
+																							var data = String(dia + "/" + mes + "/" + ano);
+
+																							var objBancoTitulosAbertos = {
+																								// idTituloAberto: retornoTitulosAbertos.results[i].Belnr + "." + retornoTitulosAbertos.results[
+																								// 		i].Kunnr + "." +
+																								// 	auxDmbtr + "." + data,
+																								idTituloAberto: String(i),
+																								belnr: retornoTitulosAbertos.results[i].Belnr,
+																								name1: retornoTitulosAbertos.results[i].Name1,
+																								budat: retornoTitulosAbertos.results[i].Budat, //Data emissão
+																								zfbdt: dataVenc, //Data vencimento
+																								dmbtr: auxDmbtr,
+																								kunnr: retornoTitulosAbertos.results[i].Kunnr
 																							};
 
-																							var requestFormasPagamentos = objFormasPagamentos.put(objBancoFormasPagamentos);
+																							var requestTitulosAbertos = objTitulosAbertos.add(objBancoTitulosAbertos);
 
-																							requestFormasPagamentos.onsuccess = function (event) {
-																								console.log("Dados FormasPagamentos inseridos. " + event);
+																							requestTitulosAbertos.onsuccess = function (event) {
+																								event.stopPropagation();
+																								console.log("Dados TitulosAbertos inseridos");
 																							};
-
-																							requestFormasPagamentos.onerror = function (event) {
-																								console.log("Dados FormasPagamentos não foram inseridos :" + event);
+																							requestTitulosAbertos.onerror = function (event) {
+																								event.stopPropagation();
+																								console.log("Dados TitulosAbertos não foram inseridos :" + event.srcElement.error);
 																							};
 																						}
-																						
-																						/*
-																							KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
-																							KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
-																							WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
-																							MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
-																							KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
-																							SPART	1 Tipo	SPART	CHAR	2	0	Setor de atividade
-																						*/
-																						oModel.read("/A991", {
-																							success: function (retornoA991) {
-																								var txA991 = db.transaction("A991", "readwrite");
-																								var objA991 = txA991.objectStore("A991");
 
-																								for (i = 0; i < retornoA991.results.length; i++) {
+																						oModel.read("/Materiais", {
+																							success: function (retornoMateriais) {
 
-																									var objBancoA991 = {
-																										idA991: i,
-																										kappl: retornoA991.results[i].Kappl,
-																										kschl: retornoA991.results[i].Kschl,
-																										werks: retornoA991.results[i].Werks,
-																										matnr: retornoA991.results[i].Matnr,
-																										kbetr: retornoA991.results[i].Kbetr,
-																										spart: retornoA991.results[i].Spart
+																								var txMateriais = db.transaction("Materiais", "readwrite");
+																								var objMateriais = txMateriais.objectStore("Materiais");
+
+																								for (i = 0; i < retornoMateriais.results.length; i++) {
+
+																									var objBancoMateriais = {
+																										matnr: retornoMateriais.results[i].Matnr,
+																										meins: retornoMateriais.results[i].Meins,
+																										maktx: retornoMateriais.results[i].Maktx,
+																										aumng: retornoMateriais.results[i].Aumng,
+																										scmng: retornoMateriais.results[i].Scmng,
+																										vrkme: retornoMateriais.results[i].Vrkme,
+																										mtpos: retornoMateriais.results[i].Mtpos,
+																										ntgew: retornoMateriais.results[i].Ntgew,
+																										provg: retornoMateriais.results[i].Provg,
+																										extwg: retornoMateriais.results[i].Extwg
 																									};
 
-																									var requestA991 = objA991.put(objBancoA991);
-																									
-																									requestA991.onsuccess = function (event) {
-																										console.log("Dados A991 inseridos. " + event);
+																									var requestMateriais = objMateriais.add(objBancoMateriais);
+
+																									requestMateriais.onsuccess = function (event) {
+																										console.log("Dados Materiais inseridos. " + event);
 																									};
 
-																									requestA991.onerror = function (event) {
-																										console.log("Dados A991 não foram inseridos :" + event);
+																									requestMateriais.onerror = function (event) {
+																										console.log("Dados Materiais não foram inseridos :" + event);
 																									};
 																								}
-																								
-																								/*
-																									KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
-																									KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
-																									WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
-																									KUNNR	1 Tipo	KUNNR	CHAR	10	0	Nº cliente
-																									MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
-																									KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
-																								*/
-																								
-																								oModel.read("/A990", {
-																									success: function (retornoA990) {
-																										var txA990 = db.transaction("A990", "readwrite");
-																										var objA990 = txA990.objectStore("A990");
 
-																										for (i = 0; i < retornoA990.results.length; i++) {
+																								oModel.read("/FormasPagamentos", {
+																									// urlParameters: {
+																									// 	"$filter": "IvCodRepres eq '" + CodRepres + "'"
+																									// },
+																									success: function (retornoFormasPagamentos) {
+																										var txFormasPagamentos = db.transaction("FormasPagamentos", "readwrite");
+																										var objFormasPagamentos = txFormasPagamentos.objectStore("FormasPagamentos");
 
-																											var objBancoA990 = {
-																												idA990: i,
-																												kappl: retornoA990.results[i].Kappl,
-																												kschl: retornoA990.results[i].Kschl,
-																												werks: retornoA990.results[i].Werks,
-																												matnr: retornoA990.results[i].Matnr,
-																												kbetr: retornoA990.results[i].Kbetr,
-																												kunnr: retornoA990.results[i].Kunnr
+																										for (i = 0; i < retornoFormasPagamentos.results.length; i++) {
+
+																											var objBancoFormasPagamentos = {
+																												idFormasPagamentos: i,
+																												zlsch: retornoFormasPagamentos.results[i].Zlsch,
+																												text1: retornoFormasPagamentos.results[i].Text1
 																											};
 
-																											var requestA990 = objA990.put(objBancoA990);
+																											var requestFormasPagamentos = objFormasPagamentos.put(objBancoFormasPagamentos);
 
-																											requestA990.onsuccess = function (event) {
-																												console.log("Dados A990 inseridos. " + event);
+																											requestFormasPagamentos.onsuccess = function (event) {
+																												console.log("Dados FormasPagamentos inseridos. " + event);
 																											};
 
-																											requestA990.onerror = function (event) {
-																												console.log("Dados A990 não foram inseridos :" + event);
+																											requestFormasPagamentos.onerror = function (event) {
+																												console.log("Dados FormasPagamentos não foram inseridos :" + event);
 																											};
 																										}
-																										
+
 																										/*
 																											KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
 																											KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
 																											WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
 																											MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
 																											KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
+																											SPART	1 Tipo	SPART	CHAR	2	0	Setor de atividade
 																										*/
-																										
-																										oModel.read("/A406", {
-																											success: function (retornoA406) {
-																												var txA406 = db.transaction("A406", "readwrite");
-																												var objA406 = txA406.objectStore("A406");
-		
-																												for (i = 0; i < retornoA406.results.length; i++) {
-		
-																													var objBancoA406 = {
-																														idA406: i,
-																														kappl: retornoA406.results[i].Kappl,
-																														kschl: retornoA406.results[i].Kschl,
-																														werks: retornoA406.results[i].Werks,
-																														matnr: retornoA406.results[i].Matnr,
-																														kbetr: retornoA406.results[i].Kbetr
+																										oModel.read("/A991", {
+																											success: function (retornoA991) {
+																												var txA991 = db.transaction("A991", "readwrite");
+																												var objA991 = txA991.objectStore("A991");
+
+																												for (i = 0; i < retornoA991.results.length; i++) {
+
+																													var objBancoA991 = {
+																														idA991: i,
+																														kappl: retornoA991.results[i].Kappl,
+																														kschl: retornoA991.results[i].Kschl,
+																														werks: retornoA991.results[i].Werks,
+																														matnr: retornoA991.results[i].Matnr,
+																														kbetr: retornoA991.results[i].Kbetr,
+																														spart: retornoA991.results[i].Spart
 																													};
-		
-																													var requestA406 = objA406.put(objBancoA406);
-		
-																													requestA406.onsuccess = function (event) {
-																														console.log("Dados A406 inseridos. " + event);
+
+																													var requestA991 = objA991.put(objBancoA991);
+
+																													requestA991.onsuccess = function (event) {
+																														console.log("Dados A991 inseridos. " + event);
 																													};
-		
-																													requestA406.onerror = function (event) {
-																														console.log("Dados A406 não foram inseridos :" + event);
+
+																													requestA991.onerror = function (event) {
+																														console.log("Dados A991 não foram inseridos :" + event);
 																													};
 																												}
+
 																												/*
-																													KOZGF	1 Tipo	KOZGF	CHAR	4	0	Seqüência de acesso
-																													KOLNR	1 Tipo	KOLNR	NUMC	3	0	Seqüência de acesso - acesso
-																													KOTABNR	1 Tipo	KOTABNR	CHAR	3	0	Tabela de condições
+																													KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
+																													KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
+																													WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
+																													KUNNR	1 Tipo	KUNNR	CHAR	10	0	Nº cliente
+																													MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
+																													KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
 																												*/
-																												
-																												oModel.read("/OrdensTabPreco", {
-																													success: function (retornoOrdensTabPreco) {
-																														var txOrdensTabPreco = db.transaction("OrdensTabPreco", "readwrite");
-																														var objOrdensTabPreco = txOrdensTabPreco.objectStore("OrdensTabPreco");
-				
-																														for (i = 0; i < retornoOrdensTabPreco.results.length; i++) {
-				
-																															var objBancoOrdensTabPreco = {
-																																idOrdensTabPreco: i,
-																																kozgf: retornoOrdensTabPreco.results[i].Kozgf,
-																																kolnr: retornoOrdensTabPreco.results[i].Kolnr,
-																																kotabnr: retornoOrdensTabPreco.results[i].Kotabnr
+
+																												oModel.read("/A990", {
+																													success: function (retornoA990) {
+																														var txA990 = db.transaction("A990", "readwrite");
+																														var objA990 = txA990.objectStore("A990");
+
+																														for (i = 0; i < retornoA990.results.length; i++) {
+
+																															var objBancoA990 = {
+																																idA990: i,
+																																kappl: retornoA990.results[i].Kappl,
+																																kschl: retornoA990.results[i].Kschl,
+																																werks: retornoA990.results[i].Werks,
+																																matnr: retornoA990.results[i].Matnr,
+																																kbetr: retornoA990.results[i].Kbetr,
+																																kunnr: retornoA990.results[i].Kunnr
 																															};
-				
-																															var requestOrdensTabPreco = objOrdensTabPreco.put(objBancoOrdensTabPreco);
-				
-																															requestOrdensTabPreco.onsuccess = function (event) {
-																																console.log("Dados OrdensTabPreco inseridos. " + event);
+
+																															var requestA990 = objA990.put(objBancoA990);
+
+																															requestA990.onsuccess = function (event) {
+																																console.log("Dados A990 inseridos. " + event);
 																															};
-				
-																															requestOrdensTabPreco.onerror = function (event) {
-																																console.log("Dados OrdensTabPreco não foram inseridos :" + event);
-																															};
-																														}
-																														
-																														var txTabPreco = db.transaction("TabPreco", "readwrite");
-																														var objTabPreco = txTabPreco.objectStore("TabPreco");
-																														
-																														//Tab preço
-																														for (i = 0; i < 2; i++) {
-				
-																															var objBancoTabPreco = {
-																																idTabPreco: i,
-																																pltyp: "Z" + (parseInt(i,10)+1),
-																																ptext: "Tabela de preço padrão" + (parseInt(i,10)+1)																															};
-				
-																															var requestTabPreco = objTabPreco.put(objBancoTabPreco);
-				
-																															requestTabPreco.onsuccess = function (event) {
-																																console.log("Dados TabPreco inseridos. " + event);
-																															};
-				
-																															requestTabPreco.onerror = function (event) {
-																																console.log("Dados TabPreco não foram inseridos :" + event);
+
+																															requestA990.onerror = function (event) {
+																																console.log("Dados A990 não foram inseridos :" + event);
 																															};
 																														}
-																														
-																													MessageBox.show(
-																														"Tabelas carregadas com sucesso!", {
-																															icon: MessageBox.Icon.SUCCESS,
-																															title: "Carregamento Completo",
-																															actions: [MessageBox.Action.OK],
-																															onClose: function () {
-																																if (that._ItemDialog) {
-																																	that._ItemDialog.destroy(true);
+
+																														/*
+																															KAPPL	1 Tipo	KAPPL	CHAR	2	0	Aplicação
+																															KSCHL	1 Tipo	KSCHA	CHAR	4	0	Tipo de condição
+																															WERKS	1 Tipo	WERKS_D	CHAR	4	0	Centro
+																															MATNR	1 Tipo	MATNR	CHAR	40	0	Nº do material
+																															KBETR	1 Tipo	KBETR_KOND	CURR	11	2	Montante/porcentagem de condição no caso de não haver escala
+																														*/
+
+																														oModel.read("/A406", {
+																															success: function (retornoA406) {
+																																var txA406 = db.transaction("A406", "readwrite");
+																																var objA406 = txA406.objectStore("A406");
+
+																																for (i = 0; i < retornoA406.results.length; i++) {
+
+																																	var objBancoA406 = {
+																																		idA406: i,
+																																		kappl: retornoA406.results[i].Kappl,
+																																		kschl: retornoA406.results[i].Kschl,
+																																		werks: retornoA406.results[i].Werks,
+																																		matnr: retornoA406.results[i].Matnr,
+																																		kbetr: retornoA406.results[i].Kbetr
+																																	};
+
+																																	var requestA406 = objA406.put(objBancoA406);
+
+																																	requestA406.onsuccess = function (event) {
+																																		console.log("Dados A406 inseridos. " + event);
+																																	};
+
+																																	requestA406.onerror = function (event) {
+																																		console.log("Dados A406 não foram inseridos :" + event);
+																																	};
 																																}
-																																that.onUpdateDateTime();
+																																/*
+																																	KOZGF	1 Tipo	KOZGF	CHAR	4	0	Seqüência de acesso
+																																	KOLNR	1 Tipo	KOLNR	NUMC	3	0	Seqüência de acesso - acesso
+																																	KOTABNR	1 Tipo	KOTABNR	CHAR	3	0	Tabela de condições
+																																*/
+
+																																oModel.read("/OrdensTabPreco", {
+																																	success: function (retornoOrdensTabPreco) {
+																																		var txOrdensTabPreco = db.transaction("OrdensTabPreco",
+																																			"readwrite");
+																																		var objOrdensTabPreco = txOrdensTabPreco.objectStore(
+																																			"OrdensTabPreco");
+
+																																		for (i = 0; i < retornoOrdensTabPreco.results.length; i++) {
+
+																																			var objBancoOrdensTabPreco = {
+																																				idOrdensTabPreco: i,
+																																				kozgf: retornoOrdensTabPreco.results[i].Kozgf,
+																																				kolnr: retornoOrdensTabPreco.results[i].Kolnr,
+																																				kotabnr: retornoOrdensTabPreco.results[i].Kotabnr
+																																			};
+
+																																			var requestOrdensTabPreco = objOrdensTabPreco.put(
+																																				objBancoOrdensTabPreco);
+
+																																			requestOrdensTabPreco.onsuccess = function (event) {
+																																				console.log("Dados OrdensTabPreco inseridos. " + event);
+																																			};
+
+																																			requestOrdensTabPreco.onerror = function (event) {
+																																				console.log("Dados OrdensTabPreco não foram inseridos :" +
+																																					event);
+																																			};
+																																		}
+
+																																		var txTabPreco = db.transaction("TabPreco", "readwrite");
+																																		var objTabPreco = txTabPreco.objectStore("TabPreco");
+
+																																		//Tab preço
+																																		for (i = 0; i < 2; i++) {
+
+																																			var objBancoTabPreco = {
+																																				idTabPreco: i,
+																																				pltyp: "Z" + (parseInt(i, 10) + 1),
+																																				ptext: "Tabela de preço padrão" + (parseInt(i, 10) + 1)
+																																			};
+
+																																			var requestTabPreco = objTabPreco.put(objBancoTabPreco);
+
+																																			requestTabPreco.onsuccess = function (event) {
+																																				console.log("Dados TabPreco inseridos. " + event);
+																																			};
+
+																																			requestTabPreco.onerror = function (event) {
+																																				console.log("Dados TabPreco não foram inseridos :" + event);
+																																			};
+																																		}
+
+																																		MessageBox.show(
+																																			"Tabelas carregadas com sucesso!", {
+																																				icon: MessageBox.Icon.SUCCESS,
+																																				title: "Carregamento Completo",
+																																				actions: [MessageBox.Action.OK],
+																																				onClose: function () {
+																																					if (that._ItemDialog) {
+																																						that._ItemDialog.destroy(true);
+																																					}
+																																					that.onUpdateDateTime();
+																																				}
+																																			});
+																																	},
+																																	error: function (error) {
+																																		console.log(error);
+																																		that.onMensagemErroODATA(error.statusCode);
+																																	}
+																																});
+																															},
+																															error: function (error) {
+																																console.log(error);
+																																that.onMensagemErroODATA(error.statusCode);
 																															}
 																														});
-																												},
-																												error: function (error) {
-																													console.log(error);
-																													that.onMensagemErroODATA(error.statusCode);
-																												}
-																											});
+																													},
+																													error: function (error) {
+																														console.log(error);
+																														that.onMensagemErroODATA(error.statusCode);
+																													}
+																												});
 																											},
 																											error: function (error) {
 																												console.log(error);
@@ -1073,7 +1191,7 @@ sap.ui.define([
 			},
 
 			DropDBTables: function (vTables) {
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onerror = function (e) {
 					console.log("Erro ao abrir conexão.");
@@ -1124,7 +1242,7 @@ sap.ui.define([
 
 			onStartWorking: function () {
 				var that = this;
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
@@ -1231,7 +1349,7 @@ sap.ui.define([
 			onEnviarDocs: function () {
 				var that = this;
 
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
@@ -1308,7 +1426,7 @@ sap.ui.define([
 
 				this._ItemDialog.open();
 
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
@@ -1343,7 +1461,7 @@ sap.ui.define([
 
 			onUpdateDateTime: function () {
 				var that = this;
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 				var Werks = this.getOwnerComponent().getModel("modelAux").getProperty("/Werks");
 
 				open.onsuccess = function (e) {
@@ -1455,7 +1573,7 @@ sap.ui.define([
 
 								} else if (retorno.EvRettyp == "S") {
 
-									var open = indexedDB.open("VB_DataBase");
+									var open = indexedDB.open("Dyna_DataBase");
 
 									open.onerror = function (hxr) {
 										console.log("Erro ao abrir tabelas.");
@@ -1563,7 +1681,7 @@ sap.ui.define([
 
 			onOpenMudarSenha: function () {
 				var that = this;
-				var open = indexedDB.open("VB_DataBase");
+				var open = indexedDB.open("Dyna_DataBase");
 
 				open.onerror = function (hxr) {
 					console.log("Erro ao abrir tabelas.");
@@ -1678,7 +1796,7 @@ sap.ui.define([
 
 								} else if (retorno.EvRettyp == "S") {
 
-									var open = indexedDB.open("VB_DataBase");
+									var open = indexedDB.open("Dyna_DataBase");
 
 									open.onerror = function (hxr) {
 										console.log("Erro ao abrir tabelas.");
@@ -1748,7 +1866,7 @@ sap.ui.define([
 						if (oAction === "Resetar credenciais") {
 
 							// Excluir os valores das tabelas
-							var open = indexedDB.open("VB_DataBase");
+							var open = indexedDB.open("Dyna_DataBase");
 							open.onerror = function (hxr) {
 								console.log("Erro ao abrir tabelas.");
 								console.log(hxr.Message);

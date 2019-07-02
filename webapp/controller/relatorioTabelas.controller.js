@@ -76,7 +76,7 @@ sap.ui.define([
 			that.getOwnerComponent().getModel("modelRelatorioTabela").setProperty("/exibicao", ComboExibicao[0].idExibicao);
 			that.byId("idExibicao").setSelectedKey(ComboExibicao[0].idExibicao);
 
-			var open1 = indexedDB.open("VB_DataBase");
+			var open1 = indexedDB.open("Dyna_DataBase");
 
 			open1.onerror = function() {
 				MessageBox.show(open1.error.mensage, {
@@ -141,7 +141,7 @@ sap.ui.define([
 			that.getOwnerComponent().getModel("modelRelatorioTabela").setProperty("/estabelecimento", estabelecimento);
 			var IdBase = that.getOwnerComponent().getModel("modelAux").getProperty("/IdBase");
 
-			var open1 = indexedDB.open("VB_DataBase");
+			var open1 = indexedDB.open("Dyna_DataBase");
 
 			open1.onerror = function() {
 				MessageBox.show(open1.error.mensage, {
@@ -201,7 +201,7 @@ sap.ui.define([
 			var fValue = this.byId("idtabClienteRelatorio").getValue();
 			that.getOwnerComponent().getModel("modelRelatorioTabela").setProperty("/cliente", fValue);
 
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function() {
 				console.log("não foi possivel encontrar e/ou carregar a base de clientes");
@@ -362,7 +362,7 @@ sap.ui.define([
 			var that = this;
 			that.byId("idLoadTabelaPreco").focus();
 
-			var open1 = indexedDB.open("VB_DataBase");
+			var open1 = indexedDB.open("Dyna_DataBase");
 
 			open1.onerror = function() {
 				MessageBox.show(open1.error.mensage, {

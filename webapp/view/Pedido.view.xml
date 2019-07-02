@@ -36,6 +36,9 @@
 							<Column minScreenWidth="550px" demandPopin="true" popinDisplay="Inline">
 								<Text text="Total Itens"/>
 							</Column>
+							<Column minScreenWidth="550px" demandPopin="true" popinDisplay="Inline">
+								<Text text="Documento Sap"/>
+							</Column>
 							<Column minScreenWidth="320px" hAlign="Left" width="100px" popinDisplay="Inline">
 								<Text text="Status"/>
 							</Column>
@@ -47,6 +50,7 @@
 									<Text text="{path : 'pedidosCadastrados>dataImpl', formatter:'.myFormatterDataImp'}"/>
 									<Text text="R$: {path : 'pedidosCadastrados>valTotPed', type: 'sap.ui.model.type.Float', formatOptions: {milharSeparetor: '.', decimalSeparator: ',', maxFractionDigits: 2, minFractionDigits : 2 }, constraints : { minimum: '0', maximum: '99' }}"/>
 									<Text text="{path : 'pedidosCadastrados>totalItensPedido'}"/>
+									<Text text="{path : 'pedidosCadastrados>Vbeln'}"/>
 									<Text text="{path :'pedidosCadastrados>situacaoPedido'}"/>
 								</cells>
 							</ColumnListItem>

@@ -52,7 +52,7 @@ sap.ui.define([
 			// var IdBase1 = this.getOwnerComponent().getModel("modelAux").getProperty("/IdBase");
 
 			// if (IdBase1 != undefined && IdBase1 != null && IdBase1 != "") {
-			// 	var open = indexedDB.open("VB_DataBase");
+			// 	var open = indexedDB.open("Dyna_DataBase");
 
 			// 	open.onerror = function(hxr) {
 			// 		console.log("Erro ao abrir tabelas.");

@@ -23,7 +23,7 @@ sap.ui.define([
 			var oModel = new sap.ui.model.json.JSONModel();
 			this.getView().setModel(oModel, "consultasProdutos");
 									
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function() {
 				console.log(open.error.mensage);
@@ -68,7 +68,7 @@ sap.ui.define([
 			var tabamo = that.getOwnerComponent().getModel("modelAux").getProperty("/Usuario").tabamo;
 			var tabbon = that.getOwnerComponent().getModel("modelAux").getProperty("/Usuario").tabbon;
 
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 
 			open.onerror = function() {
 				console.log(open.error.mensage);

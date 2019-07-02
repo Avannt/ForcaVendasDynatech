@@ -24,7 +24,7 @@ sap.ui.define([
 			var oItem = [];
 			var that = this;
 			this.byId("searchField").setValue("");
-			var open = indexedDB.open("VB_DataBase");
+			var open = indexedDB.open("Dyna_DataBase");
 			
 			open.onerror = function() {
 				console.log(open.error.mensage);
